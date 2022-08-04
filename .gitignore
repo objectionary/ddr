@@ -1,3 +1,5 @@
 .idea
 consoleApp.iml
 target
+src/main/resources/sample_in
+src/main/resources/sample_out

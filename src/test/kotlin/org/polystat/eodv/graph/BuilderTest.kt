@@ -5,19 +5,19 @@ import org.junit.jupiter.api.Test
 class BuilderTest : BaseTest() {
 
     @Test
-    fun `test simple tree`() = doTest("animals")
+    fun `test basic tree`() = doTest("basic_tree")
 
     @Test
-    fun `test large tree`() = doTest("creatures")
+    fun `test tree`() = doTest("tree")
 
     @Test
-    fun `test multiple trees`() = doTest("double_hie")
+    fun `test multiple trees`() = doTest("multiple_trees")
 
     @Test
-    fun `test cycle`() = doTest("one_cycle")
+    fun `test cycle`() = doTest("basic_cycle")
 
     @Test
-    fun `test triple cycle`() = doTest("triple")
+    fun `test triple cycle`() = doTest("triple_cycle")
 
     @Test
     fun `test multiple cycles`() = {}

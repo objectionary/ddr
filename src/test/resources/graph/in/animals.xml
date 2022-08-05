@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="191"
+         name="ex-1"
+         time="2022-08-02T08:06:01.480897800Z"
+         version="1.0-SNAPSHOT">
+    <listing>+alias org.eolang.io.stdout
+
+        [] &gt; animal
+        [t] &gt; talk
+        stdout &gt; @
+        t
+
+        [] &gt; cat
+        animal &gt; @
+
+        [args...] &gt; main
+        cat &gt; tom
+        tom.talk "My name is Tom" &gt; @
+    </listing>
+    <errors/>
+    <sheets/>
+    <metas>
+        <meta line="1">
+            <head>alias</head>
+            <tail>org.eolang.io.stdout</tail>
+            <part>org.eolang.io.stdout</part>
+        </meta>
+    </metas>
+    <objects>
+        <o abstract="" line="3" name="animal" pos="0">
+            <o abstract="" line="4" name="talk" pos="2">
+                <o line="4" name="t" pos="3"/>
+                <o base="stdout" line="5" name="@" pos="4">
+                    <o base="t" line="6" pos="6"/>
+                </o>
+            </o>
+        </o>
+        <o abstract="" line="8" name="cat" pos="0">
+            <o base="animal" line="9" name="@" pos="2"/>
+        </o>
+        <o abstract="" line="11" name="main" pos="0">
+            <o line="11" name="args" pos="1" vararg=""/>
+            <o base="cat" line="12" name="tom" pos="2"/>
+            <o base="tom" line="13" pos="2"/>
+            <o base=".talk" line="13" method="" name="@" pos="5">
+                <o base="string" data="string" line="13" pos="11">My name is Tom</o>
+            </o>
+        </o>
+    </objects>
+</program>

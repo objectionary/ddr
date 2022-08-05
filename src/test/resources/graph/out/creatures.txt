@@ -1,0 +1,11 @@
+IGraphNode(name=creature, body=[o: null])
+creature CHILD:
+IGraphNode(name=animal, body=[o: null])
+animal CHILD:
+IGraphNode(name=cat, body=[o: null])
+animal CHILD:
+IGraphNode(name=dog, body=[o: null])
+creature CHILD:
+IGraphNode(name=human, body=[o: null])
+human CHILD:
+IGraphNode(name=olesya, body=[o: null])

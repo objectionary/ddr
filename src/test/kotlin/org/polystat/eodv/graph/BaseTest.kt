@@ -23,8 +23,8 @@ open class BaseTest {
 
     private fun checkOutput(expected: String, actual: String) =
         assertEquals(
-            expected,//.replace("\n", "").replace("\r", ""),
-            actual//.replace("\n", "").replace("\r", "")
+            expected.replace("\n", "").replace("\r", ""),
+            actual.replace("\n", "").replace("\r", "")
         )
 
     private fun printOut(node: IGraphNode, out: ByteArrayOutputStream, nodes: MutableSet<IGraphNode>) {

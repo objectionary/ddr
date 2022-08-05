@@ -2,9 +2,9 @@ IGraphNode(name=classA, body=[o: null])
 classA CHILD:
 IGraphNode(name=classB, body=[o: null])
 classB CHILD:
-IGraphNode(name=classA, body=[o: null])
-classB CHILD:
 IGraphNode(name=classC, body=[o: null])
+classC CHILD:
+IGraphNode(name=classA, body=[o: null])
 classC CHILD:
 IGraphNode(name=classD, body=[o: null])
 classA CHILD:

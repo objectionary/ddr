@@ -17,5 +17,8 @@ class BuilderTest : BaseTest() {
     fun `test cycle`() = doTest("one_cycle")
 
     @Test
+    fun `test triple cycle`() = doTest("triple")
+
+    @Test
     fun `test multiple cycles`() = {}
 }

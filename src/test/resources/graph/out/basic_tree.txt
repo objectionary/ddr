@@ -1,3 +1,3 @@
-IGraphNode(name=animal, body=[o: null])
+NODE: name="animal"
 animal CHILD:
-IGraphNode(name=cat, body=[o: null])
+NODE: name="cat"

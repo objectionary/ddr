@@ -1,11 +1,11 @@
-IGraphNode(name=classA, body=[o: null])
+NODE: name="classA"
 classA CHILD:
-IGraphNode(name=classB, body=[o: null])
+NODE: name="classB"
 classB CHILD:
-IGraphNode(name=classA, body=[o: null])
+NODE: name="classA"
 classB CHILD:
-IGraphNode(name=classC, body=[o: null])
+NODE: name="classC"
 classC CHILD:
-IGraphNode(name=classD, body=[o: null])
+NODE: name="classD"
 classA CHILD:
-IGraphNode(name=classE, body=[o: null])
+NODE: name="classE"

@@ -1,8 +1,8 @@
-IGraphNode(name=animal, body=[o: null])
+NODE: name="animal"
 animal CHILD:
-IGraphNode(name=cat, body=[o: null])
+NODE: name="cat"
 animal CHILD:
-IGraphNode(name=dog, body=[o: null])
-IGraphNode(name=human, body=[o: null])
+NODE: name="dog"
+NODE: name="human"
 human CHILD:
-IGraphNode(name=sam, body=[o: null])
+NODE: name="sam"

@@ -18,7 +18,7 @@ import javax.xml.transform.stream.StreamSource
         "src\\launch.main\\resources\\sample_in\\xsl\\ins1.xsl"
     )
  */
-class Transformer {
+class XslTransformer {
     private val logger = KotlinLogging.logger {}
 
     fun createXsl(

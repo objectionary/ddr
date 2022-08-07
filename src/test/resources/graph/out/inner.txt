@@ -1,0 +1,8 @@
+NODE: name="live"
+live CHILD:
+NODE: name="talk"
+NODE: name="animal"
+animal CHILD:
+NODE: name="mouse"
+animal CHILD:
+NODE: name="cat"

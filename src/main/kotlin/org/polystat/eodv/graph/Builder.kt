@@ -41,16 +41,29 @@ class GraphBuilder {
         }
     }
 
-    private fun abstracts(objects: NodeList): MutableMap<String, Node> {
-        val abstracts: MutableMap<String, Node> = mutableMapOf()
+    private fun abstracts(objects: NodeList): MutableMap<String, MutableSet<Node>> {
+        val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
         for (i in 0..objects.length) {
             val node = objects.item(i)
             val name = node?.attributes?.getNamedItem("name")?.textContent
             if (node?.attributes?.getNamedItem("abstract") != null && name != null) {
-                abstracts[name] = node
+                abstracts.getOrPut(name) { mutableSetOf() }.add(node)
             }
         }
         return abstracts
+    }
+
+    private fun getAbstract(
+        abstracts: MutableMap<String, MutableSet<Node>>,
+        baseName: String?,
+        baseRef: String?
+    ): Node? {
+        if (baseName != null && abstracts.contains(baseName)) {
+            return abstracts[baseName]!!.find {
+                it.attributes?.getNamedItem("line")?.textContent == baseRef // нет конечно
+            }
+        }
+        return null
     }
 
     private fun constructInheritance(document: Document) {
@@ -61,13 +74,26 @@ class GraphBuilder {
             val name = node?.attributes?.getNamedItem("name")?.textContent
             if (name != null && name == "@") {
                 // check that @ attribute's base has an abstract object in this program
-                val base = node.attributes.getNamedItem("base")?.textContent
-                if (base != null && abstracts.contains(base)) {
-                    val parentName = node.parentNode?.attributes?.getNamedItem("name")?.textContent
-                    if (parentName != null && abstracts.containsKey(parentName)) {
-                        val igChild =
-                            graph.igNodes.getOrPut(parentName) { IGraphNode(parentName, node.parentNode) }
-                        val igParent = graph.igNodes.getOrPut(base) { IGraphNode(base, abstracts[base]!!) }
+                val baseNodeName = node.attributes.getNamedItem("base")?.textContent
+                val baseNodeRef = node.attributes.getNamedItem("ref")?.textContent
+                val abstractBaseNode = getAbstract(abstracts, baseNodeName, baseNodeRef)
+                if (abstractBaseNode != null) {
+                    val parentNode = node.parentNode
+                    if (parentNode != null) {
+                        var igChild = IGraphNode(node.parentNode)
+                        val checkedChild = checkNodes(igChild)
+                        if (checkedChild == null) {
+                            graph.igNodes.add(igChild)
+                        } else {
+                            igChild = checkedChild
+                        }
+                        var igParent = IGraphNode(abstractBaseNode)
+                        val checkedParent = checkNodes(igParent)
+                        if (checkedParent == null) {
+                            graph.igNodes.add(igParent)
+                        } else {
+                            igParent = checkedParent
+                        }
                         graph.connect(igChild, igParent)
                     }
                 }
@@ -75,8 +101,12 @@ class GraphBuilder {
         }
     }
 
+    private fun checkNodes(node: IGraphNode) : IGraphNode? {
+        return graph.igNodes.find { it.body.attributes == node.body.attributes }
+    }
+
     private fun setLeaves() =
-        graph.igNodes.filter { it.value.children.isEmpty() }.forEach { graph.leaves.add(it.value) }
+        graph.igNodes.filter { it.children.isEmpty() }.forEach { graph.leaves.add(it) }
 
     private fun setHeads(node: IGraphNode, visited: MutableMap<IGraphNode, Boolean>) {
         if (visited.containsKey(node) || node.parents.isEmpty()) {

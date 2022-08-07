@@ -1,5 +1,6 @@
 package org.polystat.eodv.graph
 
+import org.polystat.eodv.launch.launch
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -7,13 +8,13 @@ import kotlin.test.assertEquals
 
 open class BaseTest {
     fun doTest(path: String) {
-        val builder = GraphBuilder()
-        builder.createGraph(constructInPath(path))
+        val graph = launch(path, constructInPath(path))
         val out = ByteArrayOutputStream()
-        builder.graph.heads.forEach { printOut(it, out, mutableSetOf()) }
+        graph.heads.forEach { printOut(it, out, mutableSetOf()) }
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
+        println(actual)
         checkOutput(expected, actual)
     }
 
@@ -28,14 +29,14 @@ open class BaseTest {
         )
 
     private fun printOut(node: IGraphNode, out: ByteArrayOutputStream, nodes: MutableSet<IGraphNode>) {
-        out.write("$node\n".toByteArray())
+        out.write("NODE: ${node.body.attributes.getNamedItem("name")}\n".toByteArray())
         if (!nodes.contains(node)) {
             nodes.add(node)
         } else {
             return
         }
         node.children.forEach {
-            out.write("${node.name} CHILD:\n".toByteArray())
+            out.write("${node.body.attributes.getNamedItem("name").textContent} CHILD:\n".toByteArray())
             printOut(it, out, nodes)
         }
     }

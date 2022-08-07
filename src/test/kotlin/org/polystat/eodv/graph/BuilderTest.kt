@@ -21,4 +21,7 @@ class BuilderTest : BaseTest() {
 
     @Test
     fun `test multiple cycles`() = {}
+
+    @Test
+    fun `test inner`() = doTest("inner")
 }

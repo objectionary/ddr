@@ -14,19 +14,20 @@ class Graph {
         child.parents.add(parent)
         parent.children.add(child)
     }
-
-    fun debugPrint(node: IGraphNode) {
-        println(node)
-        node.children.forEach {
-            println("${node.body.nodeName} CHILD:")
-            debugPrint(it)
-        }
-    }
 }
 
 data class IGraphNode(
     val body: Node
 ) {
+//    val name: String by lazy { body.attributes.getNamedItem("name").textContent }
+    val name: String = body.attributes.getNamedItem("name").textContent // debug
     val children: MutableList<IGraphNode> = mutableListOf()
     val parents: MutableList<IGraphNode> = mutableListOf()
+    val attributes: MutableList<IGraphAttr> = mutableListOf()
 }
+
+data class IGraphAttr(
+    val name: String,
+    val parentDistance: Int,
+    val body: Node
+)

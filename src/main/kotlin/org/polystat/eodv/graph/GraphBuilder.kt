@@ -38,7 +38,7 @@ class GraphBuilder {
                 }
                 graph.heads.clear()
                 thinnedOutHeads.forEach { graph.heads.add(it) }
-                CycleDetector(graph).processClosedCycles()
+                processClosedCycles(graph)
             }
         } catch (e: Exception) {
             when (e) {

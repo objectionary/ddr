@@ -1,14 +1,15 @@
 package org.polystat.eodv.graph
 
-import org.polystat.eodv.launch.launch
+import org.polystat.eodv.launch.buildGraph
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.assertEquals
 
-open class BaseTest {
+open class BuilderBaseTest {
+
     fun doTest(path: String) {
-        val graph = launch(path, constructInPath(path))
+        val graph = buildGraph(path, constructInPath(path))
         val out = ByteArrayOutputStream()
         graph.heads.forEach { printOut(it, out, mutableSetOf()) }
         val actual = String(out.toByteArray())

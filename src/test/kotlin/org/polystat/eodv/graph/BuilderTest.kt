@@ -2,7 +2,7 @@ package org.polystat.eodv.graph
 
 import org.junit.jupiter.api.Test
 
-class BuilderTest : BaseTest() {
+class BuilderTest : BuilderBaseTest() {
 
     @Test
     fun `test basic tree`() = doTest("basic_tree")

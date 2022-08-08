@@ -1,15 +1,17 @@
-package org.polystat.eodv.graph
+package org.polystat.eodv.graph.builder
 
+import org.polystat.eodv.graph.IGraphNode
+import org.polystat.eodv.graph.TestBase
 import org.polystat.eodv.launch.buildGraph
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.assertEquals
 
-open class BuilderBaseTest {
+open class BuilderBase : TestBase {
 
-    fun doTest() {
-        val path = Thread.currentThread().stackTrace[2].methodName.substring(5).replace(' ', '_')
+    override fun doTest() {
+        val path = getTestName()
         val graph = buildGraph(path, constructInPath(path))
         val out = ByteArrayOutputStream()
         graph.heads.forEach { printOut(it, out, mutableSetOf()) }
@@ -20,32 +22,19 @@ open class BuilderBaseTest {
         checkOutput(expected, actual)
     }
 
-    private fun constructInPath(path: String): String = "src/test/resources/graph/in/$path.xml"
-
-    private fun constructOutPath(path: String): String = "src/test/resources/graph/out/$path.txt"
-
-    private fun checkOutput(
-        expected: String,
-        actual: String
-    ) =
-        assertEquals(
-            expected.replace("\n", "").replace("\r", ""),
-            actual.replace("\n", "").replace("\r", "")
-        )
-
     private fun printOut(
         node: IGraphNode,
         out: ByteArrayOutputStream,
         nodes: MutableSet<IGraphNode>
     ) {
-        out.write("NODE: ${node.body.attributes.getNamedItem("name")}\n".toByteArray())
+        out.write("NODE: ${node.name}\n".toByteArray())
         if (!nodes.contains(node)) {
             nodes.add(node)
         } else {
             return
         }
         node.children.forEach {
-            out.write("${node.body.attributes.getNamedItem("name").textContent} CHILD:\n".toByteArray())
+            out.write("${node.name} CHILD:\n".toByteArray())
             printOut(it, out, nodes)
         }
     }

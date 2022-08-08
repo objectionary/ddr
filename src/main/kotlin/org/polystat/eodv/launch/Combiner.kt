@@ -15,7 +15,7 @@ fun launch(
     path: String
 ) {
     val graph = buildGraph(filename, path)
-    pushAttributes(graph)
+    processAttributes(graph)
 }
 
 fun buildGraph(
@@ -31,7 +31,8 @@ fun buildGraph(
     return builder.graph
 }
 
-fun pushAttributes(graph: Graph) {
+fun processAttributes(graph: Graph) {
     val attributesSetter = AttributesSetter(graph)
     attributesSetter.setSpecifiedAttributes()
+    attributesSetter.pushAttributes()
 }

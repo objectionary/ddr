@@ -1,8 +1,8 @@
-package org.polystat.eodv.graph
+package org.polystat.eodv.graph.builder
 
 import org.junit.jupiter.api.Test
 
-class BuilderTest : BuilderBaseTest() {
+class BuilderTest : BuilderBase() {
 
     @Test
     fun `test basic tree`() = doTest()

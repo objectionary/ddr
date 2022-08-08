@@ -15,4 +15,18 @@ class AttributesSetter(private val graph: Graph) {
         }
         println()
     }
+
+    fun pushAttributes() {
+        graph.heads.forEach { dfsPush(it, null) }
+        println()
+    }
+
+    private fun dfsPush(node: IGraphNode, parent: IGraphNode?) {
+        parent?.attributes?.filter { pa ->
+            node.attributes.none { na -> na.name == pa.name }
+        }?.forEach {
+            node.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
+        }
+        node.children.forEach { dfsPush(it, node) }
+    }
 }

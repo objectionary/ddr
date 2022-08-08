@@ -14,9 +14,10 @@ interface TestBase {
             actual.replace("\n", "").replace("\r", "")
         )
 
-    fun constructInPath(path: String): String = "src/test/resources/graph/in/$path.xml"
+    fun constructInPath(path: String): String = "src/test/resources/in/$path.xml"
 
-    fun constructOutPath(path: String): String = "src/test/resources/graph/out/$path.txt"
+    fun constructOutPath(path: String): String
+
 
     fun getTestName() = Thread.currentThread().stackTrace[4].methodName.substring(5).replace(' ', '_')
 }

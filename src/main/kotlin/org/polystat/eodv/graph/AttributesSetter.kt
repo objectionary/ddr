@@ -17,16 +17,23 @@ class AttributesSetter(private val graph: Graph) {
     }
 
     fun pushAttributes() {
-        graph.heads.forEach { dfsPush(it, null) }
+        graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
         println()
     }
 
-    private fun dfsPush(node: IGraphNode, parent: IGraphNode?) {
+    private fun dfsPush(
+        node: IGraphNode,
+        parent: IGraphNode?,
+        visited: MutableMap<IGraphNode, Int>
+    ) {
+        if (visited[node] == 2) return
+        if (visited[node] == 1) visited[node] = 2
+        else visited[node] = 1
         parent?.attributes?.filter { pa ->
             node.attributes.none { na -> na.name == pa.name }
         }?.forEach {
             node.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
         }
-        node.children.forEach { dfsPush(it, node) }
+        node.children.forEach { dfsPush(it, node, visited) }
     }
 }

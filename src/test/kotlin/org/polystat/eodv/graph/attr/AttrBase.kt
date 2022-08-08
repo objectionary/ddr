@@ -24,13 +24,15 @@ open class AttrBase : TestBase {
         checkOutput(expected, actual)
     }
 
+    override fun constructOutPath(path: String): String = "src/test/resources/out/attr/$path.txt"
+
     private fun printOut(
         out: ByteArrayOutputStream,
         nodes: Set<IGraphNode>
     ) {
         nodes.forEach { node ->
             out.write("NODE: ${node.name} ATTRIBUTES:\n".toByteArray())
-            node.attributes.forEach {out.write("name=${it.name}, dist=${it.parentDistance}".toByteArray())}
+            node.attributes.forEach {out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray())}
         }
     }
 }

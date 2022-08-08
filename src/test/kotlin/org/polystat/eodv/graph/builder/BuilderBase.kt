@@ -22,6 +22,8 @@ open class BuilderBase : TestBase {
         checkOutput(expected, actual)
     }
 
+    override fun constructOutPath(path: String): String = "src/test/resources/out/graph/$path.txt"
+
     private fun printOut(
         node: IGraphNode,
         out: ByteArrayOutputStream,

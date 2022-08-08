@@ -1,0 +1,7 @@
+NODE: name="classA"
+classA CHILD:
+NODE: name="classC"
+classC CHILD:
+NODE: name="classB"
+classB CHILD:
+NODE: name="classA"

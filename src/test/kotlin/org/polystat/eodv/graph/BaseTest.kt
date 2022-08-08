@@ -14,7 +14,7 @@ open class BaseTest {
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-        println(actual)
+        println(actual) // debug
         checkOutput(expected, actual)
     }
 

@@ -1,0 +1,14 @@
+NODE: name="classA"
+classA CHILD:
+NODE: name="classC"
+classC CHILD:
+NODE: name="classB"
+classB CHILD:
+NODE: name="classA"
+NODE: name="classA2"
+classA2 CHILD:
+NODE: name="classC2"
+classC2 CHILD:
+NODE: name="classB2"
+classB2 CHILD:
+NODE: name="classA2"

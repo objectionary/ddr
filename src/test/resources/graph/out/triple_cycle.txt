@@ -1,11 +1,11 @@
+NODE: name="classC"
+classC CHILD:
 NODE: name="classA"
 classA CHILD:
 NODE: name="classB"
 classB CHILD:
 NODE: name="classC"
-classC CHILD:
-NODE: name="classA"
-classC CHILD:
-NODE: name="classD"
 classA CHILD:
 NODE: name="classE"
+classC CHILD:
+NODE: name="classD"

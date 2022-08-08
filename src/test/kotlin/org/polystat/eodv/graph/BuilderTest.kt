@@ -14,14 +14,23 @@ class BuilderTest : BaseTest() {
     fun `test multiple trees`() = doTest("multiple_trees")
 
     @Test
-    fun `test cycle`() = doTest("basic_cycle")
+    fun `test basic cycle`() = doTest("basic_cycle")
 
     @Test
     fun `test triple cycle`() = doTest("triple_cycle")
 
     @Test
-    fun `test multiple cycles`() = {}
+    fun `test multiple cycles`() = doTest("multiple_cycles")
+
+    @Test
+    fun `test closed cycle`() = doTest("closed_cycle")
+
+    @Test
+    fun `test multiple closed cycles`() = doTest("multiple_closed_cycles")
 
     @Test
     fun `test inner`() = doTest("inner")
+
+    @Test
+    fun `test inner concrete`() = doTest("inner_concrete")
 }

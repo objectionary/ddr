@@ -9,3 +9,10 @@ classB CHILD:
 NODE: name="classC"
 classC CHILD:
 NODE: name="classD"
+NODE: name="classB2"
+classB2 CHILD:
+NODE: name="classA2"
+classA2 CHILD:
+NODE: name="classB2"
+classB2 CHILD:
+NODE: name="classC2"

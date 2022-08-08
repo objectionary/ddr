@@ -28,9 +28,18 @@ class GraphBuilder {
                 constructInheritance(document)
                 setLeaves()
                 graph.leaves.forEach { setHeads(it, mutableMapOf()) }
-                val toBeRemoved: MutableSet<IGraphNode> = mutableSetOf()
-                graph.heads.forEach { thinOutHeads(it, toBeRemoved, mutableSetOf()) }
-                toBeRemoved.forEach { graph.heads.remove(it) }
+                val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
+                graph.heads.forEach {
+                    val found = mutableListOf(false)
+                    thinOutHeads(it, thinnedOutHeads, mutableSetOf(), found)
+                    if (!found[0]) {
+                        thinnedOutHeads.add(it)
+                    }
+                }
+                graph.heads.clear()
+                thinnedOutHeads.forEach { graph.heads.add(it) }
+                val cycleDetector = CycleDetector(graph)
+                cycleDetector.findInitiallyReachable()
             }
         } catch (e: Exception) {
             when (e) {
@@ -120,15 +129,20 @@ class GraphBuilder {
     private fun thinOutHeads(
         node: IGraphNode,
         toBeRemoved: MutableSet<IGraphNode>,
-        visited: MutableSet<IGraphNode>
+        visited: MutableSet<IGraphNode>,
+        found: MutableList<Boolean>
     ) {
-        if (toBeRemoved.contains(node)) return
-        if (!toBeRemoved.contains(node) && visited.contains(node)) {
+        if (found[0] || toBeRemoved.contains(node)) {
+            found[0] = true
+            return
+        }
+        if (visited.contains(node)) {
             toBeRemoved.add(node)
+            found[0] = true
             return
         }
         visited.add(node)
-        node.children.forEach { thinOutHeads(it, toBeRemoved, visited) }
+        node.children.forEach { thinOutHeads(it, toBeRemoved, visited, found) }
     }
 
     private fun decorationCycles() {

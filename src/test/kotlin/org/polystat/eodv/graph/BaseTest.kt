@@ -22,13 +22,20 @@ open class BaseTest {
 
     private fun constructOutPath(path: String): String = "src/test/resources/graph/out/$path.txt"
 
-    private fun checkOutput(expected: String, actual: String) =
+    private fun checkOutput(
+        expected: String,
+        actual: String
+    ) =
         assertEquals(
             expected.replace("\n", "").replace("\r", ""),
             actual.replace("\n", "").replace("\r", "")
         )
 
-    private fun printOut(node: IGraphNode, out: ByteArrayOutputStream, nodes: MutableSet<IGraphNode>) {
+    private fun printOut(
+        node: IGraphNode,
+        out: ByteArrayOutputStream,
+        nodes: MutableSet<IGraphNode>
+    ) {
         out.write("NODE: ${node.body.attributes.getNamedItem("name")}\n".toByteArray())
         if (!nodes.contains(node)) {
             nodes.add(node)

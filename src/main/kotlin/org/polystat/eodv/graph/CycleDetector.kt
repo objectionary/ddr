@@ -1,9 +1,7 @@
 package org.polystat.eodv.graph
 
-class CycleDetector(val graph: Graph) {
-    val initiallyReachable: MutableSet<IGraphNode> = mutableSetOf()
-
-    fun findInitiallyReachable() {
+class CycleDetector(private val graph: Graph) {
+    fun processClosedCycles() {
         val reached: MutableMap<IGraphNode, Boolean> = mutableMapOf()
         graph.igNodes.forEach { reached[it] = false }
         graph.heads.forEach { dfsReachable(it, reached) }
@@ -18,13 +16,19 @@ class CycleDetector(val graph: Graph) {
         assert(graph.igNodes.size == reached.filter { it.value }.size)
     }
 
-    private fun dfsReachable(node: IGraphNode, reached: MutableMap<IGraphNode, Boolean>) {
+    private fun dfsReachable(
+        node: IGraphNode,
+        reached: MutableMap<IGraphNode, Boolean>
+    ) {
         if (reached[node] == true) return
         else reached[node] = true
         node.children.forEach { dfsReachable(it, reached) }
     }
 
-    private fun traverseCycles(node: IGraphNode, reached: MutableMap<IGraphNode, Boolean>) {
+    private fun traverseCycles(
+        node: IGraphNode,
+        reached: MutableMap<IGraphNode, Boolean>
+    ) {
         if (reached[node]!!) return
         reached[node] = true
         node.children.forEach { traverseCycles(it, reached) }

@@ -38,8 +38,7 @@ class GraphBuilder {
                 }
                 graph.heads.clear()
                 thinnedOutHeads.forEach { graph.heads.add(it) }
-                val cycleDetector = CycleDetector(graph)
-                cycleDetector.findInitiallyReachable()
+                CycleDetector(graph).processClosedCycles()
             }
         } catch (e: Exception) {
             when (e) {
@@ -110,14 +109,17 @@ class GraphBuilder {
         }
     }
 
-    private fun checkNodes(node: IGraphNode) : IGraphNode? {
+    private fun checkNodes(node: IGraphNode): IGraphNode? {
         return graph.igNodes.find { it.body.attributes == node.body.attributes }
     }
 
     private fun setLeaves() =
         graph.igNodes.filter { it.children.isEmpty() }.forEach { graph.leaves.add(it) }
 
-    private fun setHeads(node: IGraphNode, visited: MutableMap<IGraphNode, Boolean>) {
+    private fun setHeads(
+        node: IGraphNode,
+        visited: MutableMap<IGraphNode, Boolean>
+    ) {
         if (visited.containsKey(node) || node.parents.isEmpty()) {
             graph.heads.add(node)
         } else {

@@ -5,32 +5,32 @@ import org.junit.jupiter.api.Test
 class BuilderTest : BuilderBaseTest() {
 
     @Test
-    fun `test basic tree`() = doTest("basic_tree")
+    fun `test basic tree`() = doTest()
 
     @Test
-    fun `test tree`() = doTest("tree")
+    fun `test tree`() = doTest()
 
     @Test
-    fun `test multiple trees`() = doTest("multiple_trees")
+    fun `test multiple trees`() = doTest()
 
     @Test
-    fun `test basic cycle`() = doTest("basic_cycle")
+    fun `test basic cycle`() = doTest()
 
     @Test
-    fun `test triple cycle`() = doTest("triple_cycle")
+    fun `test triple cycle`() = doTest()
 
     @Test
-    fun `test multiple cycles`() = doTest("multiple_cycles")
+    fun `test multiple cycles`() = doTest()
 
     @Test
-    fun `test closed cycle`() = doTest("closed_cycle")
+    fun `test closed cycle`() = doTest()
 
     @Test
-    fun `test multiple closed cycles`() = doTest("multiple_closed_cycles")
+    fun `test multiple closed cycles`() = doTest()
 
     @Test
-    fun `test inner`() = doTest("inner")
+    fun `test inner`() = doTest()
 
     @Test
-    fun `test inner concrete`() = doTest("inner_concrete")
+    fun `test inner concrete`() = doTest()
 }

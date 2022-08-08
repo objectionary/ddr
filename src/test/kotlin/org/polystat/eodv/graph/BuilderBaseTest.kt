@@ -8,7 +8,8 @@ import kotlin.test.assertEquals
 
 open class BuilderBaseTest {
 
-    fun doTest(path: String) {
+    fun doTest() {
+        val path = Thread.currentThread().stackTrace[2].methodName.substring(5).replace(' ', '_')
         val graph = buildGraph(path, constructInPath(path))
         val out = ByteArrayOutputStream()
         graph.heads.forEach { printOut(it, out, mutableSetOf()) }

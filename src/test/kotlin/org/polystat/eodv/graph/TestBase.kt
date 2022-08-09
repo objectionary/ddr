@@ -14,7 +14,7 @@ interface TestBase {
             actual.replace("\n", "").replace("\r", "")
         )
 
-    fun constructInPath(path: String): String = "src/test/resources/in/$path.xml"
+    fun constructInPath(path: String): String = "src\\test\\resources\\in\\$path.xml"
 
     fun constructOutPath(path: String): String
 

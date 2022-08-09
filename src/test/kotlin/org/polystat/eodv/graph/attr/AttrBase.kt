@@ -20,11 +20,11 @@ open class AttrBase : TestBase {
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-        println(actual) // debug
+//        println(actual) // debug
         checkOutput(expected, actual)
     }
 
-    override fun constructOutPath(path: String): String = "src/test/resources/out/attr/$path.txt"
+    override fun constructOutPath(path: String): String = "src\\test\\resources\\out\\attr\\$path.txt"
 
     private fun printOut(
         out: ByteArrayOutputStream,

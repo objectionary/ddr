@@ -18,18 +18,18 @@ open class BuilderBase : TestBase {
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-        println(actual) // debug
+//        println(actual) // debug
         checkOutput(expected, actual)
     }
 
-    override fun constructOutPath(path: String): String = "src/test/resources/out/graph/$path.txt"
+    override fun constructOutPath(path: String): String = "src\\test\\resources\\out\\builder\\$path.txt"
 
     private fun printOut(
         node: IGraphNode,
         out: ByteArrayOutputStream,
         nodes: MutableSet<IGraphNode>
     ) {
-        out.write("NODE: ${node.name}\n".toByteArray())
+        out.write("NODE: name=\"${node.name}\"\n".toByteArray())
         if (!nodes.contains(node)) {
             nodes.add(node)
         } else {

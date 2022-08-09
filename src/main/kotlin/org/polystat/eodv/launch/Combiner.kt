@@ -4,11 +4,13 @@ import org.polystat.eodv.graph.AttributesSetter
 import org.polystat.eodv.graph.Graph
 import org.polystat.eodv.graph.GraphBuilder
 import org.polystat.eodv.transform.XslTransformer
+import java.io.File
 import java.nio.file.Files
 import kotlin.io.path.Path
 
-private const val ADD_REFS_XSL = "src\\main\\resources\\add-refs.xsl" // todo separator
-private const val OUTPUT_DIR = "src\\main\\resources\\tmp_out"
+private val sep = File.separatorChar
+private val ADD_REFS_XSL = "src${sep}main${sep}resources${sep}add-refs.xsl"
+private val OUTPUT_DIR = "src${sep}main${sep}resources${sep}tmp_out"
 
 fun launch(
     filename: String,
@@ -22,7 +24,7 @@ fun buildGraph(
     filename: String,
     path: String
 ): Graph {
-    val out = "$OUTPUT_DIR\\$filename.xml"
+    val out = "$OUTPUT_DIR${sep}$filename.xml"
     Files.createDirectories(Path(OUTPUT_DIR))
     val transformer = XslTransformer()
     transformer.createXsl(path, out, ADD_REFS_XSL)

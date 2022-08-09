@@ -22,7 +22,7 @@ open class BuilderBase : TestBase {
         checkOutput(expected, actual)
     }
 
-    override fun constructOutPath(path: String): String = "src\\test\\resources\\out\\builder\\$path.txt"
+    override fun constructOutPath(path: String): String = "src${sep}test${sep}resources${sep}out${sep}builder${sep}$path.txt"
 
     private fun printOut(
         node: IGraphNode,

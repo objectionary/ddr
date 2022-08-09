@@ -1,8 +1,13 @@
 package org.polystat.eodv.graph
 
+import java.io.File
 import kotlin.test.assertEquals
 
 interface TestBase {
+    
+    val sep: Char
+        get() = File.separatorChar
+
     fun doTest()
 
     fun checkOutput(
@@ -14,7 +19,7 @@ interface TestBase {
             actual.replace("\n", "").replace("\r", "")
         )
 
-    fun constructInPath(path: String): String = "src\\test\\resources\\in\\$path.xml"
+    fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}in${sep}$path.xml"
 
     fun constructOutPath(path: String): String
 

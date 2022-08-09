@@ -24,7 +24,7 @@ open class AttrBase : TestBase {
         checkOutput(expected, actual)
     }
 
-    override fun constructOutPath(path: String): String = "src\\test\\resources\\out\\attr\\$path.txt"
+    override fun constructOutPath(path: String): String = "src${sep}test${sep}resources${sep}out${sep}attr${sep}$path.txt"
 
     private fun printOut(
         out: ByteArrayOutputStream,

@@ -16,41 +16,40 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
-class GraphBuilder {
+/**
+ * Builds decoration hierarchy graph
+ */
+class GraphBuilder(private val document: Document) {
     private val logger = KotlinLogging.logger {}
+    private val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
     val graph = Graph()
 
-    fun createGraph(filename: String) {
+    fun createGraph() {
         try {
-            val factory = DocumentBuilderFactory.newInstance()
-            FileInputStream(filename).use { `is` ->
-                val document = factory.newDocumentBuilder().parse(`is`)
-                constructInheritance(document)
-                setLeaves()
-                graph.leaves.forEach { setHeads(it, mutableMapOf()) }
-                val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
-                graph.heads.forEach {
-                    val found = mutableListOf(false)
-                    thinOutHeads(it, thinnedOutHeads, mutableSetOf(), found)
-                    if (!found[0]) {
-                        thinnedOutHeads.add(it)
-                    }
+            constructInheritance(document)
+            setLeaves()
+            graph.leaves.forEach { setHeads(it, mutableMapOf()) }
+            val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
+            graph.heads.forEach {
+                val found = mutableListOf(false)
+                thinOutHeads(it, thinnedOutHeads, mutableSetOf(), found)
+                if (!found[0]) {
+                    thinnedOutHeads.add(it)
                 }
-                graph.heads.clear()
-                thinnedOutHeads.forEach { graph.heads.add(it) }
-                processClosedCycles(graph)
             }
+            graph.heads.clear()
+            thinnedOutHeads.forEach { graph.heads.add(it) }
+            processClosedCycles(graph)
         } catch (e: Exception) {
             when (e) {
-                is ParserConfigurationException, is SAXException, is IOException, is TransformerException ->
+                is IOException, is TransformerException ->
                     logger.error { e.message }
                 else -> throw e
             }
         }
     }
 
-    private fun abstracts(objects: NodeList): MutableMap<String, MutableSet<Node>> {
-        val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
+    private fun abstracts(objects: NodeList) {
         for (i in 0..objects.length) {
             val node = objects.item(i)
             val name = node?.attributes?.getNamedItem("name")?.textContent
@@ -58,11 +57,9 @@ class GraphBuilder {
                 abstracts.getOrPut(name) { mutableSetOf() }.add(node)
             }
         }
-        return abstracts
     }
 
     private fun getAbstract(
-        abstracts: MutableMap<String, MutableSet<Node>>,
         baseName: String?,
         baseRef: String?
     ): Node? {
@@ -76,7 +73,7 @@ class GraphBuilder {
 
     private fun constructInheritance(document: Document) {
         val objects = document.getElementsByTagName("o")
-        val abstracts = abstracts(objects)
+        abstracts(objects)
         for (i in 0..objects.length) {
             val node = objects.item(i)
             val name = node?.attributes?.getNamedItem("name")?.textContent
@@ -84,7 +81,7 @@ class GraphBuilder {
                 // check that @ attribute's base has an abstract object in this program
                 val baseNodeName = node.attributes.getNamedItem("base")?.textContent
                 val baseNodeRef = node.attributes.getNamedItem("ref")?.textContent
-                val abstractBaseNode = getAbstract(abstracts, baseNodeName, baseNodeRef)
+                val abstractBaseNode = getAbstract(baseNodeName, baseNodeRef)
                 if (abstractBaseNode != null) {
                     val parentNode = node.parentNode
                     if (parentNode != null) {

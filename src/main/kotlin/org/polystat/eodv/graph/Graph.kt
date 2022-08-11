@@ -2,6 +2,9 @@ package org.polystat.eodv.graph
 
 import org.w3c.dom.Node
 
+/**
+ * Decoration hierarchy graph representation
+ */
 class Graph {
     val igNodes: MutableSet<IGraphNode> = mutableSetOf()
     val heads: MutableSet<IGraphNode> = mutableSetOf()
@@ -16,6 +19,10 @@ class Graph {
     }
 }
 
+/**
+ * Graph node representation
+ * @param body represents the corresponding xml file node
+ */
 data class IGraphNode(
     val body: Node
 ) {
@@ -26,6 +33,12 @@ data class IGraphNode(
     val attributes: MutableList<IGraphAttr> = mutableListOf()
 }
 
+/**
+ * Graph attribute representation
+ * @param name is the name of the attribute
+ * @param parentDistance is the distance to the parent, from which this attribute was pushed to current node
+ * @param body represents the corresponding xml file node
+ */
 data class IGraphAttr(
     val name: String,
     val parentDistance: Int,

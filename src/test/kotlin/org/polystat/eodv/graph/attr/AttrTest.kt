@@ -2,6 +2,9 @@ package org.polystat.eodv.graph.attr
 
 import org.junit.jupiter.api.Test
 
+/**
+ * Tests attributes propagation
+ */
 class AttrTest : AttrBase() {
 
     @Test

@@ -3,7 +3,7 @@ package org.polystat.eodv.graph
 import org.w3c.dom.Node
 
 class AttributesSetter(private val graph: Graph) {
-    fun setSpecifiedAttributes() {
+    fun setDefaultAttributes() {
         graph.igNodes.forEach {
             val attributes = it.body.childNodes
             for (j in 0 until attributes.length) {
@@ -13,13 +13,9 @@ class AttributesSetter(private val graph: Graph) {
                 }
             }
         }
-        println()
     }
 
-    fun pushAttributes() {
-        graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
-        println()
-    }
+    fun pushAttributes() = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
 
     private fun dfsPush(
         node: IGraphNode,

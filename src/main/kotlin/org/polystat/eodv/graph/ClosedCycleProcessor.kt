@@ -1,5 +1,8 @@
 package org.polystat.eodv.graph
 
+/**
+ * Processes decoration cycles
+ */
 @Throws(IllegalStateException::class)
 fun processClosedCycles(graph: Graph) {
     val reached: MutableMap<IGraphNode, Boolean> = mutableMapOf()

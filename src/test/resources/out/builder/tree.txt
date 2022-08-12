@@ -1,3 +1,6 @@
+NODE: name="live"
+NODE: name="talk"
+NODE: name="talk"
 NODE: name="creature"
 creature CHILD:
 NODE: name="animal"
@@ -9,3 +12,8 @@ creature CHILD:
 NODE: name="human"
 human CHILD:
 NODE: name="olesya"
+NODE: name="meow"
+NODE: name="live"
+NODE: name="woof"
+NODE: name="work"
+NODE: name="main"

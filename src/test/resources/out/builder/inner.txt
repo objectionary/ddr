@@ -1,3 +1,4 @@
+NODE: name="eat"
 NODE: name="live"
 live CHILD:
 NODE: name="talk"
@@ -6,3 +7,9 @@ animal CHILD:
 NODE: name="mouse"
 animal CHILD:
 NODE: name="cat"
+NODE: name="pii"
+NODE: name="human"
+NODE: name="live"
+NODE: name="talk"
+NODE: name="meow"
+NODE: name="main"

@@ -55,6 +55,7 @@ class GraphBuilder(private val document: Document) {
             val name = node?.attributes?.getNamedItem("name")?.textContent
             if (node?.attributes?.getNamedItem("abstract") != null && name != null) {
                 abstracts.getOrPut(name) { mutableSetOf() }.add(node)
+                graph.igNodes.add(IGraphNode(node))
             }
         }
     }

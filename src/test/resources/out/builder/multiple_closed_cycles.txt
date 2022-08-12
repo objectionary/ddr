@@ -1,3 +1,10 @@
+NODE: name="doA"
+NODE: name="doB"
+NODE: name="doC"
+NODE: name="doA2"
+NODE: name="doB2"
+NODE: name="doC2"
+NODE: name="main"
 NODE: name="classA"
 classA CHILD:
 NODE: name="classC"

@@ -28,6 +28,7 @@ fun launch(
     val graph = buildGraph(filename, path)
     processAttributes(graph)
     val innerPropagator = InnerPropagator(document!!, graph)
+    innerPropagator.propagateInnerAttrs()
 }
 
 fun buildGraph(

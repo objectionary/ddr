@@ -26,8 +26,8 @@ class Graph {
 data class IGraphNode(
     val body: Node
 ) {
-//    val name: String by lazy { body.attributes.getNamedItem("name").textContent }
-    val name: String = body.attributes.getNamedItem("name").textContent // debug
+//    val name: String by lazy { name(body) }
+    val name: String? = name(body) // debug
     val children: MutableList<IGraphNode> = mutableListOf()
     val parents: MutableList<IGraphNode> = mutableListOf()
     val attributes: MutableList<IGraphAttr> = mutableListOf()

@@ -52,8 +52,8 @@ class GraphBuilder(private val document: Document) {
     private fun abstracts(objects: NodeList) {
         for (i in 0..objects.length) {
             val node = objects.item(i)
-            val name = node?.attributes?.getNamedItem("name")?.textContent
-            if (node?.attributes?.getNamedItem("abstract") != null && name != null) {
+            val name = name(node)
+            if (abstract(node) != null && name != null) {
                 abstracts.getOrPut(name) { mutableSetOf() }.add(node)
                 graph.igNodes.add(IGraphNode(node))
             }
@@ -66,7 +66,7 @@ class GraphBuilder(private val document: Document) {
     ): Node? {
         if (baseName != null && abstracts.contains(baseName)) {
             return abstracts[baseName]!!.find {
-                it.attributes?.getNamedItem("line")?.textContent == baseRef
+                line(it) == baseRef
             }
         }
         return null
@@ -77,11 +77,11 @@ class GraphBuilder(private val document: Document) {
         abstracts(objects)
         for (i in 0..objects.length) {
             val node = objects.item(i)
-            val name = node?.attributes?.getNamedItem("name")?.textContent
+            val name = name(node)
             if (name != null && name == "@") {
                 // check that @ attribute's base has an abstract object in this program
-                val baseNodeName = node.attributes.getNamedItem("base")?.textContent
-                val baseNodeRef = node.attributes.getNamedItem("ref")?.textContent
+                val baseNodeName = base(node)
+                val baseNodeRef = ref(node)
                 val abstractBaseNode = getAbstract(baseNodeName, baseNodeRef)
                 if (abstractBaseNode != null) {
                     val parentNode = node.parentNode

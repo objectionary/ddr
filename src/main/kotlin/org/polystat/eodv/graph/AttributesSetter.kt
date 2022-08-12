@@ -8,8 +8,8 @@ class AttributesSetter(private val graph: Graph) {
             val attributes = it.body.childNodes
             for (j in 0 until attributes.length) {
                 val attr: Node = attributes.item(j)
-                if (attr.attributes?.getNamedItem("abstract") != null) {
-                    it.attributes.add(IGraphAttr(attr.attributes.getNamedItem("name").textContent, 0, attr))
+                if (abstract(attr) != null) {
+                    it.attributes.add(IGraphAttr(name(attr)!!, 0, attr))
                 }
             }
         }

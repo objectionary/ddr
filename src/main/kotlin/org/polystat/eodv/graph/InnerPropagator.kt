@@ -13,11 +13,9 @@ class InnerPropagator(
 ) {
     private val decorators: MutableMap<IGraphNode, Boolean> = mutableMapOf()
     private val abstracts: MutableMap<String, MutableSet<IGraphNode>> = mutableMapOf()
-//    private val abstracts: MutableSet<IGraphNode> = mutableSetOf()
 
     fun propagateInnerAttrs() {
         collectDecorators()
-//        collectAbstracts()
         processDecorators()
     }
 
@@ -25,37 +23,30 @@ class InnerPropagator(
         val objects = document.getElementsByTagName("o")
         for (i in 0..objects.length) {
             val node = objects.item(i)
-            val name = node?.attributes?.getNamedItem("name")?.textContent
+            val name = name(node)
             if (name != null && name == "@") {
                 decorators[IGraphNode(node)] = false
             }
-            if (node?.attributes?.getNamedItem("abstract") != null && name != null) {
+            if (abstract(node) != null && name != null) {
                 abstracts.getOrPut(name) { mutableSetOf() }.add(IGraphNode(node))
             }
         }
     }
 
-//    private fun collectAbstracts() {
-//        graph.igNodes.forEach {
-//            if (it.body.attributes?.getNamedItem("abstract") != null)
-//                abstracts.add(it)
-//        }
-//    }
-
     private fun processDecorators() {
-//        while (decorators.containsValue(false)) {
-            decorators.filter { !it.value }.forEach {
-                getBaseAbstract(it.key)
-            }
+//        while (decorators.containsValue(false)) { // todo
+        decorators.filter { !it.value }.forEach {
+            getBaseAbstract(it.key)
+        }
 //        }
     }
 
     private fun getBaseAbstract(key: IGraphNode) {
         var tmpKey = key.body
-        while (tmpKey.attributes.getNamedItem("base")?.textContent?.startsWith('.') == true) {
+        while (base(tmpKey)?.startsWith('.') == true) {
             tmpKey = tmpKey.previousSibling.previousSibling
         }
-        when (tmpKey.attributes.getNamedItem("base")?.textContent) {
+        when (base(tmpKey)) {
             "^" -> decorators[key] = processParent(tmpKey)
             "$" -> {} // todo
             else -> { // tom
@@ -79,7 +70,7 @@ class InnerPropagator(
             igParent = graph.igNodes.find { it.body == parent }
         }
         val prev = igParent!!.attributes.find {
-            node.nextSibling.nextSibling.attributes.getNamedItem("base").textContent.substring(1) == it.name
+            base(node.nextSibling.nextSibling)?.substring(1) == it.name
         } // found prev chain attribute in igParent
         val prevNode = graph.igNodes.find { it.body == prev?.body } // found actual graph node of this attribute
         prevNode?.attributes?.forEach { igObj!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body)) }
@@ -89,7 +80,7 @@ class InnerPropagator(
 
     private fun resolveRefs(node: Node): Node? {
         // node == tom
-        return if (node.attributes?.getNamedItem("abstract") != null) {
+        return if (abstract(node) != null) {
             node
         } else {
             val objects = document.getElementsByTagName("o")
@@ -98,11 +89,11 @@ class InnerPropagator(
     }
 
     private fun findAbstractRec(node: Node, objects: NodeList): Node? {
-        val ref = node.attributes?.getNamedItem("ref")?.textContent ?: return null
+        val ref = ref(node) ?: return null
         for (i in 0..objects.length) {
             val item = objects.item(i) ?: continue
-            if (item.attributes.getNamedItem("line")?.textContent == ref) {
-                return if (item.attributes.getNamedItem("abstract") != null) item
+            if (line(item) == ref) {
+                return if (abstract(item) != null) item
                 else findAbstractRec(item, objects)
             }
         }
@@ -110,28 +101,27 @@ class InnerPropagator(
     }
 
     private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode) { // tom, mouse
-        // надо пройти по цепочке обратно чтобы найти eat у pii и дать main-у его свойства, расставлять @ буду потом
         var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return
-        var tmpNode: Node? = node.nextSibling.nextSibling?: return // graph.igNodes.find { it.body == node }?: return
-        if (node.attributes.getNamedItem("base").textContent == "tom") {
+        var tmpNode: Node? = node.nextSibling.nextSibling ?: return // graph.igNodes.find { it.body == node }?: return
+        if (base(node) == "tom") {
             println()
         }
-        while (tmpAbstract.body.attributes.getNamedItem("name").textContent != key.body.attributes.getNamedItem("base")?.textContent?.substring(1)) {
+        while (name(tmpAbstract.body) != base(key.body)?.substring(1)) {
             tmpAbstract = graph.igNodes.find { e ->
-                tmpAbstract.attributes.find {
-                    tmpNode!!.attributes.getNamedItem("base")?.textContent?.substring(1) == it.body.attributes.getNamedItem("name")?.textContent
-                }?.body == e.body
+                tmpAbstract.attributes.find { base(tmpNode)?.substring(1) == name(it.body) }?.body == e.body
             } ?: return
             tmpNode = tmpNode?.nextSibling?.nextSibling
         }
 
-        val parent = node.parentNode?: return // main (analogue of obj above, not parent!!!)
+        val parent = node.parentNode ?: return
         var igParent = graph.igNodes.find { it.body == parent }
         if (igParent == null) {
             graph.igNodes.add(IGraphNode(parent))
             igParent = graph.igNodes.find { it.body == parent }
         }
-        tmpAbstract.attributes.forEach { igParent!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body)) }
+        tmpAbstract.attributes.forEach {
+            igParent!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
+        }
         graph.connect(igParent!!, tmpAbstract)
     }
 

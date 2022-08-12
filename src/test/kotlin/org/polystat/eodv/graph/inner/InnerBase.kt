@@ -30,19 +30,12 @@ open class InnerBase : TestBase {
     override fun constructOutPath(path: String): String = "src${sep}test${sep}resources${sep}out${sep}inner${sep}$path.txt"
 
     private fun printOut(
-        node: IGraphNode,
         out: ByteArrayOutputStream,
-        nodes: MutableSet<IGraphNode>
+        nodes: Set<IGraphNode>
     ) {
-        out.write("NODE: name=\"${node.name}\"\n".toByteArray())
-        if (!nodes.contains(node)) {
-            nodes.add(node)
-        } else {
-            return
-        }
-        node.children.forEach {
-            out.write("${node.name} CHILD:\n".toByteArray())
-            printOut(it, out, nodes)
+        nodes.forEach { node ->
+            out.write("NODE: ${node.name} ATTRIBUTES:\n".toByteArray())
+            node.attributes.forEach {out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray())}
         }
     }
 }

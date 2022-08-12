@@ -66,7 +66,7 @@ class GraphBuilder(private val document: Document) {
     ): Node? {
         if (baseName != null && abstracts.contains(baseName)) {
             return abstracts[baseName]!!.find {
-                it.attributes?.getNamedItem("line")?.textContent == baseRef // нет конечно
+                it.attributes?.getNamedItem("line")?.textContent == baseRef
             }
         }
         return null

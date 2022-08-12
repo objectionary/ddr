@@ -23,6 +23,9 @@ class InnerTest : InnerBase() {
     fun `test inner prop`() = doTest()
 
     @Test
+    fun `test inner ordered`() = doTest()
+
+    @Test
     @Ignore
     fun `test condition`() = doTest()
 }

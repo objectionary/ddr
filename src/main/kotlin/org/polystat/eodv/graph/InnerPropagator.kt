@@ -35,9 +35,10 @@ class InnerPropagator(
 
     private fun processDecorators() {
 //        while (decorators.containsValue(false)) { // todo
-        decorators.filter { !it.value }.forEach {
-            getBaseAbstract(it.key)
-        }
+        for (i in 0..5)
+            decorators.filter { !it.value }.forEach {
+                getBaseAbstract(it.key)
+            }
 //        }
     }
 
@@ -47,7 +48,9 @@ class InnerPropagator(
             tmpKey = tmpKey.previousSibling.previousSibling
         }
         when (base(tmpKey)) {
-            "^" -> decorators[key] = processParent(tmpKey)
+            "^" -> {
+                processParent2(tmpKey, key)
+            }
             "$" -> {} // todo
             else -> { // tom
                 val abstract = resolveRefs(tmpKey) ?: return // => tom == mouse
@@ -57,13 +60,13 @@ class InnerPropagator(
     }
 
     private fun processParent(node: Node): Boolean {
-        val obj = node.parentNode // pii
+        val obj = node.parentNode // rat_pii
         var igObj = graph.igNodes.find { it.body == obj }
         if (igObj == null) {
             graph.igNodes.add(IGraphNode(obj))
             igObj = graph.igNodes.find { it.body == obj }
         }
-        val parent = node.parentNode.parentNode // mouse
+        val parent = node.parentNode.parentNode // rat
         var igParent = graph.igNodes.find { it.body == parent }
         if (igParent == null) {
             graph.igNodes.add(IGraphNode(parent))
@@ -78,8 +81,17 @@ class InnerPropagator(
         return true
     }
 
+    private fun processParent2(node: Node, key: IGraphNode): Boolean {
+        val parent = node.parentNode.parentNode // rat
+        var igParent = graph.igNodes.find { it.body == parent }
+        if (igParent == null) {
+            graph.igNodes.add(IGraphNode(parent))
+            igParent = graph.igNodes.find { it.body == parent }
+        }
+        return resolveAttrs(node, parent, key)
+    }
+
     private fun resolveRefs(node: Node): Node? {
-        // node == tom
         return if (abstract(node) != null) {
             node
         } else {
@@ -100,29 +112,28 @@ class InnerPropagator(
         return null
     }
 
-    private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode) { // tom, mouse
-        var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return
-        var tmpNode: Node? = node.nextSibling.nextSibling ?: return // graph.igNodes.find { it.body == node }?: return
-        if (base(node) == "tom") {
-            println()
-        }
+    private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode): Boolean { // tom, mouse
+        var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return false
+        var tmpNode: Node? = node.nextSibling.nextSibling ?: return false // graph.igNodes.find { it.body == node }?: return
         while (name(tmpAbstract.body) != base(key.body)?.substring(1)) {
             tmpAbstract = graph.igNodes.find { e ->
                 tmpAbstract.attributes.find { base(tmpNode)?.substring(1) == name(it.body) }?.body == e.body
-            } ?: return
+            } ?: return false
             tmpNode = tmpNode?.nextSibling?.nextSibling
         }
-
-        val parent = node.parentNode ?: return
+        val parent = node.parentNode ?: return false // rat_pii
         var igParent = graph.igNodes.find { it.body == parent }
         if (igParent == null) {
             graph.igNodes.add(IGraphNode(parent))
             igParent = graph.igNodes.find { it.body == parent }
         }
         tmpAbstract.attributes.forEach {
-            igParent!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
+            if (igParent!!.attributes.find { a -> it.body == a.body } == null) {
+                igParent.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
+            }
         }
         graph.connect(igParent!!, tmpAbstract)
+        return true
     }
 
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="401"
+         name="ex-1"
+         time="2022-08-12T18:11:26.935279200Z"
+         version="1.0-SNAPSHOT">
+    <listing>+alias org.eolang.io.stdout
+
+        [] &gt; animal
+        [] &gt; live
+        [] &gt; eat
+        stdout &gt; @
+        "I'm eating"
+        [] &gt; smth
+        5.plus &gt; @
+        6
+        stdout &gt; @
+        "I'm alive animal"
+        [t] &gt; talk
+        live &gt; @
+
+        [] &gt; rat
+        mouse &gt; @
+        [] &gt; rat_pii
+        ^.pii.eat &gt; @
+
+        [] &gt; mouse
+        animal &gt; @
+        [] &gt; pii
+        ^.live &gt; @
+
+        [args...] &gt; main
+        rat &gt; tom
+        tom.rat_pii &gt; @
+    </listing>
+    <errors/>
+    <sheets/>
+    <metas>
+        <meta line="1">
+            <head>alias</head>
+            <tail>org.eolang.io.stdout</tail>
+            <part>org.eolang.io.stdout</part>
+        </meta>
+    </metas>
+    <objects>
+        <o abstract="" line="3" name="animal" pos="0">
+            <o abstract="" line="4" name="live" pos="2">
+                <o abstract="" line="5" name="eat" pos="4">
+                    <o base="stdout" line="6" name="@" pos="6">
+                        <o base="string" data="string" line="7" pos="8">I'm eating</o>
+                    </o>
+                    <o abstract="" line="8" name="smth" pos="6">
+                        <o base="int" data="int" line="9" pos="8">5</o>
+                        <o base=".plus" line="9" method="" name="@" pos="9">
+                            <o base="int" data="int" line="10" pos="10">6</o>
+                        </o>
+                    </o>
+                </o>
+                <o base="stdout" line="11" name="@" pos="4">
+                    <o base="string" data="string" line="12" pos="6">I'm alive animal</o>
+                </o>
+            </o>
+            <o abstract="" line="13" name="talk" pos="2">
+                <o line="13" name="t" pos="3"/>
+                <o base="live" line="14" name="@" pos="4"/>
+            </o>
+        </o>
+        <o abstract="" line="16" name="rat" pos="0">
+            <o base="mouse" line="17" name="@" pos="2"/>
+            <o abstract="" line="18" name="rat_pii" pos="2">
+                <o base="^" line="19" pos="4"/>
+                <o base=".pii" line="19" method="" pos="5"/>
+                <o base=".eat" line="19" method="" name="@" pos="9"/>
+            </o>
+        </o>
+        <o abstract="" line="21" name="mouse" pos="0">
+            <o base="animal" line="22" name="@" pos="2"/>
+            <o abstract="" line="23" name="pii" pos="2">
+                <o base="^" line="24" pos="4"/>
+                <o base=".live" line="24" method="" name="@" pos="5"/>
+            </o>
+        </o>
+        <o abstract="" line="26" name="main" pos="0">
+            <o line="26" name="args" pos="1" vararg=""/>
+            <o base="rat" line="27" name="tom" pos="2"/>
+            <o base="tom" line="28" pos="2"/>
+            <o base=".rat_pii" line="28" method="" name="@" pos="5"/>
+        </o>
+    </objects>
+</program>

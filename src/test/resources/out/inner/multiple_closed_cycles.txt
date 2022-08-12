@@ -1,0 +1,31 @@
+NODE: classA ATTRIBUTES:
+name=doA, dist=0
+name=doB, dist=1
+name=doC, dist=2
+NODE: doA ATTRIBUTES:
+NODE: classB ATTRIBUTES:
+name=doB, dist=0
+name=doC, dist=1
+name=doA, dist=2
+NODE: doB ATTRIBUTES:
+NODE: classC ATTRIBUTES:
+name=doC, dist=0
+name=doA, dist=1
+name=doB, dist=2
+NODE: doC ATTRIBUTES:
+NODE: classA2 ATTRIBUTES:
+name=doA2, dist=0
+name=doB2, dist=1
+name=doC2, dist=2
+NODE: doA2 ATTRIBUTES:
+NODE: classB2 ATTRIBUTES:
+name=doB2, dist=0
+name=doC2, dist=1
+name=doA2, dist=2
+NODE: doB2 ATTRIBUTES:
+NODE: classC2 ATTRIBUTES:
+name=doC2, dist=0
+name=doA2, dist=1
+name=doB2, dist=2
+NODE: doC2 ATTRIBUTES:
+NODE: main ATTRIBUTES:

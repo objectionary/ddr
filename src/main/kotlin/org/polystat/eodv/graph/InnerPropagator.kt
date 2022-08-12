@@ -3,7 +3,6 @@ package org.polystat.eodv.graph
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
-import java.util.Objects
 
 /**
  * Propagates inner attributes
@@ -44,11 +43,11 @@ class InnerPropagator(
 //    }
 
     private fun processDecorators() {
-        while (decorators.containsValue(false)) {
+//        while (decorators.containsValue(false)) {
             decorators.filter { !it.value }.forEach {
                 getBaseAbstract(it.key)
             }
-        }
+//        }
     }
 
     private fun getBaseAbstract(key: IGraphNode) {
@@ -56,19 +55,14 @@ class InnerPropagator(
         while (tmpKey.attributes.getNamedItem("base")?.textContent?.startsWith('.') == true) {
             tmpKey = tmpKey.previousSibling.previousSibling
         }
-        if(tmpKey.attributes.getNamedItem("base").textContent == "tom") {
-            println()
-        }
         when (tmpKey.attributes.getNamedItem("base")?.textContent) {
             "^" -> decorators[key] = processParent(tmpKey)
             "$" -> {} // todo
             else -> { // tom
-                val abstract = resolveRefs(tmpKey)?: return // => tom == mouse
-                resolveAttrs(tmpKey, abstract)
-                println()
+                val abstract = resolveRefs(tmpKey) ?: return // => tom == mouse
+                resolveAttrs(tmpKey, abstract, key)
             }
         }
-        println()
     }
 
     private fun processParent(node: Node): Boolean {
@@ -89,7 +83,7 @@ class InnerPropagator(
         } // found prev chain attribute in igParent
         val prevNode = graph.igNodes.find { it.body == prev?.body } // found actual graph node of this attribute
         prevNode?.attributes?.forEach { igObj!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body)) }
-        graph.connect(igObj!!, prevNode!!)
+        graph.connect(igObj!!, prevNode!!) // assuming length to here == 1
         return true
     }
 
@@ -106,17 +100,39 @@ class InnerPropagator(
     private fun findAbstractRec(node: Node, objects: NodeList): Node? {
         val ref = node.attributes?.getNamedItem("ref")?.textContent ?: return null
         for (i in 0..objects.length) {
-            val item = objects.item(i)?: continue
+            val item = objects.item(i) ?: continue
             if (item.attributes.getNamedItem("line")?.textContent == ref) {
-                if (item.attributes.getNamedItem("abstract") != null) return item
-                else return findAbstractRec(item, objects)
+                return if (item.attributes.getNamedItem("abstract") != null) item
+                else findAbstractRec(item, objects)
             }
         }
         return null
     }
 
-    private fun resolveAttrs(node: Node, abstract: Node) {
+    private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode) { // tom, mouse
+        // надо пройти по цепочке обратно чтобы найти eat у pii и дать main-у его свойства, расставлять @ буду потом
+        var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return
+        var tmpNode: Node? = node.nextSibling.nextSibling?: return // graph.igNodes.find { it.body == node }?: return
+        if (node.attributes.getNamedItem("base").textContent == "tom") {
+            println()
+        }
+        while (tmpAbstract.body.attributes.getNamedItem("name").textContent != key.body.attributes.getNamedItem("base")?.textContent?.substring(1)) {
+            tmpAbstract = graph.igNodes.find { e ->
+                tmpAbstract.attributes.find {
+                    tmpNode!!.attributes.getNamedItem("base")?.textContent?.substring(1) == it.body.attributes.getNamedItem("name")?.textContent
+                }?.body == e.body
+            } ?: return
+            tmpNode = tmpNode?.nextSibling?.nextSibling
+        }
 
+        val parent = node.parentNode?: return // main (analogue of obj above, not parent!!!)
+        var igParent = graph.igNodes.find { it.body == parent }
+        if (igParent == null) {
+            graph.igNodes.add(IGraphNode(parent))
+            igParent = graph.igNodes.find { it.body == parent }
+        }
+        tmpAbstract.attributes.forEach { igParent!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body)) }
+        graph.connect(igParent!!, tmpAbstract)
     }
 
 }

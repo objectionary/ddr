@@ -19,11 +19,11 @@ open class InnerBase : TestBase {
         val innerPropagator = InnerPropagator(document!!, graph)
         innerPropagator.propagateInnerAttrs()
         val out = ByteArrayOutputStream()
-//        printOut(out, graph.igNodes)
+        printOut(out, graph.igNodes)
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-//        println(actual) // debug
+        println(actual) // debug
         checkOutput(expected, actual)
     }
 

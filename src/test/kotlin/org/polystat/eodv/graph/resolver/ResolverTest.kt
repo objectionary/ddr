@@ -2,7 +2,7 @@ package org.polystat.eodv.graph.inner
 
 import org.junit.jupiter.api.Test
 
-class InnerTest : ResolverBase() {
+class ResolverTest : ResolverBase() {
     @Test
     fun `test multiple trees`() = doTest()
 

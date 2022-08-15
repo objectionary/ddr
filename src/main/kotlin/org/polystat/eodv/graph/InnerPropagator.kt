@@ -65,20 +65,8 @@ class InnerPropagator(
             node
         } else {
             val objects = document.getElementsByTagName("o")
-            findAbstractRec(node, objects)
+            findRef(node, objects)
         }
-    }
-
-    private fun findAbstractRec(node: Node, objects: NodeList): Node? {
-        val ref = ref(node) ?: return null
-        for (i in 0..objects.length) {
-            val item = objects.item(i) ?: continue
-            if (line(item) == ref) {
-                return if (abstract(item) != null) item
-                else findAbstractRec(item, objects)
-            }
-        }
-        return null
     }
 
     private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode): Boolean { // tom, mouse

@@ -10,13 +10,7 @@ import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
 /**
- * Transforms xml with provided xsl
- * Usage:
-    transformer.createXsl(
-        "src\\launch.main\\resources\\sample_in\\xml\\in1.xml",
-        "src\\launch.main\\resources\\sample_out\\out1.xml",
-        "src\\launch.main\\resources\\sample_in\\xsl\\ins1.xsl"
-    )
+ * Transforms xml file using provided xsl
  */
 class XslTransformer {
     private val logger = KotlinLogging.logger {}

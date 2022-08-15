@@ -26,6 +26,6 @@ class InnerTest : InnerBase() {
     fun `test inner ordered`() = doTest()
 
     @Test
-    @Ignore
+//    @Ignore
     fun `test condition`() = doTest()
 }

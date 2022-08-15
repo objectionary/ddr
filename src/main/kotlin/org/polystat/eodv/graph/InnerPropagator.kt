@@ -49,46 +49,15 @@ class InnerPropagator(
         }
         when (base(tmpKey)) {
             "^" -> {
-                processParent2(tmpKey, key)
+                val abstract = tmpKey.parentNode.parentNode
+                resolveAttrs(tmpKey, abstract, key)
             }
             "$" -> {} // todo
-            else -> { // tom
+            else -> {
                 val abstract = resolveRefs(tmpKey) ?: return // => tom == mouse
                 resolveAttrs(tmpKey, abstract, key)
             }
         }
-    }
-
-    private fun processParent(node: Node): Boolean {
-        val obj = node.parentNode // rat_pii
-        var igObj = graph.igNodes.find { it.body == obj }
-        if (igObj == null) {
-            graph.igNodes.add(IGraphNode(obj))
-            igObj = graph.igNodes.find { it.body == obj }
-        }
-        val parent = node.parentNode.parentNode // rat
-        var igParent = graph.igNodes.find { it.body == parent }
-        if (igParent == null) {
-            graph.igNodes.add(IGraphNode(parent))
-            igParent = graph.igNodes.find { it.body == parent }
-        }
-        val prev = igParent!!.attributes.find {
-            base(node.nextSibling.nextSibling)?.substring(1) == it.name
-        } // found prev chain attribute in igParent
-        val prevNode = graph.igNodes.find { it.body == prev?.body } // found actual graph node of this attribute
-        prevNode?.attributes?.forEach { igObj!!.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body)) }
-        graph.connect(igObj!!, prevNode!!) // assuming length to here == 1
-        return true
-    }
-
-    private fun processParent2(node: Node, key: IGraphNode): Boolean {
-        val parent = node.parentNode.parentNode // rat
-        var igParent = graph.igNodes.find { it.body == parent }
-        if (igParent == null) {
-            graph.igNodes.add(IGraphNode(parent))
-            igParent = graph.igNodes.find { it.body == parent }
-        }
-        return resolveAttrs(node, parent, key)
     }
 
     private fun resolveRefs(node: Node): Node? {

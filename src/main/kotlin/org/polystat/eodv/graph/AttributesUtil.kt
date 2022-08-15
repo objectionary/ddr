@@ -13,6 +13,8 @@ fun ref(node: Node?) = node?.attributes?.getNamedItem("ref")?.textContent
 
 fun line(node: Node?) = node?.attributes?.getNamedItem("line")?.textContent
 
+fun pos(node: Node?) = node?.attributes?.getNamedItem("pos")?.textContent
+
 fun findRef(node: Node, objects: NodeList): Node? {
     val ref = ref(node) ?: return null
     for (i in 0..objects.length) {

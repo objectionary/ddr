@@ -1,6 +1,7 @@
 package org.polystat.eodv.graph.inner
 
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 
 class InnerTest : ResolverBase() {
     @Test
@@ -28,6 +29,6 @@ class InnerTest : ResolverBase() {
     fun `test creations`() = doTest()
 
     @Test
-//    @Ignore
+    @Ignore
     fun `test condition`() = doTest()
 }

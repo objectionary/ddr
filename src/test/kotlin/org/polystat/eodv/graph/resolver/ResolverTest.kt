@@ -26,8 +26,4 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test creations`() = doTest()
-
-    @Test
-//    @Ignore
-    fun `test condition`() = doTest()
 }

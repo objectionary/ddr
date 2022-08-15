@@ -148,20 +148,4 @@ class GraphBuilder(private val document: Document) {
     private fun decorationCycles() {
 
     }
-
-    @Throws(TransformerException::class, UnsupportedEncodingException::class)
-    private fun writeXml(
-        doc: Document,
-        output: OutputStream
-    ) {
-        val prettyPrintXlst = "src/main/resources/pretty_print.xslt"
-        val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(File(prettyPrintXlst)))
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
-        transformer.setOutputProperty(OutputKeys.STANDALONE, "no")
-        val source = DOMSource(doc)
-        val result = StreamResult(output)
-        transformer.transform(source, result)
-    }
 }
-
-//data class Node(val name: String)

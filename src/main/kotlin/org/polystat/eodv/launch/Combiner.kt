@@ -36,37 +36,57 @@ import org.xml.sax.SAXException
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 import java.nio.file.Files
+import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
 import kotlin.io.path.Path
+import kotlin.io.path.pathString
 
 private val logger = KotlinLogging.logger {}
 private val sep = File.separatorChar
 private val ADD_REFS_XSL = "src${sep}main${sep}resources${sep}add-refs.xsl"
-private val OUTPUT_DIR = "src${sep}main${sep}resources${sep}tmp_out"
-var document: Document? = null
+val documents = mutableMapOf<Document, String>()
 
-fun launch(
-    path: String
-) {
-//    val graph = buildGraph(filename, path)
-//    processAttributes(graph)
-//    val innerPropagator = InnerPropagator(document!!, graph)
-//    innerPropagator.propagateInnerAttrs()
-//    BasicDecoratorsResolver(graph, document!!, FileOutputStream(outPath)).resolveDecorators()
+/**
+ * @param path path to the directory to be analysed
+ */
+fun launch(path: String) {
+    val graph = buildGraph(path)
+    processAttributes(graph)
+    val innerPropagator = InnerPropagator(graph)
+    innerPropagator.propagateInnerAttrs()
+    BasicDecoratorsResolver(graph, documents).resolveDecorators()
 }
 
-fun buildGraph(
-    filename: String,
-    path: String
-): Graph {
-    val out = "$OUTPUT_DIR${sep}$filename.xml"
-    Files.createDirectories(Path(OUTPUT_DIR))
+fun buildGraph(path: String): Graph {
+//    val refsDir = "$path${sep}tmp"
+//    Files.createDirectories(Path(refsDir))
     val transformer = XslTransformer()
-    transformer.createXsl(path, out, ADD_REFS_XSL)
-    document = getDocument(out)
-    val builder = GraphBuilder(document!!)
+    Files.walk(Paths.get(path))
+        .filter(Files::isRegularFile)
+        .forEach {
+            try {
+                val tmpPath = "${path.replace('/', sep)}_tmp${sep}tmp$sep${it}"
+                val forDirs = Path(tmpPath.substringBeforeLast(sep))
+                Files.createDirectories(forDirs)
+                val newFilePath = Paths.get(tmpPath)
+                try {Files.createFile(newFilePath)} catch(ignored: Exception) {}
+                transformer.createXsl(it.pathString, tmpPath, ADD_REFS_XSL)
+                documents[getDocument(tmpPath)!!] = tmpPath
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+//    val dir = File(path)
+//    val directoryListing: Array<File> = dir.listFiles() as Array<File>
+//    directoryListing.forEach {
+//        val tmpPath = "$path$sep${it.canonicalPath}"
+//        transformer.createXsl(path, tmpPath, ADD_REFS_XSL)
+//        documents[getDocument(tmpPath)!!] = tmpPath
+//    }
+    val builder = GraphBuilder(documents)
     builder.createGraph()
     return builder.graph
 }

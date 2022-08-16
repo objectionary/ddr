@@ -22,11 +22,15 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.integrational.resolver
+package org.polystat.eodv.integration.resolver
 
 import org.junit.jupiter.api.Test
 
 class ResolverTest : ResolverBase() {
+
+    @Test
+    fun `test basic`() = doTest()
+
     @Test
     fun `test basic tree`() = doTest()
 

@@ -1,0 +1,4 @@
+[] > util
+  [] > doUtil
+    QQ.io.stdout > @
+      "heheffd"

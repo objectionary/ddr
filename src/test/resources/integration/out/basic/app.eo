@@ -1,0 +1,12 @@
++alias util
+
+[] > classA
+  util > @
+  [] > doA
+    ^.doUtil > @
+
+[args...] > app
+  classA > instance
+  instance
+  .@
+  .doUtil > @

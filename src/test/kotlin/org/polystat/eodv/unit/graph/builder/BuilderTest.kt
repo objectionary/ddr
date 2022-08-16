@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.builder
+package org.polystat.eodv.unit.graph.builder
 
 import org.junit.jupiter.api.Test
+import org.polystat.eodv.unit.graph.builder.BuilderBase
 
 class BuilderTest : BuilderBase() {
 

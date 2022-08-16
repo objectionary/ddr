@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.builder
+package org.polystat.eodv.unit.graph.builder
 
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.unit.TestBase
@@ -35,7 +35,7 @@ open class BuilderBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val graph = buildGraph(path, constructInPath(path))
+        val graph = buildGraph(path)
         val out = ByteArrayOutputStream()
         graph.heads.forEach { printOut(it, out, mutableSetOf()) }
         val actual = String(out.toByteArray())

@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.inner
+package org.polystat.eodv.unit.graph.inner
 
 import org.junit.jupiter.api.Test
+import org.polystat.eodv.unit.graph.inner.InnerBase
 import kotlin.test.Ignore
 
 class InnerTest : InnerBase() {

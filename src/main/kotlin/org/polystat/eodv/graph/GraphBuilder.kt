@@ -27,30 +27,21 @@ package org.polystat.eodv.graph
 import mu.KotlinLogging
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 
-import org.xml.sax.SAXException
 import java.io.*
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
-import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerException
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
-import javax.xml.transform.stream.StreamSource
 
 /**
  * Builds decoration hierarchy graph
  */
-class GraphBuilder(private val document: Document) {
+class GraphBuilder(private val documents: MutableMap<Document, String>) {
     private val logger = KotlinLogging.logger {}
     private val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
     val graph = Graph()
 
     fun createGraph() {
         try {
-            constructInheritance(document)
+            constructInheritance()
             setLeaves()
             graph.leaves.forEach { setHeads(it, mutableMapOf()) }
             val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
@@ -73,34 +64,38 @@ class GraphBuilder(private val document: Document) {
         }
     }
 
-    private fun abstracts(objects: NodeList) {
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
-            val name = name(node)
-            if (abstract(node) != null && name != null) {
-                abstracts.getOrPut(name) { mutableSetOf() }.add(node)
-                graph.igNodes.add(IGraphNode(node))
+    private fun abstracts(objects: MutableList<Node>) =
+        objects.forEach {
+            val name = name(it)
+            if (abstract(it) != null && name != null) {
+                abstracts.getOrPut(name) { mutableSetOf() }.add(it)
+                graph.igNodes.add(IGraphNode(it))
             }
         }
-    }
 
     private fun getAbstract(
         baseName: String?,
         baseRef: String?
-    ): Node? {
+    ): Node? =
         if (baseName != null && abstracts.contains(baseName)) {
-            return abstracts[baseName]!!.find {
+            abstracts[baseName]!!.find {
                 line(it) == baseRef
             }
-        }
-        return null
-    }
+        } else null
 
-    private fun constructInheritance(document: Document) {
-        val objects = document.getElementsByTagName("o")
+
+    private fun constructInheritance() {
+        val objects = mutableListOf<Node>()
+        documents.forEach {
+            val docObjects = it.key.getElementsByTagName("o")
+            for (i in 0 until docObjects.length) {
+                val node = docObjects.item(i)
+                objects.add(node)
+            }
+        }
+        graph.initialObjects.addAll(objects)
         abstracts(objects)
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
+        for (node in objects) {
             val name = name(node)
             if (name != null && name == "@") {
                 // check that @ attribute's base has an abstract object in this program

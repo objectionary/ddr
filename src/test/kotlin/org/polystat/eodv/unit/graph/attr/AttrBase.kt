@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.attr
+package org.polystat.eodv.unit.graph.attr
 
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.unit.TestBase
@@ -36,7 +36,7 @@ open class AttrBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val graph = buildGraph(path, constructInPath(path))
+        val graph = buildGraph(path)
         processAttributes(graph)
         val out = ByteArrayOutputStream()
         printOut(out, graph.igNodes)

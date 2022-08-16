@@ -26,13 +26,11 @@ package org.polystat.eodv.graph
 
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 
 /**
  * Propagates inner attributes
  */
 class InnerPropagator(
-    private val document: Document,
     private val graph: Graph
 ) {
     private val decorators: MutableMap<IGraphNode, Boolean> = mutableMapOf()
@@ -44,9 +42,8 @@ class InnerPropagator(
     }
 
     private fun collectDecorators() {
-        val objects = document.getElementsByTagName("o")
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
+        val objects = graph.initialObjects
+        for (node in objects) {
             val name = name(node)
             if (name != null && name == "@") {
                 decorators[IGraphNode(node)] = false
@@ -88,7 +85,7 @@ class InnerPropagator(
         return if (abstract(node) != null) {
             node
         } else {
-            val objects = document.getElementsByTagName("o")
+            val objects = graph.initialObjects
             findRef(node, objects)
         }
     }

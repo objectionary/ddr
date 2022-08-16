@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.attr
+package org.polystat.eodv.unit.graph.attr
 
 import org.junit.jupiter.api.Test
 

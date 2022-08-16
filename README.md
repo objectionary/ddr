@@ -4,7 +4,7 @@
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
 [![mvn](https://github.com/objectionary/ddr/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/objectionary/ddr/actions/workflows/build.yml)
-[![Hits-of-Code](https://hitsofcode.com/github/objectionary/ddr)](https://hitsofcode.com/view/github/objectionary/eo-sys)
+[![Hits-of-Code](https://hitsofcode.com/github/objectionary/ddr)](https://hitsofcode.com/view/github/objectionary/ddr)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/objectionary/ddr/blob/master/LICENSE.txt)
 
 DDR is an Experimental Dynamic Dispatch Removal Toolkit for [EO](https://www.eolang.org) Programs

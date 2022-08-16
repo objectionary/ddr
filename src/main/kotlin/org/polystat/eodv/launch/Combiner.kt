@@ -48,15 +48,13 @@ private val OUTPUT_DIR = "src${sep}main${sep}resources${sep}tmp_out"
 var document: Document? = null
 
 fun launch(
-    filename: String,
-    path: String,
-    outPath: String
+    path: String
 ) {
-    val graph = buildGraph(filename, path)
-    processAttributes(graph)
-    val innerPropagator = InnerPropagator(document!!, graph)
-    innerPropagator.propagateInnerAttrs()
-    BasicDecoratorsResolver(graph, document!!, FileOutputStream(outPath)).resolveDecorators()
+//    val graph = buildGraph(filename, path)
+//    processAttributes(graph)
+//    val innerPropagator = InnerPropagator(document!!, graph)
+//    innerPropagator.propagateInnerAttrs()
+//    BasicDecoratorsResolver(graph, document!!, FileOutputStream(outPath)).resolveDecorators()
 }
 
 fun buildGraph(

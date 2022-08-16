@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.resolver
+package org.polystat.eodv.integrational.resolver
 
 import org.junit.jupiter.api.Test
 

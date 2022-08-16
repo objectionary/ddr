@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph
+package org.polystat.eodv.unit
 
 import java.io.File
 import kotlin.test.assertEquals
@@ -43,7 +43,7 @@ interface TestBase {
             actual.replace("\n", "").replace("\r", "")
         )
 
-    fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}in${sep}$path.xml"
+    fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}in${sep}$path.xml"
 
     fun constructOutPath(path: String): String
 

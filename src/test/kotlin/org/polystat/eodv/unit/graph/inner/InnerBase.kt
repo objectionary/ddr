@@ -22,23 +22,26 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.graph.attr
+package org.polystat.eodv.graph.inner
 
 import org.polystat.eodv.graph.IGraphNode
-import org.polystat.eodv.graph.TestBase
+import org.polystat.eodv.graph.InnerPropagator
+import org.polystat.eodv.unit.TestBase
 import org.polystat.eodv.launch.buildGraph
+import org.polystat.eodv.launch.document
 import org.polystat.eodv.launch.processAttributes
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
-import kotlin.test.assertEquals
 
-open class AttrBase : TestBase {
+open class InnerBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
         val graph = buildGraph(path, constructInPath(path))
         processAttributes(graph)
+        val innerPropagator = InnerPropagator(document!!, graph)
+        innerPropagator.propagateInnerAttrs()
         val out = ByteArrayOutputStream()
         printOut(out, graph.igNodes)
         val actual = String(out.toByteArray())
@@ -48,7 +51,7 @@ open class AttrBase : TestBase {
         checkOutput(expected, actual)
     }
 
-    override fun constructOutPath(path: String): String = "src${sep}test${sep}resources${sep}out${sep}attr${sep}$path.txt"
+    override fun constructOutPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}out${sep}inner${sep}$path.txt"
 
     private fun printOut(
         out: ByteArrayOutputStream,

@@ -5,11 +5,13 @@ import org.polystat.eodv.graph.AttributesSetter
 import org.polystat.eodv.graph.Graph
 import org.polystat.eodv.graph.GraphBuilder
 import org.polystat.eodv.graph.InnerPropagator
+import org.polystat.eodv.transform.BasicDecoratorsResolver
 import org.polystat.eodv.transform.XslTransformer
 import org.w3c.dom.Document
 import org.xml.sax.SAXException
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.nio.file.Files
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
@@ -23,12 +25,14 @@ var document: Document? = null
 
 fun launch(
     filename: String,
-    path: String
+    path: String,
+    outPath: String
 ) {
     val graph = buildGraph(filename, path)
     processAttributes(graph)
     val innerPropagator = InnerPropagator(document!!, graph)
     innerPropagator.propagateInnerAttrs()
+    BasicDecoratorsResolver(graph, document!!, FileOutputStream(outPath)).resolveDecorators()
 }
 
 fun buildGraph(

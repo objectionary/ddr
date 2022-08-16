@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<program ms="237"
-         name="ex-1"
-         time="2022-08-08T08:49:47.335991700Z"
-         version="1.0-SNAPSHOT">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<program ms="237" name="ex-1" time="2022-08-08T08:49:47.335991700Z" version="1.0-SNAPSHOT">
     <listing>+alias org.eolang.io.stdout
 
         [] &gt; classA
@@ -37,7 +34,7 @@
     </metas>
     <objects>
         <o abstract="" line="3" name="classA" pos="0">
-            <o base="classB" line="4" name="@" pos="2"/>
+            <o base="classB" line="4" name="@" pos="2" ref="9"/>
             <o abstract="" line="5" name="doA" pos="2">
                 <o base="stdout" line="6" name="@" pos="4">
                     <o base="string" data="string" line="7" pos="6">A</o>
@@ -45,14 +42,14 @@
             </o>
         </o>
         <o abstract="" line="9" name="classB" pos="0">
-            <o base="classC" line="10" name="@" pos="2"/>
+            <o base="classC" line="10" name="@" pos="2" ref="14"/>
             <o abstract="" line="11" name="doB" pos="2">
                 <o base="^" line="12" pos="4"/>
                 <o base=".doC" line="12" method="" name="@" pos="5"/>
             </o>
         </o>
         <o abstract="" line="14" name="classC" pos="0">
-            <o base="classA" line="15" name="@" pos="2"/>
+            <o base="classA" line="15" name="@" pos="2" ref="3"/>
             <o abstract="" line="16" name="doC" pos="2">
                 <o base="stdout" line="17" name="@" pos="4">
                     <o base="string" data="string" line="18" pos="6">C</o>
@@ -61,10 +58,11 @@
         </o>
         <o abstract="" line="20" name="main" pos="0">
             <o line="20" name="args" pos="1" vararg=""/>
-            <o base="classB" line="21" name="instance" pos="2"/>
-            <o base="instance" line="22" pos="2"/>
+            <o base="classB" line="21" name="instance" pos="2" ref="9"/>
+            <o base="instance" line="22" pos="2" ref="21"/>
+            <o base=".@" line="22" pos="14"/>
+            <o base=".@" line="22" pos="16"/>
             <o base=".doA" line="22" method="" name="@" pos="10"/>
         </o>
     </objects>
 </program>
-

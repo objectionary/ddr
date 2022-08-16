@@ -17,7 +17,11 @@ import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
 
-class BasicDecoratorsResolver(private val graph: Graph, private val document: Document) {
+class BasicDecoratorsResolver(
+    private val graph: Graph,
+    private val document: Document,
+    private val outputStream: OutputStream
+) {
 
     private val declarations: MutableMap<Node, Node?> = mutableMapOf()
 
@@ -25,7 +29,7 @@ class BasicDecoratorsResolver(private val graph: Graph, private val document: Do
         collectDeclarations()
         resolveRefs()
         injectAttributes()
-        FileOutputStream("src\\main\\resources\\tmp_out\\mod\\out.xml").use { writeXml(it) }
+        outputStream.use { writeXml(it) }
     }
 
     private fun collectDeclarations() {
@@ -67,7 +71,7 @@ class BasicDecoratorsResolver(private val graph: Graph, private val document: Do
         val parent = node.parentNode
         val siblings = mutableSetOf(node)
         var tmpNode = node
-        while(tmpNode.nextSibling != null) {
+        while (tmpNode.nextSibling != null) {
             siblings.add(tmpNode.nextSibling)
             tmpNode = tmpNode.nextSibling
         }
@@ -108,7 +112,8 @@ class BasicDecoratorsResolver(private val graph: Graph, private val document: Do
 
     @Throws(TransformerException::class, UnsupportedEncodingException::class)
     private fun writeXml(output: OutputStream) {
-        val prettyPrintXlst = "src/main/resources/pretty_print.xslt"
+        val sep = File.separator
+        val prettyPrintXlst = "src${sep}main${sep}resources${sep}pretty_print.xslt"
         val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(File(prettyPrintXlst)))
         transformer.setOutputProperty(OutputKeys.INDENT, "yes")
         transformer.setOutputProperty(OutputKeys.STANDALONE, "no")

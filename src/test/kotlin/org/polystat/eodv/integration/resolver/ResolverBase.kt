@@ -24,6 +24,7 @@
 
 package org.polystat.eodv.integration.resolver
 
+import org.apache.commons.io.FileUtils
 import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.unit.TestBase
 import org.polystat.eodv.launch.buildGraph
@@ -33,12 +34,13 @@ import org.polystat.eodv.transform.BasicDecoratorsResolver
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.nio.file.Paths
 
 open class ResolverBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val graph = buildGraph(path)
+        val graph = buildGraph(constructInPath(path))
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()
@@ -48,6 +50,8 @@ open class ResolverBase : TestBase {
 //        val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
 //        val expected = bufferedReader.use { it.readText() }
         println(actual)
+        val fDir = Paths.get("${constructInPath(path).replace('/', sep)}_tmpr")
+        FileUtils.deleteDirectory(File(fDir.toString()));
 //        checkOutput(expected, actual)
     }
 

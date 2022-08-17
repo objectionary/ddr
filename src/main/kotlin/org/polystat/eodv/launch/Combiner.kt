@@ -25,6 +25,7 @@
 package org.polystat.eodv.launch
 
 import mu.KotlinLogging
+import org.apache.commons.io.FileUtils
 import org.polystat.eodv.graph.AttributesSetter
 import org.polystat.eodv.graph.Graph
 import org.polystat.eodv.graph.GraphBuilder
@@ -35,9 +36,9 @@ import org.w3c.dom.Document
 import org.xml.sax.SAXException
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
@@ -62,51 +63,19 @@ fun launch(path: String) {
     BasicDecoratorsResolver(graph, documents).resolveDecorators()
 }
 
+
 fun buildGraph(path: String): Graph {
     val transformer = XslTransformer()
     Files.walk(Paths.get(path))
         .filter(Files::isRegularFile)
         .forEach {
-            try {
-                val tmpPath = "${path.replace('/', sep)}_tmp${sep}tmp1$sep${it}"
-                val forDirs = Path(tmpPath.substringBeforeLast(sep))
-                Files.createDirectories(forDirs)
-                val newFilePath = Paths.get(tmpPath)
-                try {Files.createFile(newFilePath)} catch(ignored: Exception) {}
-                transformer.createXsl(it.pathString, tmpPath, ADD_REFS_XSL)
-//                documents[getDocument(tmpPath)!!] = tmpPath
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    Files.walk(Paths.get("${path.replace('/', sep)}_tmp${sep}tmp1"))
-        .filter(Files::isRegularFile)
-        .forEach {
-            try {
-                val tmpPath = it.toString().replace("tmp1", "tmp2")
-                val forDirs = Path(tmpPath.substringBeforeLast(sep))
-                Files.createDirectories(forDirs)
-                val newFilePath = Paths.get(tmpPath)
-                try {Files.createFile(newFilePath)} catch(ignored: Exception) {}
-                transformer.createXsl(it.toString(), tmpPath, EXPAND_ALIASES)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    Files.walk(Paths.get("${path.replace('/', sep)}_tmp${sep}tmp2"))
-        .filter(Files::isRegularFile)
-        .forEach {
-            try {
-                val tmpPath = it.toString().replace("tmp2", "tmp3")
-                val forDirs = Path(tmpPath.substringBeforeLast(sep))
-                Files.createDirectories(forDirs)
-                val newFilePath = Paths.get(tmpPath)
-                try {Files.createFile(newFilePath)} catch(ignored: Exception) {}
-                transformer.createXsl(it.toString(), tmpPath, RESOLVE_ALIASES)
-                documents[getDocument(tmpPath)!!] = tmpPath
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            val tmpPath = "${path}_tmp${it.toString().substring(path.length)}"
+            val forDirs = Path(tmpPath.substringBeforeLast(sep))
+            Files.createDirectories(forDirs)
+            val newFilePath = Paths.get(tmpPath)
+            try {Files.createFile(newFilePath)} catch(ignored: Exception) {}
+            transformer.createXsl(it.pathString, tmpPath)
+            documents[getDocument(tmpPath)!!] = tmpPath
         }
     val builder = GraphBuilder(documents)
     builder.createGraph()

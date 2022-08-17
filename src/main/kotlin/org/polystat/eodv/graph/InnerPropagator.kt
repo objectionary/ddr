@@ -46,10 +46,10 @@ class InnerPropagator(
         for (node in objects) {
             val name = name(node)
             if (name != null && name == "@") {
-                decorators[IGraphNode(node)] = false
+                decorators[IGraphNode(node, packageName(node))] = false
             }
             if (abstract(node) != null && name != null) {
-                abstracts.getOrPut(name) { mutableSetOf() }.add(IGraphNode(node))
+                abstracts.getOrPut(name) { mutableSetOf() }.add(IGraphNode(node, packageName(node)))
             }
         }
     }
@@ -102,7 +102,7 @@ class InnerPropagator(
         val parent = node.parentNode ?: return false // rat_pii
         var igParent = graph.igNodes.find { it.body == parent }
         if (igParent == null) {
-            graph.igNodes.add(IGraphNode(parent))
+            graph.igNodes.add(IGraphNode(parent, packageName(parent)))
             igParent = graph.igNodes.find { it.body == parent }
         }
         tmpAbstract.attributes.forEach {

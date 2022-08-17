@@ -38,6 +38,17 @@ fun line(node: Node?) = node?.attributes?.getNamedItem("line")?.textContent
 
 fun pos(node: Node?) = node?.attributes?.getNamedItem("pos")?.textContent
 
+fun packageName(node: Node?) : String {
+    val heads = node?.ownerDocument?.getElementsByTagName("head")?: return ""
+    for (i in 0 until heads.length) {
+        val head = heads.item(i)
+        if (head.textContent.equals("package")) {
+            return head.nextSibling.nextSibling.textContent
+        }
+    }
+    return ""
+}
+
 fun findRef(node: Node, objects: MutableList<Node>): Node? {
     val ref = ref(node) ?: return null
     objects.forEach {

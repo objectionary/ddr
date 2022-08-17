@@ -35,7 +35,7 @@ open class BuilderBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val graph = buildGraph(path)
+        val graph = buildGraph(constructInPath(path))
         val out = ByteArrayOutputStream()
         graph.heads.forEach { printOut(it, out, mutableSetOf()) }
         val actual = String(out.toByteArray())

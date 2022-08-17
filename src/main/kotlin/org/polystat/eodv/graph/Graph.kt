@@ -49,7 +49,8 @@ class Graph {
  * @param body represents the corresponding xml file node
  */
 data class IGraphNode(
-    val body: Node
+    val body: Node,
+    val packageName: String
 ) {
 //    val name: String by lazy { name(body) }
     val name: String? = name(body) // debug

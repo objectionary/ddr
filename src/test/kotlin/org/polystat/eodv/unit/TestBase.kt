@@ -43,7 +43,7 @@ interface TestBase {
             actual.replace("\n", "").replace("\r", "")
         )
 
-    fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}in${sep}$path.xml"
+    fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}in${sep}$path"
 
     fun constructOutPath(path: String): String
 

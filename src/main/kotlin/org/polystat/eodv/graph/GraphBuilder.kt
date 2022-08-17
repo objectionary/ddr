@@ -64,16 +64,16 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
         }
     }
 
-    private fun abstracts(objects: MutableList<Node>) =
+    private fun abstracts(objects: MutableList<Node>, packageName: String) =
         objects.forEach {
             val name = name(it)
             if (abstract(it) != null && name != null) {
                 abstracts.getOrPut(name) { mutableSetOf() }.add(it)
-                graph.igNodes.add(IGraphNode(it))
+                graph.igNodes.add(IGraphNode(it, packageName))
             }
         }
 
-    private fun getAbstract(
+    private fun getAbstractViaRef(
         baseName: String?,
         baseRef: String?
     ): Node? =
@@ -83,36 +83,44 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             }
         } else null
 
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
+        val packageName = baseNodeName?.substringBeforeLast('.')
+        val nodeName = baseNodeName?.substringAfterLast('.')
+        return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
+    }
 
     private fun constructInheritance() {
-        val objects = mutableListOf<Node>()
         documents.forEach {
+            val objects = mutableListOf<Node>()
             val docObjects = it.key.getElementsByTagName("o")
+            val packageName = packageName(docObjects.item(0))
             for (i in 0 until docObjects.length) {
-                val node = docObjects.item(i)
-                objects.add(node)
+                objects.add(docObjects.item(i))
             }
+            abstracts(objects, packageName)
+            graph.initialObjects.addAll(objects)
         }
-        graph.initialObjects.addAll(objects)
-        abstracts(objects)
-        for (node in objects) {
+        for (node in graph.initialObjects) {
             val name = name(node)
             if (name != null && name == "@") {
                 // check that @ attribute's base has an abstract object in this program
                 val baseNodeName = base(node)
                 val baseNodeRef = ref(node)
-                val abstractBaseNode = getAbstract(baseNodeName, baseNodeRef)
+                var abstractBaseNode = getAbstractViaRef(baseNodeName, baseNodeRef)
+                if (abstractBaseNode == null) {
+                    abstractBaseNode = getAbstractViaPackage(baseNodeName)?.body
+                }
                 if (abstractBaseNode != null) {
                     val parentNode = node.parentNode
                     if (parentNode != null) {
-                        var igChild = IGraphNode(node.parentNode)
+                        var igChild = IGraphNode(node.parentNode, packageName(node.parentNode))
                         val checkedChild = checkNodes(igChild)
                         if (checkedChild == null) {
                             graph.igNodes.add(igChild)
                         } else {
                             igChild = checkedChild
                         }
-                        var igParent = IGraphNode(abstractBaseNode)
+                        var igParent = IGraphNode(abstractBaseNode, packageName(abstractBaseNode))
                         val checkedParent = checkNodes(igParent)
                         if (checkedParent == null) {
                             graph.igNodes.add(igParent)

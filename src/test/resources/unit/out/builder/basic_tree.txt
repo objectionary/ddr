@@ -1,5 +1,6 @@
-NODE: name="talk"
 NODE: name="animal"
 animal CHILD:
 NODE: name="cat"
+NODE: name="talk"
+talk CHILD:
 NODE: name="main"

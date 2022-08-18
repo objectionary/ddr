@@ -1,6 +1,8 @@
-NODE: name="doA"
-NODE: name="doB"
 NODE: name="doC"
+doC CHILD:
+NODE: name="doB"
+NODE: name="doA"
+doA CHILD:
 NODE: name="main"
 NODE: name="classA"
 classA CHILD:

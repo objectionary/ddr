@@ -25,7 +25,6 @@
 package org.polystat.eodv.launch
 
 import mu.KotlinLogging
-import org.apache.commons.io.FileUtils
 import org.polystat.eodv.graph.AttributesSetter
 import org.polystat.eodv.graph.Graph
 import org.polystat.eodv.graph.GraphBuilder
@@ -36,9 +35,7 @@ import org.w3c.dom.Document
 import org.xml.sax.SAXException
 import java.io.File
 import java.io.FileInputStream
-import java.io.IOException
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
@@ -47,15 +44,13 @@ import kotlin.io.path.pathString
 
 private val logger = KotlinLogging.logger {}
 private val sep = File.separatorChar
-private val ADD_REFS_XSL = "src${sep}main${sep}resources${sep}add-refs.xsl"
-private val RESOLVE_ALIASES = "src${sep}main${sep}resources${sep}resolve-aliases.xsl"
-private val EXPAND_ALIASES = "src${sep}main${sep}resources${sep}expand-aliases.xsl"
 val documents = mutableMapOf<Document, String>()
 
 /**
  * @param path path to the directory to be analysed
  */
 fun launch(path: String) {
+    documents.clear()
     val graph = buildGraph(path)
     processAttributes(graph)
     val innerPropagator = InnerPropagator(graph)
@@ -63,13 +58,12 @@ fun launch(path: String) {
     BasicDecoratorsResolver(graph, documents).resolveDecorators()
 }
 
-
 fun buildGraph(path: String): Graph {
     val transformer = XslTransformer()
     Files.walk(Paths.get(path))
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = "${path}_tmp${it.toString().substring(path.length)}"
+            val tmpPath = "${path.substringBeforeLast(sep)}${sep}TMP${sep}${path.substringAfterLast(sep)}_tmp${it.toString().substring(path.length)}"
             val forDirs = Path(tmpPath.substringBeforeLast(sep))
             Files.createDirectories(forDirs)
             val newFilePath = Paths.get(tmpPath)

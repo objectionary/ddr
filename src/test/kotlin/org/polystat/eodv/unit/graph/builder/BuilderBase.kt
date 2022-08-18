@@ -27,6 +27,7 @@ package org.polystat.eodv.unit.graph.builder
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.unit.TestBase
 import org.polystat.eodv.launch.buildGraph
+import org.polystat.eodv.launch.documents
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -35,6 +36,7 @@ open class BuilderBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
+        documents.clear()
         val graph = buildGraph(constructInPath(path))
         val out = ByteArrayOutputStream()
         graph.heads.forEach { printOut(it, out, mutableSetOf()) }

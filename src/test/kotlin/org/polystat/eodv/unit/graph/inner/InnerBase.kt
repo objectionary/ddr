@@ -39,7 +39,7 @@ open class InnerBase : TestBase {
     override fun doTest() {
         val path = getTestName()
         documents.clear()
-        val graph = buildGraph(path)
+        val graph = buildGraph(constructInPath(path))
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test
 class ResolverTest : ResolverBase() {
 
     @Test
-    fun `test basic`() = doTest()
+    fun `test basic dir`() = doTest()
 
     @Test
     fun `test basic tree`() = doTest()

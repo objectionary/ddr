@@ -61,4 +61,7 @@ class BuilderTest : BuilderBase() {
 
     @Test
     fun `test inner concrete`() = doTest()
+
+    @Test
+    fun `test inner ordered`() = doTest()
 }

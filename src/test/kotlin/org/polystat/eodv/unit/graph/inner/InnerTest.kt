@@ -56,4 +56,7 @@ class InnerTest : InnerBase() {
     @Test
     @Ignore
     fun `test condition`() = doTest()
+
+    @Test
+    fun `test basic dir`() = doTest()
 }

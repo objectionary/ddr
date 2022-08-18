@@ -22,11 +22,14 @@
  * SOFTWARE.
  */
 
-package org.polystat.eodv.unit
+package org.polystat.eodv
 
 import java.io.File
 import kotlin.test.assertEquals
 
+/**
+ * Common interface for all test classes
+ */
 interface TestBase {
     
     val sep: Char
@@ -46,7 +49,6 @@ interface TestBase {
     fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}in${sep}$path"
 
     fun constructOutPath(path: String): String
-
 
     fun getTestName() = Thread.currentThread().stackTrace[4].methodName.substring(5).replace(' ', '_')
 }

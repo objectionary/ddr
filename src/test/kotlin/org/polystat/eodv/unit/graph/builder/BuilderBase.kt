@@ -25,7 +25,7 @@
 package org.polystat.eodv.unit.graph.builder
 
 import org.polystat.eodv.graph.IGraphNode
-import org.polystat.eodv.unit.TestBase
+import org.polystat.eodv.TestBase
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
 import java.io.BufferedReader

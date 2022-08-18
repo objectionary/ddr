@@ -15,8 +15,8 @@
   animal > @
 
 [] > bengal
-  cat.@.live > @
+  cat.live > @
 
 [args...] > app
   classA > instance
-  instance.@.doUtil > @
+  instance.doUtil > @

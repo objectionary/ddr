@@ -26,7 +26,7 @@ package org.polystat.eodv.unit.graph.inner
 
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.graph.InnerPropagator
-import org.polystat.eodv.unit.TestBase
+import org.polystat.eodv.TestBase
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
 import org.polystat.eodv.launch.processAttributes

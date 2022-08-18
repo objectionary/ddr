@@ -24,7 +24,6 @@
 
 package org.polystat.eodv.graph
 
-import org.w3c.dom.Document
 import org.w3c.dom.Node
 
 /**
@@ -65,9 +64,6 @@ class InnerPropagator(
 
     private fun getBaseAbstract(key: IGraphNode) {
         var tmpKey = key.body
-        if (tmpKey.attributes.getNamedItem("base").textContent.equals(".doUtil")) {
-            println()
-        }
         while (base(tmpKey)?.startsWith('.') == true) {
             tmpKey = tmpKey.previousSibling.previousSibling
         }

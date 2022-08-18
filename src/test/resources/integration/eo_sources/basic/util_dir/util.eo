@@ -1,4 +1,6 @@
++package org.ut
+
 [] > util
   [] > doUtil
     QQ.io.stdout > @
-      "heheffd"
+      "util"

@@ -27,6 +27,7 @@ package org.polystat.eodv.unit.graph.attr
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.unit.TestBase
 import org.polystat.eodv.launch.buildGraph
+import org.polystat.eodv.launch.documents
 import org.polystat.eodv.launch.processAttributes
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -36,7 +37,8 @@ open class AttrBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val graph = buildGraph(path)
+        documents.clear()
+        val graph = buildGraph(constructInPath(path))
         processAttributes(graph)
         val out = ByteArrayOutputStream()
         printOut(out, graph.igNodes)

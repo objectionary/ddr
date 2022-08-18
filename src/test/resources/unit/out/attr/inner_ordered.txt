@@ -14,9 +14,12 @@ name=pii, dist=1
 name=live, dist=2
 name=talk, dist=2
 NODE: rat_pii ATTRIBUTES:
+name=smth, dist=1
 NODE: mouse ATTRIBUTES:
 name=pii, dist=0
 name=live, dist=1
 name=talk, dist=1
 NODE: pii ATTRIBUTES:
+name=eat, dist=1
 NODE: main ATTRIBUTES:
+name=smth, dist=2

@@ -63,4 +63,7 @@ class AttrTest : AttrBase() {
 
     @Test
     fun `test inner ordered`() = doTest()
+
+    @Test
+    fun `test basic dir`() = doTest()
 }

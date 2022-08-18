@@ -28,6 +28,7 @@ import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.unit.TestBase
 import org.polystat.eodv.launch.buildGraph
+import org.polystat.eodv.launch.documents
 import org.polystat.eodv.launch.processAttributes
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -37,6 +38,7 @@ open class InnerBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
+        documents.clear()
         val graph = buildGraph(path)
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)

@@ -30,7 +30,7 @@ import org.polystat.eodv.unit.graph.builder.BuilderBase
 class BuilderTest : BuilderBase() {
 
     @Test
-    fun `test basic`() = doTest()
+    fun `test basic dir`() = doTest()
 
     @Test
     fun `test basic tree`() = doTest()

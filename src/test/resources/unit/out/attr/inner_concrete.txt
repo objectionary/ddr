@@ -11,6 +11,7 @@ name=pii, dist=0
 name=live, dist=1
 name=talk, dist=1
 NODE: pii ATTRIBUTES:
+name=eat, dist=1
 NODE: human ATTRIBUTES:
 name=live, dist=0
 name=talk, dist=0
@@ -21,5 +22,5 @@ name=meow, dist=0
 name=live, dist=1
 name=talk, dist=1
 NODE: meow ATTRIBUTES:
+name=eat, dist=2
 NODE: main ATTRIBUTES:
-

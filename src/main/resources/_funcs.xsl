@@ -22,39 +22,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="expand-aliases" version="2.0">
-  <!--
-  Here we find all aliases that don't use full syntax
-  and expand them to the full one. For example, this one:
-
-  +alias org.example.foo
-
-  Will be expanded to:
-
-  +alias foo org.example.foo
-  -->
-  <xsl:output encoding="UTF-8"/>
-  <xsl:template match="/program/metas/meta[head='alias' and not(contains(tail, ' '))]">
-    <xsl:copy>
-      <xsl:attribute name="expanded"/>
-      <xsl:apply-templates select="node() except tail except part|@*"/>
-      <xsl:variable name="parts" select="tokenize(tail, '\.')"/>
-      <xsl:element name="tail">
-        <xsl:value-of select="$parts[last()]"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="tail"/>
-      </xsl:element>
-      <xsl:element name="part">
-        <xsl:value-of select="$parts[last()]"/>
-      </xsl:element>
-      <xsl:element name="part">
-        <xsl:value-of select="tail"/>
-      </xsl:element>
-    </xsl:copy>
-  </xsl:template>
-  <xsl:template match="node()|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="node()|@*"/>
-    </xsl:copy>
-  </xsl:template>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0">
+  <xsl:function name="eo:abstract" as="xs:boolean">
+    <xsl:param name="o" as="element()"/>
+    <xsl:sequence select="not(exists($o/@base)) and (exists($o/o) or $o/@atom or $o/@abstract)"/>
+  </xsl:function>
+  <xsl:function name="eo:attr" as="xs:boolean">
+    <xsl:param name="o" as="element()"/>
+    <xsl:sequence select="$o/parent::o[not(@base)] and not($o/@base) and not($o/@atom) and not($o/o)"/>
+  </xsl:function>
+  <xsl:function name="eo:alias-name" as="xs:string">
+    <xsl:param name="object" as="element()"/>
+    <xsl:sequence select="tokenize($object/tail, ' ')[1]"/>
+  </xsl:function>
+  <xsl:function name="eo:alias-qualified" as="xs:string">
+    <xsl:param name="object" as="element()"/>
+    <xsl:sequence select="tokenize($object/tail, ' ')[2]"/>
+  </xsl:function>
 </xsl:stylesheet>

@@ -2,5 +2,7 @@
 
 [] > util
   [] > doUtil
-    QQ.io.stdout > @
+    QQ
+    .io
+    .stdout > @
       "util"

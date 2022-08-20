@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2022 Objectionary.com
+Copyright (c) 2022 Olesia Subbotina
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="expand-aliases" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="compress-aliases" version="2.0">
   <!--
-  Here we find all aliases that don't use full syntax
-  and expand them to the full one. For example, this one:
+  Here we go through all objects that DON'T have @ref attributes
+  and try to find their references in aliases. If we find them,
+  we change their @base attributes. If not, we decide that they
+  are in org.eolang package and also change the @base attribute.
 
-  +alias org.example.foo
-
-  Will be expanded to:
-
-  +alias foo org.example.foo
+  If some alias is badly formatted, a runtime error is issued.
   -->
   <xsl:output encoding="UTF-8"/>
-  <xsl:template match="/program/metas/meta[head='alias' and not(contains(tail, ' '))]">
+  <xsl:template match="o[not(@ref) and @base and not(starts-with(@base, '.'))]">
+    <xsl:variable name="o" select="."/>
     <xsl:copy>
-      <xsl:attribute name="expanded"/>
-      <xsl:apply-templates select="node() except tail except part|@*"/>
-      <xsl:variable name="parts" select="tokenize(tail, '\.')"/>
-      <xsl:element name="tail">
-        <xsl:value-of select="$parts[last()]"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="tail"/>
-      </xsl:element>
-      <xsl:element name="part">
-        <xsl:value-of select="$parts[last()]"/>
-      </xsl:element>
-      <xsl:element name="part">
-        <xsl:value-of select="tail"/>
-      </xsl:element>
+      <xsl:attribute name="base">
+        <xsl:variable name="partt" select="/program/metas/meta/part[1]"/>
+        <xsl:variable name="meta" select="/program/metas/meta[head='alias' and contains($o/@base, $partt)]"/>
+        <xsl:choose>
+          <xsl:when test="$meta">
+            <xsl:variable name="tail" select="$meta/part[1]"/>
+            <xsl:value-of select="$tail"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$o/@base"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:apply-templates select="node()|@* except @base"/>
     </xsl:copy>
   </xsl:template>
   <xsl:template match="node()|@*">

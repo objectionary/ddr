@@ -25,9 +25,9 @@
 package org.polystat.eodv.integration.resolver
 
 import com.jcabi.xml.*
+import org.apache.commons.io.FileUtils
 import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
-import org.cactoos.text.TextOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
 import org.polystat.eodv.TestBase
@@ -36,6 +36,7 @@ import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
 import org.polystat.eodv.launch.processAttributes
 import org.polystat.eodv.transform.BasicDecoratorsResolver
+import org.polystat.eodv.transform.XslTransformer
 import java.io.BufferedReader
 import java.io.File
 import java.nio.file.Files
@@ -58,70 +59,65 @@ open class ResolverBase : TestBase {
         Files.walk(Paths.get(cmpPath))
             .filter(Files::isRegularFile)
             .forEach {
+                val compressAliases = "src${sep}main${sep}resources${sep}compress-aliases.xsl"
+                XslTransformer().singleTransformation(it.toString(), it.toString(), compressAliases)
+                val wrapMethodCalls = "src${sep}main${sep}resources${sep}wrap-method-calls.xsl"
+                XslTransformer().singleTransformation(it.toString(), it.toString(), wrapMethodCalls)
                 XMIRToEo(it.toString(), path)
             }
         val outPath = constructOutPath(path)
-        val eoOutPath = constructEoOutPath(path) // todo change below
         val cmpFiles = mutableListOf<String>()
         Files.walk(Paths.get(outPath))
             .filter(Files::isRegularFile)
             .forEach {
                 cmpFiles.add(it.toString())
             }
+        val eoOutPath = constructEoOutPath(path)
         Files.walk(Paths.get(eoOutPath))
             .filter(Files::isRegularFile)
             .forEach {
-                val expectedBr: BufferedReader = File(it.toString()).bufferedReader()
-                val expected = expectedBr.use { br -> br.readText() }
-                val actualFile = cmpFiles.find { fn ->
-                    println(fn.substringAfterLast("" +
-                            "path"))
-                    println(it.toString().substringAfterLast(path))
-                    fn.substringAfterLast("path") == it.toString().substringAfterLast(path)
-                }
-                val actualBr: BufferedReader = File(actualFile.toString()).bufferedReader()
+                val actualBr: BufferedReader = File(it.toString()).bufferedReader()
                 val actual = actualBr.use { br -> br.readText() }
-                println("EXPECTED $expected")
-                println("\n\nACTUAL $actual")
-                checkOutput(expected, actual)
+                val expectedFile = cmpFiles.find { fn ->
+                    fn.substringAfterLast(path) == it.toString().substringAfterLast(path)
+                }
+                val expectedBr: BufferedReader = File(expectedFile.toString()).bufferedReader()
+                val expected = expectedBr.use { br -> br.readText() }
+                checkOutput(actual, expected)
             }
-//        val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
-//        val expected = bufferedReader.use { it.readText() } // todo walk and compare each
-//        val fDir = Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP")
-//        FileUtils.deleteDirectory(File(fDir.toString())); // works!!!!!!
-//        checkOutput(expected, actual)
+        val tmpDir =
+            Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+        FileUtils.deleteDirectory(File(tmpDir))
     }
 
     @Throws(Exception::class)
     private fun eoToXMIR(path: String) {
         val outFile = File(path.replaceFirst("eo_sources", "in").replace(".eo", ".xmir"))
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
-        val os = outFile.outputStream()
         val syntax = Syntax(
             "transformer",
             ResourceOf(path.replace("src${sep}test${sep}resources${sep}", "")),
-            OutputTo(os)
+            OutputTo(outFile.outputStream())
         )
         syntax.parse()
     }
 
     @Throws(Exception::class)
     private fun XMIRToEo(path: String, testName: String) {
-        val outFile = File(path.replaceFirst("in${sep}TMP${sep}${testName}_tmp", "eo_outputs${sep}$testName").replace(".xmir", ".eo"))
+        val outFile = File(
+            path.replaceFirst("in${sep}TMP${sep}${testName}_tmp",
+                "eo_outputs${sep}$testName").replace(".xmir", ".eo")
+        )
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
-        val src = TextOf(ResourceOf(path.replace("src${sep}test${sep}resources${sep}", ""))).asString()
+        val src = File(path).readText()
         val first: XML = clean(XMLDocument(src))
         val eolang = XMIR(first).toEO()
-//        println(eolang)
-        val os = outFile.outputStream()
-        os.write(eolang.toByteArray())
+        outFile.outputStream().write(eolang.toByteArray())
     }
+
     private fun clean(xmir: XML): XML {
-        val a = ResolverBase::class.java.getResourceAsStream("strip-xmir.xsl")
-        val b = File("src/test/resources/integration/strip-xmir.xsl").inputStream()
-        return XSLDocument(
-            b
-        ).with(ClasspathSources()).transform(xmir)
+        val stripXml = File("src/test/resources/integration/strip-xmir.xsl").inputStream()
+        return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
     override fun constructOutPath(path: String): String =

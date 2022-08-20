@@ -1,22 +1,30 @@
-+alias org.ut.util
++alias util org.ut.util
 
 [] > classA
   util > @
   [] > doA
-    QQ.io.stdout > @
+    QQ
+    .io
+    .stdout > @
       "gg"
 
 [] > animal
   [] > live
-    QQ.io.stdout > @
+    QQ
+    .io
+    .stdout > @
       "alive"
 
 [] > cat
   animal > @
 
 [] > bengal
-  cat.@.live > @
+  cat
+  .@
+  .live > @
 
 [args...] > app
   classA > instance
-  instance.@.doUtil > @
+  instance
+  .@
+  .doUtil > @

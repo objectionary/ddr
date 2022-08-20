@@ -22,39 +22,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="expand-aliases" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="wrap-method-calls" version="2.0">
   <!--
-  Here we find all aliases that don't use full syntax
-  and expand them to the full one. For example, this one:
+  When we see this structure:
 
-  +alias org.example.foo
+  <o base="foo"/>
+  <o base=".bar"/>
+  <o base=".test"/>
 
-  Will be expanded to:
+  We transfer it to this one:
 
-  +alias foo org.example.foo
+  <o base=".test"/>
+    <o base=".bar"/>
+      <o base="foo"/>
+    </o>
+  </o>
   -->
-  <xsl:output encoding="UTF-8"/>
-  <xsl:template match="/program/metas/meta[head='alias' and not(contains(tail, ' '))]">
+  <xsl:import href="src/main/resources/_funcs.xsl"/>
+  <xsl:output encoding="UTF-8" method="xml"/>
+  <xsl:template match="o[@method]" mode="#all" priority="0">
+    <xsl:variable name="target" select="preceding-sibling::o[1]"/>
     <xsl:copy>
-      <xsl:attribute name="expanded"/>
-      <xsl:apply-templates select="node() except tail except part|@*"/>
-      <xsl:variable name="parts" select="tokenize(tail, '\.')"/>
-      <xsl:element name="tail">
-        <xsl:value-of select="$parts[last()]"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="tail"/>
-      </xsl:element>
-      <xsl:element name="part">
-        <xsl:value-of select="$parts[last()]"/>
-      </xsl:element>
-      <xsl:element name="part">
-        <xsl:value-of select="tail"/>
-      </xsl:element>
+      <xsl:apply-templates select="@* except @method"/>
+      <xsl:apply-templates select="$target" mode="full"/>
+      <xsl:apply-templates select="node()"/>
     </xsl:copy>
   </xsl:template>
-  <xsl:template match="node()|@*">
+  <xsl:template match="o[following-sibling::o[1][@method]]" priority="1">
+    <!-- We delete the original one -->
+  </xsl:template>
+  <xsl:template match="node()|@*" mode="#all">
     <xsl:copy>
-      <xsl:apply-templates select="node()|@*"/>
+      <xsl:apply-templates select="node()|@* except @method"/>
     </xsl:copy>
   </xsl:template>
 </xsl:stylesheet>

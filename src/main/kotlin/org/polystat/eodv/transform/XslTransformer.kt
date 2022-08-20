@@ -25,7 +25,6 @@
 package org.polystat.eodv.transform
 
 import mu.KotlinLogging
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import javax.xml.transform.TransformerConfigurationException
@@ -40,7 +39,7 @@ import javax.xml.transform.stream.StreamSource
 class XslTransformer {
     private val logger = KotlinLogging.logger {}
     private val sep = File.separatorChar
-    private val ADD_REFS_XSL = "src${sep}main${sep}resources${sep}add-refs.xsl"
+    private val ADD_REFS = "src${sep}main${sep}resources${sep}add-refs.xsl"
     private val RESOLVE_ALIASES = "src${sep}main${sep}resources${sep}resolve-aliases.xsl"
     private val EXPAND_ALIASES = "src${sep}main${sep}resources${sep}expand-aliases.xsl"
 
@@ -50,7 +49,7 @@ class XslTransformer {
     ) {
         try {
             val factory1 = TransformerFactory.newInstance()
-            val transformer1 = factory1.newTemplates(StreamSource(File(ADD_REFS_XSL).inputStream())).newTransformer()
+            val transformer1 = factory1.newTemplates(StreamSource(File(ADD_REFS).inputStream())).newTransformer()
             val source1 = StreamSource(File(inFilename).inputStream())
             val os1 = File("tmp1")
             val tmp1res = StreamResult(os1.outputStream())
@@ -70,11 +69,33 @@ class XslTransformer {
             transformer3.transform(source3, result)
         } catch (e: Exception) {
             when (e) {
-                is FileNotFoundException, is TransformerConfigurationException -> logger.error { e.message }
+                is FileNotFoundException, is TransformerConfigurationException -> logger.error { e.printStackTrace() }
                 is TransformerException -> {
-                    val locator = e.locator
-                    logger.error { "Error in col:${locator.columnNumber} line:${locator.lineNumber}" }
-                    logger.error { e.exception.message }
+                    logger.error { e.printStackTrace() }
+                }
+                else -> throw e
+            }
+        }
+    }
+
+    fun singleTransformation(
+        inFilename: String,
+        outFilename: String,
+        xslMod: String
+    ) {
+        try {
+            val factory = TransformerFactory.newInstance()
+            val transformer = factory.newTemplates(StreamSource(File(xslMod).inputStream())).newTransformer()
+            val source = StreamSource(File(inFilename).inputStream())
+            val os2 = File("tmp2")
+            val tmp2res = StreamResult(os2.outputStream())
+            transformer.transform(source, tmp2res)
+            File(outFilename).writeBytes(os2.readBytes())
+        } catch (e: Exception) {
+            when (e) {
+                is FileNotFoundException, is TransformerConfigurationException -> logger.error { e.printStackTrace() }
+                is TransformerException -> {
+                    logger.error { e.printStackTrace() }
                 }
                 else -> throw e
             }

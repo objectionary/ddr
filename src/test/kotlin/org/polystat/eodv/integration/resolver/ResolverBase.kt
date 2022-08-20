@@ -47,6 +47,7 @@ open class ResolverBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
+        documents.clear()
         Files.walk(Paths.get(constructEoPath(path)))
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }

@@ -84,7 +84,7 @@ open class ResolverBase : TestBase {
                 }
                 val expectedBr: BufferedReader = File(expectedFile.toString()).bufferedReader()
                 val expected = expectedBr.use { br -> br.readText() }
-                checkOutput(actual, expected)
+                checkOutput(expected, actual)
             }
         val tmpDir =
             Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()

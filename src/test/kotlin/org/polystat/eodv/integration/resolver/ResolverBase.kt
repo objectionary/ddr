@@ -117,7 +117,7 @@ open class ResolverBase : TestBase {
     }
 
     private fun clean(xmir: XML): XML {
-        val stripXml = File("src/test/resources/integration/strip-xmir.xsl").inputStream()
+        val stripXml = File("src${sep}test${sep}resources${sep}integration${sep}strip-xmir.xsl").inputStream()
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 

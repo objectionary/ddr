@@ -49,12 +49,16 @@ fun packageName(node: Node?) : String {
     return ""
 }
 
-fun findRef(node: Node, objects: MutableList<Node>): Node? {
+fun findRef(node: Node, objects: MutableList<Node>, graph: Graph): Node? {
     val ref = ref(node) ?: return null
     objects.forEach {
         if (line(it) == ref) {
-            return if (abstract(it) != null) it
-            else findRef(it, objects)
+            if (abstract(it) != null && packageName(node) == packageName(it)) {
+                return it
+            }
+            if (abstract(it) == null && packageName(node) == packageName(it)) {
+                return findRef(it, objects, graph)
+            }
         }
     }
     return null

@@ -67,7 +67,7 @@ class BasicDecoratorsResolver(
         }
     }
 
-    private fun resolveRefs() = declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects) }
+    private fun resolveRefs() = declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
 
     private fun injectAttributes() {
         val objects = graph.initialObjects

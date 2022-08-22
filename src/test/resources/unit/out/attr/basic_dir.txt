@@ -1,3 +1,6 @@
+NODE: util ATTRIBUTES:
+name=doUtil, dist=0
+NODE: doUtil ATTRIBUTES:
 NODE: classA ATTRIBUTES:
 name=doA, dist=0
 name=doUtil, dist=1
@@ -9,6 +12,3 @@ NODE: cat ATTRIBUTES:
 name=live, dist=1
 NODE: bengal ATTRIBUTES:
 NODE: app ATTRIBUTES:
-NODE: util ATTRIBUTES:
-name=doUtil, dist=0
-NODE: doUtil ATTRIBUTES:

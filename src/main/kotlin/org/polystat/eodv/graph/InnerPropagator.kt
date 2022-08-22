@@ -85,7 +85,7 @@ class InnerPropagator(
             node
         } else {
             val objects = graph.initialObjects
-            findRef(node, objects)
+            findRef(node, objects, graph)
         }
     }
 

@@ -1,13 +1,3 @@
-NODE: name="doA"
-NODE: name="doA2"
-NODE: name="doC2"
-doC2 CHILD:
-NODE: name="doB2"
-NODE: name="doC"
-doC CHILD:
-NODE: name="doB"
-doB CHILD:
-NODE: name="main"
 NODE: name="classA"
 classA CHILD:
 NODE: name="classC"
@@ -22,3 +12,13 @@ classC2 CHILD:
 NODE: name="classB2"
 classB2 CHILD:
 NODE: name="classA2"
+NODE: name="doA"
+NODE: name="doA2"
+NODE: name="doC"
+doC CHILD:
+NODE: name="doB"
+doB CHILD:
+NODE: name="main"
+NODE: name="doC2"
+doC2 CHILD:
+NODE: name="doB2"

@@ -2,17 +2,14 @@ NODE: classA ATTRIBUTES:
 name=doA, dist=0
 name=doC, dist=1
 name=doBA, dist=2
-NODE: doA ATTRIBUTES:
 NODE: classB ATTRIBUTES:
 name=doBA, dist=0
 name=doA, dist=1
 name=doC, dist=2
-NODE: doBA ATTRIBUTES:
 NODE: classC ATTRIBUTES:
 name=doC, dist=0
 name=doBA, dist=1
 name=doA, dist=2
-NODE: doC ATTRIBUTES:
 NODE: classD ATTRIBUTES:
 name=doC, dist=1
 name=doBA, dist=2
@@ -21,4 +18,7 @@ NODE: classE ATTRIBUTES:
 name=doA, dist=1
 name=doC, dist=2
 name=doBA, dist=3
+NODE: doA ATTRIBUTES:
+NODE: doBA ATTRIBUTES:
+NODE: doC ATTRIBUTES:
 NODE: main ATTRIBUTES:

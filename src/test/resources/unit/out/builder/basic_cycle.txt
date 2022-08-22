@@ -1,6 +1,3 @@
-NODE: name="doA"
-doA CHILD:
-NODE: name="doBA"
 NODE: name="classB"
 classB CHILD:
 NODE: name="classA"
@@ -12,6 +9,9 @@ classB CHILD:
 NODE: name="classC"
 classC CHILD:
 NODE: name="classD"
+NODE: name="doA"
+doA CHILD:
+NODE: name="doBA"
 NODE: name="doC"
 doC CHILD:
 NODE: name="main"

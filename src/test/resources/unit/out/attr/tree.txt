@@ -1,29 +1,29 @@
-NODE: creature ATTRIBUTES:
-name=live, dist=0
-name=talk, dist=0
-NODE: live ATTRIBUTES:
-NODE: talk ATTRIBUTES:
 NODE: animal ATTRIBUTES:
 name=talk, dist=0
 name=live, dist=1
-NODE: talk ATTRIBUTES:
-NODE: human ATTRIBUTES:
-name=live, dist=1
-name=talk, dist=1
 NODE: cat ATTRIBUTES:
 name=meow, dist=0
 name=talk, dist=1
 name=live, dist=2
-NODE: meow ATTRIBUTES:
+NODE: creature ATTRIBUTES:
+name=live, dist=0
+name=talk, dist=0
 NODE: dog ATTRIBUTES:
 name=live, dist=0
 name=woof, dist=0
 name=talk, dist=1
+NODE: human ATTRIBUTES:
+name=live, dist=1
+name=talk, dist=1
 NODE: live ATTRIBUTES:
-NODE: woof ATTRIBUTES:
+NODE: live ATTRIBUTES:
+NODE: main ATTRIBUTES:
+NODE: meow ATTRIBUTES:
 NODE: olesya ATTRIBUTES:
 name=work, dist=0
 name=live, dist=2
 name=talk, dist=2
+NODE: talk ATTRIBUTES:
+NODE: talk ATTRIBUTES:
+NODE: woof ATTRIBUTES:
 NODE: work ATTRIBUTES:
-NODE: main ATTRIBUTES:

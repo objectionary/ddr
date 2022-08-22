@@ -1,4 +1,3 @@
-NODE: name="talk"
 NODE: name="creature"
 creature CHILD:
 NODE: name="animal"
@@ -10,14 +9,15 @@ creature CHILD:
 NODE: name="human"
 human CHILD:
 NODE: name="olesya"
-NODE: name="talk"
-talk CHILD:
-NODE: name="meow"
-talk CHILD:
-NODE: name="live"
 NODE: name="live"
 live CHILD:
 NODE: name="work"
+NODE: name="talk"
+NODE: name="talk"
+talk CHILD:
+NODE: name="live"
+talk CHILD:
+NODE: name="meow"
 NODE: name="woof"
 woof CHILD:
 NODE: name="main"

@@ -1,9 +1,3 @@
-NODE: name="smth"
-NODE: name="live"
-live CHILD:
-NODE: name="talk"
-live CHILD:
-NODE: name="pii"
 NODE: name="animal"
 animal CHILD:
 NODE: name="mouse"
@@ -14,3 +8,9 @@ eat CHILD:
 NODE: name="rat_pii"
 rat_pii CHILD:
 NODE: name="main"
+NODE: name="live"
+live CHILD:
+NODE: name="pii"
+live CHILD:
+NODE: name="talk"
+NODE: name="smth"

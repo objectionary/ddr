@@ -45,7 +45,7 @@ open class AttrBase : TestBase {
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-        println(actual) // debug
+//        println(actual) // debug
         checkOutput(expected, actual)
     }
 
@@ -55,7 +55,7 @@ open class AttrBase : TestBase {
         out: ByteArrayOutputStream,
         nodes: Set<IGraphNode>
     ) {
-        nodes.forEach { node ->
+        nodes.sortedBy { it.name }.forEach { node ->
             out.write("NODE: ${node.name} ATTRIBUTES:\n".toByteArray())
             node.attributes.forEach {out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray())}
         }

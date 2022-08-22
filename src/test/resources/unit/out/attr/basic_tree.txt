@@ -1,6 +1,6 @@
 NODE: animal ATTRIBUTES:
 name=talk, dist=0
-NODE: talk ATTRIBUTES:
 NODE: cat ATTRIBUTES:
 name=talk, dist=1
 NODE: main ATTRIBUTES:
+NODE: talk ATTRIBUTES:

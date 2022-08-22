@@ -39,11 +39,11 @@ open class BuilderBase : TestBase {
         documents.clear()
         val graph = buildGraph(constructInPath(path))
         val out = ByteArrayOutputStream()
-        graph.heads.forEach { printOut(it, out, mutableSetOf()) }
+        graph.heads.sortedBy { it.name }.forEach { printOut(it, out, mutableSetOf()) }
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-        println(actual) // debug
+//        println(actual) // debug
         checkOutput(expected, actual)
     }
 
@@ -60,7 +60,7 @@ open class BuilderBase : TestBase {
         } else {
             return
         }
-        node.children.forEach {
+        node.children.sortedBy { it.name }.forEach {
             out.write("${node.name} CHILD:\n".toByteArray())
             printOut(it, out, nodes)
         }

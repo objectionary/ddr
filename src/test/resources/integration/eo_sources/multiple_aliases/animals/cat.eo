@@ -1,0 +1,9 @@
++package org.animals
++alias org.eolang.io.stdout
++alias org.life.creature
+
+[t] > cat
+  creature > @
+  [] > talk
+    stdout > @
+      "cat talks"

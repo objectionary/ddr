@@ -1,0 +1,7 @@
++alias creature org.life.creature
+
+[] > app
+  QQ
+  .io
+  .stdout > @
+    "hg"

@@ -31,4 +31,7 @@ class ResolverTest : ResolverBase() {
     @Test
     fun `test basic`() = doTest()
 
+    @Test
+    fun `test multiple aliases`() = doTest()
+
 }

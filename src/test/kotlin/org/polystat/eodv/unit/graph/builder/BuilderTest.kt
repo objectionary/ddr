@@ -33,6 +33,9 @@ class BuilderTest : BuilderBase() {
     fun `test basic dir`() = doTest()
 
     @Test
+    fun `test multiple aliases`() = doTest()
+
+    @Test
     fun `test basic tree`() = doTest()
 
     @Test

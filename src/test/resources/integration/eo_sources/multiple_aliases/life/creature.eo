@@ -1,0 +1,6 @@
++package org.life
+
+[] > creature
+  [] > live
+    QQ.io.stdout > @
+      "ALIVE"

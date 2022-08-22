@@ -27,30 +27,21 @@ package org.polystat.eodv.graph
 import mu.KotlinLogging
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 
-import org.xml.sax.SAXException
 import java.io.*
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
-import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerException
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
-import javax.xml.transform.stream.StreamSource
 
 /**
  * Builds decoration hierarchy graph
  */
-class GraphBuilder(private val document: Document) {
+class GraphBuilder(private val documents: MutableMap<Document, String>) {
     private val logger = KotlinLogging.logger {}
     private val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
     val graph = Graph()
 
     fun createGraph() {
         try {
-            constructInheritance(document)
+            constructInheritance()
             setLeaves()
             graph.leaves.forEach { setHeads(it, mutableMapOf()) }
             val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
@@ -73,51 +64,63 @@ class GraphBuilder(private val document: Document) {
         }
     }
 
-    private fun abstracts(objects: NodeList) {
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
-            val name = name(node)
-            if (abstract(node) != null && name != null) {
-                abstracts.getOrPut(name) { mutableSetOf() }.add(node)
-                graph.igNodes.add(IGraphNode(node))
+    private fun abstracts(objects: MutableList<Node>, packageName: String) =
+        objects.forEach {
+            val name = name(it)
+            if (abstract(it) != null && name != null) {
+                abstracts.getOrPut(name) { mutableSetOf() }.add(it)
+                graph.igNodes.add(IGraphNode(it, packageName))
             }
         }
-    }
 
-    private fun getAbstract(
+    private fun getAbstractViaRef(
         baseName: String?,
         baseRef: String?
-    ): Node? {
+    ): Node? =
         if (baseName != null && abstracts.contains(baseName)) {
-            return abstracts[baseName]!!.find {
+            abstracts[baseName]!!.find {
                 line(it) == baseRef
             }
-        }
-        return null
+        } else null
+
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
+        val packageName = baseNodeName?.substringBeforeLast('.')
+        val nodeName = baseNodeName?.substringAfterLast('.')
+        return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
     }
 
-    private fun constructInheritance(document: Document) {
-        val objects = document.getElementsByTagName("o")
-        abstracts(objects)
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
+    private fun constructInheritance() {
+        documents.forEach {
+            val objects = mutableListOf<Node>()
+            val docObjects = it.key.getElementsByTagName("o")
+            val packageName = packageName(docObjects.item(0))
+            for (i in 0 until docObjects.length) {
+                objects.add(docObjects.item(i))
+            }
+            abstracts(objects, packageName)
+            graph.initialObjects.addAll(objects)
+        }
+        for (node in graph.initialObjects) {
             val name = name(node)
             if (name != null && name == "@") {
                 // check that @ attribute's base has an abstract object in this program
                 val baseNodeName = base(node)
                 val baseNodeRef = ref(node)
-                val abstractBaseNode = getAbstract(baseNodeName, baseNodeRef)
+                var abstractBaseNode = getAbstractViaRef(baseNodeName, baseNodeRef)
+                if (abstractBaseNode == null) {
+                    abstractBaseNode = getAbstractViaPackage(baseNodeName)?.body
+                }
                 if (abstractBaseNode != null) {
                     val parentNode = node.parentNode
                     if (parentNode != null) {
-                        var igChild = IGraphNode(node.parentNode)
+                        var igChild = IGraphNode(node.parentNode, packageName(node.parentNode))
                         val checkedChild = checkNodes(igChild)
                         if (checkedChild == null) {
                             graph.igNodes.add(igChild)
                         } else {
                             igChild = checkedChild
                         }
-                        var igParent = IGraphNode(abstractBaseNode)
+                        var igParent = IGraphNode(abstractBaseNode, packageName(abstractBaseNode))
                         val checkedParent = checkNodes(igParent)
                         if (checkedParent == null) {
                             graph.igNodes.add(igParent)

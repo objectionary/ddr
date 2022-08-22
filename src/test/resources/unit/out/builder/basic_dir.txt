@@ -1,0 +1,12 @@
+NODE: name="util"
+util CHILD:
+NODE: name="classA"
+NODE: name="doA"
+NODE: name="animal"
+animal CHILD:
+NODE: name="cat"
+NODE: name="live"
+live CHILD:
+NODE: name="bengal"
+NODE: name="app"
+NODE: name="doUtil"

@@ -31,6 +31,7 @@ import org.w3c.dom.Node
  */
 class Graph {
     val igNodes: MutableSet<IGraphNode> = mutableSetOf()
+    val initialObjects: MutableList<Node> = mutableListOf()
     val heads: MutableSet<IGraphNode> = mutableSetOf()
     val leaves: MutableList<IGraphNode> = mutableListOf()
 
@@ -48,7 +49,8 @@ class Graph {
  * @param body represents the corresponding xml file node
  */
 data class IGraphNode(
-    val body: Node
+    val body: Node,
+    val packageName: String
 ) {
 //    val name: String by lazy { name(body) }
     val name: String? = name(body) // debug

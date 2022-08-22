@@ -28,8 +28,8 @@ import org.polystat.eodv.graph.*
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 import java.io.File
+import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.UnsupportedEncodingException
 import javax.xml.transform.OutputKeys
@@ -42,8 +42,7 @@ import javax.xml.transform.stream.StreamSource
 
 class BasicDecoratorsResolver(
     private val graph: Graph,
-    private val document: Document,
-    private val outputStream: OutputStream
+    private val documents: MutableMap<Document, String>
 ) {
 
     private val declarations: MutableMap<Node, Node?> = mutableMapOf()
@@ -52,13 +51,15 @@ class BasicDecoratorsResolver(
         collectDeclarations()
         resolveRefs()
         injectAttributes()
-        outputStream.use { writeXml(it) }
+        documents.forEach {
+            val outputStream = FileOutputStream(it.value)
+            outputStream.use { os -> writeXml(os, it.key) }
+        }
     }
 
     private fun collectDeclarations() {
-        val objects = document.getElementsByTagName("o")
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
+        val objects = graph.initialObjects
+        for (node in objects) {
             val base = base(node) ?: continue
             if (abstract(node) == null && !base.startsWith('.')) {
                 declarations[node] = null
@@ -66,20 +67,16 @@ class BasicDecoratorsResolver(
         }
     }
 
-    private fun resolveRefs() {
-        val objects = document.getElementsByTagName("o")
-        declarations.keys.forEach { declarations[it] = findRef(it, objects) }
-    }
+    private fun resolveRefs() = declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects) }
 
     private fun injectAttributes() {
-        val objects = document.getElementsByTagName("o")
-        for (i in 0..objects.length) {
-            val node = objects.item(i)
+        val objects = graph.initialObjects
+        for (node in objects) {
             val ref = ref(node) ?: continue // todo ^ doesn't have ref attr
             if (name(node) == null) {
                 val baseObject = firstRef(ref, objects)
                 val abstract = getIgAbstract(baseObject) ?: continue
-                var sibling = node?.nextSibling?.nextSibling
+                var sibling = node.nextSibling?.nextSibling
                 while (base(sibling)?.startsWith(".") == true) {
                     val base = base(sibling)
                     val attr = abstract.attributes.find { it.name == base?.substring(1) }
@@ -104,6 +101,7 @@ class BasicDecoratorsResolver(
         // template: <o base=".@" line="13" method="" pos="5"/>
         for (i in 0 until attr.parentDistance) {
             val offset = 2 * i
+            val document = parent.ownerDocument
             val newChild: Element = document.createElement("o")
             newChild.setAttribute("base", ".@")
             newChild.setAttribute("line", line(node))
@@ -122,19 +120,16 @@ class BasicDecoratorsResolver(
 
     private fun firstRef(
         ref: String,
-        objects: NodeList
+        objects: MutableList<Node>
     ): Node? {
-        for (i in 0..objects.length) {
-            val item = objects.item(i) ?: continue
-            if (line(item) == ref) {
-                return item
-            }
+        for (node in objects) {
+            if (line(node) == ref) return node
         }
         return null
     }
 
     @Throws(TransformerException::class, UnsupportedEncodingException::class)
-    private fun writeXml(output: OutputStream) {
+    private fun writeXml(output: OutputStream, document: Document) {
         val sep = File.separator
         val prettyPrintXlst = "src${sep}main${sep}resources${sep}pretty_print.xslt"
         val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(File(prettyPrintXlst)))

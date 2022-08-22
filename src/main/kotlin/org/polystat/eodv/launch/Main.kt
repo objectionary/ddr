@@ -24,6 +24,10 @@
 
 package org.polystat.eodv.launch
 
+/**
+ * @param args command line arguments
+ * - args[0] path to the folder with .eo program to be analyzed
+ */
 fun main(args: Array<String>) {
-    launch(filename = args[0], path = args[1], outPath = args[2])
+    launch(path = args[0])
 }

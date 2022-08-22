@@ -1,0 +1,30 @@
++alias util org.ut.util
+
+[] > classA
+  util > @
+  [] > doA
+    QQ
+    .io
+    .stdout > @
+      "gg"
+
+[] > animal
+  [] > live
+    QQ
+    .io
+    .stdout > @
+      "alive"
+
+[] > cat
+  animal > @
+
+[] > bengal
+  cat
+  .@
+  .live > @
+
+[args...] > app
+  classA > instance
+  instance
+  .@
+  .doUtil > @

@@ -7,3 +7,7 @@
   [] > meow
     ^
     .talk > @
+  [] > bengal_live
+    cat
+    .@
+    .live > @

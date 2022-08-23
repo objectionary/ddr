@@ -1,7 +1,8 @@
-+alias creature org.life.creature
++alias bengal breeds.bengal
 
 [] > app
-  QQ
-  .io
-  .stdout > @
-    "hg"
+  bengal > mickey
+  mickey
+  .@
+  .@
+  .live > @

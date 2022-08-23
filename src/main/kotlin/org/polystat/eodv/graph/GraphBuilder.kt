@@ -83,7 +83,7 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             }
         } else null
 
-    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? { // todo может быть там что-то импортится из пакета и несколько методов вызыватеся, тогда так отсекать последнюю точку плохо
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')
         return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }

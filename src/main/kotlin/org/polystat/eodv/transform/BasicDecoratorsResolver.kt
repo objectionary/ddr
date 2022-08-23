@@ -128,6 +128,9 @@ class BasicDecoratorsResolver(
                 if (line(it) == ref && packageName(node) == packageName(it)) return it
             }
         } else {
+            if (base(node) == "^") {
+                return node.parentNode.parentNode
+            }
             return getAbstractViaPackage(base(node))?.body
         }
         return null

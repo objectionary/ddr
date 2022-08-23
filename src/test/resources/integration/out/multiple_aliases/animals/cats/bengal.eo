@@ -6,7 +6,9 @@
     "hello"
   [] > meow
     ^
-    .talk > @
+    .@
+    .@
+    .live > @
   [] > bengal_live
     cat
     .@

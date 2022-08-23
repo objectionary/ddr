@@ -4,6 +4,6 @@
 [] > bengal
   cat "hello" > @
   [] > meow
-    ^.talk > @
+    ^.live > @
   [] > bengal_live
     cat.live > @

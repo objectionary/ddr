@@ -24,6 +24,7 @@
 
 package org.polystat.eodv.unit.graph.attr
 
+import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.TestBase
@@ -37,6 +38,8 @@ import java.nio.file.Paths
 
 open class AttrBase : TestBase {
 
+    private val logger = KotlinLogging.logger {}
+
     override fun doTest() {
         val path = getTestName()
         documents.clear()
@@ -47,7 +50,7 @@ open class AttrBase : TestBase {
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-        println(actual) // debug
+        logger.debug(actual)
         checkOutput(expected, actual)
         try {
             val tmpDir =

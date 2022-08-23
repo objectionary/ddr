@@ -74,7 +74,7 @@ class InnerPropagator(
             }
             "$" -> {} // todo
             else -> {
-                val abstract = resolveRefs(tmpKey) ?: return // => tom == mouse
+                val abstract = resolveRefs(tmpKey) ?: return
                 resolveAttrs(tmpKey, abstract, key)
             }
         }
@@ -89,16 +89,16 @@ class InnerPropagator(
         }
     }
 
-    private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode): Boolean { // tom, mouse
+    private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode): Boolean {
         var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return false
-        var tmpNode: Node? = node.nextSibling.nextSibling ?: return false // graph.igNodes.find { it.body == node }?: return
+        var tmpNode: Node? = node.nextSibling.nextSibling ?: return false
         while (name(tmpAbstract.body) != base(key.body)?.substring(1)) {
             tmpAbstract = graph.igNodes.find { e ->
                 tmpAbstract.attributes.find { base(tmpNode)?.substring(1) == name(it.body) }?.body == e.body
             } ?: return false
             tmpNode = tmpNode?.nextSibling?.nextSibling
         }
-        val parent = node.parentNode ?: return false // rat_pii
+        val parent = node.parentNode ?: return false
         var igParent = graph.igNodes.find { it.body == parent }
         if (igParent == null) {
             graph.igNodes.add(IGraphNode(parent, packageName(parent)))

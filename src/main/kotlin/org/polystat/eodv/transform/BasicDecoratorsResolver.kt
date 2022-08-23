@@ -72,9 +72,10 @@ class BasicDecoratorsResolver(
     private fun injectAttributes() {
         val objects = graph.initialObjects
         for (node in objects) {
-            val ref = ref(node) ?: continue // todo ^ doesn't have ref attr
+//            val ref = ref(node) ?: continue // todo ^ doesn't have ref attr
             if (name(node) == null) {
-                val baseObject = firstRef(ref, objects)
+                val baseObject = firstRef(node, objects)
+                println("BASE: ${baseObject?.attributes?.getNamedItem("name")?.textContent}")
                 val abstract = getIgAbstract(baseObject) ?: continue
                 var sibling = node.nextSibling?.nextSibling
                 while (base(sibling)?.startsWith(".") == true) {
@@ -119,13 +120,24 @@ class BasicDecoratorsResolver(
     }
 
     private fun firstRef(
-        ref: String,
+        node: Node,
         objects: MutableList<Node>
     ): Node? {
-        for (node in objects) {
-            if (line(node) == ref) return node
+        val ref = ref(node)
+        if (ref != null) {
+            objects.forEach {
+                if (line(it) == ref && packageName(node) == packageName(it)) return it
+            }
+        } else {
+            return getAbstractViaPackage(base(node))?.body
         }
         return null
+    }
+
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
+        val packageName = baseNodeName?.substringBeforeLast('.')
+        val nodeName = baseNodeName?.substringAfterLast('.')
+        return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
     }
 
     @Throws(TransformerException::class, UnsupportedEncodingException::class)

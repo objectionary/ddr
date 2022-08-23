@@ -49,8 +49,14 @@ fun packageName(node: Node?) : String {
     return ""
 }
 
+private fun getAbstractViaPackage(baseNodeName: String?, graph: Graph): IGraphNode? {
+    val packageName = baseNodeName?.substringBeforeLast('.')
+    val nodeName = baseNodeName?.substringAfterLast('.')
+    return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
+}
+
 fun findRef(node: Node, objects: MutableList<Node>, graph: Graph): Node? {
-    val ref = ref(node) ?: return null
+    val ref = ref(node) ?: return getAbstractViaPackage(base(node), graph)?.body
     objects.forEach {
         if (line(it) == ref) {
             if (abstract(it) != null && packageName(node) == packageName(it)) {

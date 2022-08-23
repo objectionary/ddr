@@ -35,6 +35,9 @@ class AttrTest : AttrBase() {
     fun `test basic tree`() = doTest()
 
     @Test
+    fun `test multiple aliases`() = doTest()
+
+    @Test
     fun `test tree`() = doTest()
 
     @Test

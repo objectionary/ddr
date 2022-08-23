@@ -1,0 +1,9 @@
++package breeds
++alias org.animals.cat
+
+[] > bengal
+  cat "hello" > @
+  [] > meow
+    ^.talk > @
+  [] > bengal_live
+    cat.live > @

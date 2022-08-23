@@ -75,7 +75,6 @@ class BasicDecoratorsResolver(
 //            val ref = ref(node) ?: continue // todo ^ doesn't have ref attr
             if (name(node) == null) {
                 val baseObject = firstRef(node, objects)
-                println("BASE: ${baseObject?.attributes?.getNamedItem("name")?.textContent}")
                 val abstract = getIgAbstract(baseObject) ?: continue
                 var sibling = node.nextSibling?.nextSibling
                 while (base(sibling)?.startsWith(".") == true) {

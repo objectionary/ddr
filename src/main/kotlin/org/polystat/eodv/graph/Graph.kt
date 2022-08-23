@@ -54,8 +54,8 @@ data class IGraphNode(
 ) {
 //    val name: String by lazy { name(body) }
     val name: String? = name(body) // debug
-    val children: MutableList<IGraphNode> = mutableListOf()
-    val parents: MutableList<IGraphNode> = mutableListOf()
+    val children: MutableSet<IGraphNode> = mutableSetOf()
+    val parents: MutableSet<IGraphNode> = mutableSetOf()
     val attributes: MutableList<IGraphAttr> = mutableListOf()
 }
 

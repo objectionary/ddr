@@ -93,7 +93,7 @@ open class ResolverBase : TestBase {
 
     @Throws(Exception::class)
     private fun eoToXMIR(path: String) {
-        val outFile = File(path.replaceFirst("eo_sources", "in").replace(".eo", ".xmir"))
+        val outFile = File(path.replaceFirst("in", "in").replace(".eo", ".xmir"))
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
         val syntax = Syntax(
             "transformer",
@@ -125,13 +125,13 @@ open class ResolverBase : TestBase {
         "src${sep}test${sep}resources${sep}integration${sep}out${sep}$path"
 
     override fun constructInPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}in${sep}$path"
+        "src${sep}test${sep}resources${sep}integration${sep}tmp_in${sep}$path"
 
     private fun constructEoOutPath(path: String): String =
         "src${sep}test${sep}resources${sep}integration${sep}eo_outputs${sep}$path"
 
     private fun constructEoPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}eo_sources${sep}$path"
+        "src${sep}test${sep}resources${sep}integration${sep}in${sep}$path"
 
     private fun constructCmpPath(path: String) =
         "${constructInPath(path).substringBeforeLast(sep)}${sep}TMP${sep}${path}_tmp"

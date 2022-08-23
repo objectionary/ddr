@@ -30,7 +30,9 @@ import kotlin.test.Ignore
 
 class InnerTest : InnerBase() {
     @Test
-    fun `test multiple aliases`() = doTest()
+    fun `test multiple aliases`() {
+        doTest()
+    }
 
     @Test
     fun `test multiple trees`() = doTest()

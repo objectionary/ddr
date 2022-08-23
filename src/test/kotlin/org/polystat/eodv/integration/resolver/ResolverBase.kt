@@ -51,6 +51,7 @@ open class ResolverBase : TestBase {
         Files.walk(Paths.get(constructEoPath(path)))
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }
+        constructInPath(path)
         val graph = buildGraph(constructInPath(path))
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
@@ -89,11 +90,15 @@ open class ResolverBase : TestBase {
         val tmpDir =
             Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
         FileUtils.deleteDirectory(File(tmpDir))
+        FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
+        FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
+        File("tmp1").delete()
+        File("tmp2").delete()
     }
 
     @Throws(Exception::class)
     private fun eoToXMIR(path: String) {
-        val outFile = File(path.replaceFirst("in", "in").replace(".eo", ".xmir"))
+        val outFile = File(path.replaceFirst("${sep}in${sep}", "${sep}xmirs${sep}").replace(".eo", ".xmir"))
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
         val syntax = Syntax(
             "transformer",
@@ -106,7 +111,7 @@ open class ResolverBase : TestBase {
     @Throws(Exception::class)
     private fun XMIRToEo(path: String, testName: String) {
         val outFile = File(
-            path.replaceFirst("in${sep}TMP${sep}${testName}_tmp",
+            path.replaceFirst("xmirs${sep}TMP${sep}${testName}_tmp",
                 "eo_outputs${sep}$testName").replace(".xmir", ".eo")
         )
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
@@ -125,7 +130,7 @@ open class ResolverBase : TestBase {
         "src${sep}test${sep}resources${sep}integration${sep}out${sep}$path"
 
     override fun constructInPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}tmp_in${sep}$path"
+        "src${sep}test${sep}resources${sep}integration${sep}xmirs${sep}$path"
 
     private fun constructEoOutPath(path: String): String =
         "src${sep}test${sep}resources${sep}integration${sep}eo_outputs${sep}$path"

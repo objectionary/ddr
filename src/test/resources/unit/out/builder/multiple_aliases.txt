@@ -1,0 +1,10 @@
+NODE: name="app"
+NODE: name="bengal_live"
+NODE: name="creature"
+creature CHILD:
+NODE: name="cat"
+cat CHILD:
+NODE: name="bengal"
+NODE: name="live"
+NODE: name="meow"
+NODE: name="talk"

@@ -1,0 +1,15 @@
+NODE: app ATTRIBUTES:
+NODE: bengal ATTRIBUTES:
+name=meow, dist=0
+name=bengal_live, dist=0
+name=talk, dist=1
+name=live, dist=2
+NODE: bengal_live ATTRIBUTES:
+NODE: cat ATTRIBUTES:
+name=talk, dist=0
+name=live, dist=1
+NODE: creature ATTRIBUTES:
+name=live, dist=0
+NODE: live ATTRIBUTES:
+NODE: meow ATTRIBUTES:
+NODE: talk ATTRIBUTES:

@@ -87,13 +87,17 @@ open class ResolverBase : TestBase {
                 val expected = expectedBr.use { br -> br.readText() }
                 checkOutput(expected, actual)
             }
-        val tmpDir =
-            Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
-        FileUtils.deleteDirectory(File(tmpDir))
-        FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
-        FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
-        File("tmp1").delete()
-        File("tmp2").delete()
+        try {
+            val tmpDir =
+                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+            FileUtils.deleteDirectory(File(tmpDir))
+            FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
+            FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
+            File("tmp1").delete()
+            File("tmp2").delete()
+        } catch (e:Exception) {
+            e.printStackTrace()
+        }
     }
 
     @Throws(Exception::class)

@@ -24,6 +24,7 @@
 
 package org.polystat.eodv.unit.graph.inner
 
+import org.apache.commons.io.FileUtils
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.TestBase
@@ -33,6 +34,7 @@ import org.polystat.eodv.launch.processAttributes
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.nio.file.Paths
 
 open class InnerBase : TestBase {
 
@@ -50,9 +52,19 @@ open class InnerBase : TestBase {
         val expected = bufferedReader.use { it.readText() }
         println(actual) // debug
         checkOutput(expected, actual)
+        try {
+            val tmpDir =
+                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+            FileUtils.deleteDirectory(File(tmpDir))
+            File("tmp1").delete()
+            File("tmp2").delete()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    override fun constructOutPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}out${sep}inner${sep}$path.txt"
+    override fun constructOutPath(path: String): String =
+        "src${sep}test${sep}resources${sep}unit${sep}out${sep}inner${sep}$path.txt"
 
     private fun printOut(
         out: ByteArrayOutputStream,
@@ -60,7 +72,7 @@ open class InnerBase : TestBase {
     ) {
         nodes.sortedBy { it.name }.forEach { node ->
             out.write("NODE: ${node.name} ATTRIBUTES:\n".toByteArray())
-            node.attributes.forEach {out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray())}
+            node.attributes.forEach { out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray()) }
         }
     }
 }

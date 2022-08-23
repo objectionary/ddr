@@ -8,3 +8,33 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/objectionary/ddr/blob/master/LICENSE.txt)
 
 DDR is an Experimental Dynamic Dispatch Removal Toolkit for [EO](https://www.eolang.org) Programs
+
+### Launch
+
+### Tests
+
+#### How to add integration tests:
+1) Add your directory with `.eo` source files to `src/test/resources/integration/in`.  
+Note that directory name must be written in snake case.
+
+2) Add your directory with desired output `.eo` files to `src/test/resources/integration/out`.  
+Note that `.eo` files in the output directory must use dot notation like shown below:
+```
+[] > greet
+  QQ
+  .io
+  .stdout > @
+    "Hello, world!"
+```
+
+3) Add a test to [ResolverTest](src/test/kotlin/org/polystat/eodv/integration/resolver/ResolverTest.kt).  
+Your test name must be identical to your added directory name with `_` symbols replaced with spaces and a word `test` inserted in the beginning.  
+Example:  
+Directory name: `basic_example`  
+Test:
+```
+@Test
+fun `test basic example`() = doTest()
+```
+
+That's it :)

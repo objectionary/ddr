@@ -30,11 +30,32 @@ import org.w3c.dom.Node
  * Decoration hierarchy graph representation
  */
 class Graph {
+    /**
+     * Collection of all graph nodes
+     */
     val igNodes: MutableSet<IGraphNode> = mutableSetOf()
+
+    /**
+     * Collection of initial xml objects
+     */
     val initialObjects: MutableList<Node> = mutableListOf()
+
+    /**
+     * "Root nodes" of the graph, it is guaranteed that the whole graph can be traversed starting from these nodes
+     */
     val heads: MutableSet<IGraphNode> = mutableSetOf()
+
+    /**
+     * Leaf nodes of the graph, they don't have any children
+     */
     val leaves: MutableList<IGraphNode> = mutableListOf()
 
+    /**
+     * Connects [child] with [parent] in the graph
+     *
+     * @param child child node
+     * @param parent parent node
+     */
     fun connect(
         child: IGraphNode,
         parent: IGraphNode
@@ -45,26 +66,45 @@ class Graph {
 }
 
 /**
- * Graph node representation
- * @param body represents the corresponding xml file node
+ * Graph node representation. Alternative representation of EO object
+ *
+ * @property body represents the corresponding xml file node
+ * @property packageName name of the package in which the described EO object is located
  */
+@Suppress("CLASS_NAME_INCORRECT")
 data class IGraphNode(
     val body: Node,
     val packageName: String
 ) {
-//    val name: String by lazy { name(body) }
-    val name: String? = name(body) // debug
+    /**
+     * Node name
+     */
+    val name: String? = name(body)
+
+    /**
+     * Children of this node
+     */
     val children: MutableSet<IGraphNode> = mutableSetOf()
+
+    /**
+     * Parents of this node
+     */
     val parents: MutableSet<IGraphNode> = mutableSetOf()
+
+    /**
+     * List of attributes of this node (inner objects and propagated attributes)
+     */
     val attributes: MutableList<IGraphAttr> = mutableListOf()
 }
 
 /**
  * Graph attribute representation
+ *
  * @property name is the name of the attribute
  * @property parentDistance is the distance to the parent, from which this attribute was pushed to current node
  * @property body represents the corresponding xml file node
  */
+@Suppress("CLASS_NAME_INCORRECT")
 data class IGraphAttr(
     val name: String,
     val parentDistance: Int,

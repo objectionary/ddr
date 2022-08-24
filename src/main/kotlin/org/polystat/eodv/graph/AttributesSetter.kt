@@ -26,29 +26,41 @@ package org.polystat.eodv.graph
 
 import org.w3c.dom.Node
 
+/**
+ * Sets all default attributes of nodes and propagates attributes through the [graph]
+ */
 class AttributesSetter(private val graph: Graph) {
+    /**
+     * Add all already existent attributes to attributes list of the node
+     */
     fun setDefaultAttributes() {
-        graph.igNodes.forEach {
-            val attributes = it.body.childNodes
+        graph.igNodes.forEach { node ->
+            val attributes = node.body.childNodes
             for (j in 0 until attributes.length) {
                 val attr: Node = attributes.item(j)
-                if (abstract(attr) != null) {
-                    it.attributes.add(IGraphAttr(name(attr)!!, 0, attr))
-                }
+                abstract(attr)?.let { node.attributes.add(IGraphAttr(name(attr)!!, 0, attr)) }
             }
         }
     }
 
-    fun pushAttributes() = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
+    /**
+     * Push attributes from parents to children
+     */
+    fun pushAttributes(): Unit = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
 
     private fun dfsPush(
         node: IGraphNode,
         parent: IGraphNode?,
         visited: MutableMap<IGraphNode, Int>
     ) {
-        if (visited[node] == 2) return
-        if (visited[node] == 1) visited[node] = 2
-        else visited[node] = 1
+        if (visited[node] == 2) {
+            return
+        }
+        if (visited[node] == 1) {
+            visited[node] = 2
+        } else {
+            visited[node] = 1
+        }
         parent?.attributes?.filter { pa ->
             node.attributes.none { na -> na.name == pa.name }
         }?.forEach {

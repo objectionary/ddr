@@ -167,8 +167,4 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
         visited.add(node)
         node.children.forEach { thinOutHeads(it, toBeRemoved, visited, found) }
     }
-
-    private fun decorationCycles() {
-
-    }
 }

@@ -37,6 +37,9 @@ class InnerPropagator(
     private val decorators: MutableMap<IGraphNode, Boolean> = mutableMapOf()
     private val abstracts: Abstracts = mutableMapOf()
 
+    /**
+     * Propagates attributes of objects that are defined not in the global scope, but inside other objects
+     */
     fun propagateInnerAttrs() {
         collectDecorators()
         processDecorators()
@@ -55,17 +58,21 @@ class InnerPropagator(
         }
     }
 
+    @Suppress("MAGIC_NUMBER")
     private fun processDecorators() {
         val repetitions = 5
-    // while (decorators.containsValue(false)) { // todo
+        // while (decorators.containsValue(false)) { // todo
         for (i in 0..repetitions) {
             decorators.filter { !it.value }.forEach {
                 getBaseAbstract(it.key)
             }
         }
-    // }
+        // }
     }
 
+    /**
+     * @return abstract object corresponding to the base attribute of the [key] node
+     */
     private fun getBaseAbstract(key: IGraphNode) {
         var tmpKey = key.body
         while (base(tmpKey)?.startsWith('.') == true) {
@@ -76,7 +83,8 @@ class InnerPropagator(
                 val abstract = tmpKey.parentNode.parentNode
                 resolveAttrs(tmpKey, abstract, key)
             }
-            "$" -> {} // todo
+            // todo handle
+            "$" -> {}
             else -> {
                 val abstract = resolveRefs(tmpKey) ?: return
                 resolveAttrs(tmpKey, abstract, key)
@@ -84,39 +92,41 @@ class InnerPropagator(
         }
     }
 
+    /**
+     * Finds an actual definition of an object that was copied into given [node]
+     */
     private fun resolveRefs(node: Node): Node? {
-        return if (abstract(node) != null) {
-            node
-        } else {
-            val objects = graph.initialObjects
-            findRef(
-                node, objects, graph
-            )
-        }
+        abstract(node)?.let { return node }
+        return findRef(node, graph.initialObjects, graph)
     }
 
-    private fun resolveAttrs(node: Node, abstract: Node, key: IGraphNode): Boolean {
-        var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return false
-        var tmpNode: Node? = node.nextSibling.nextSibling ?: return false
+    /**
+     * Goes back through the chain of dot notations and propagates
+     * all the attributes of the applied node into the current object
+     */
+    private fun resolveAttrs(
+        node: Node,
+        abstract: Node,
+        key: IGraphNode
+    ) {
+        var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return
+        var tmpNode: Node? = node.nextSibling.nextSibling ?: return
         while (name(tmpAbstract.body) != base(key.body)?.substring(1)) {
-            tmpAbstract = graph.igNodes.find { e ->
-                tmpAbstract.attributes.find { base(tmpNode)?.substring(1) == name(it.body) }?.body == e.body
-            } ?: return false
+            tmpAbstract = graph.igNodes.find { graphNode ->
+                tmpAbstract.attributes.find {
+                    base(tmpNode)?.substring(1) == name(it.body)
+                }?.body == graphNode.body
+            } ?: return
             tmpNode = tmpNode?.nextSibling?.nextSibling
         }
-        val parent = node.parentNode ?: return false
-        var igParent = graph.igNodes.find { it.body == parent }
-        if (igParent == null) {
-            graph.igNodes.add(IGraphNode(parent, packageName(parent)))
-            igParent = graph.igNodes.find { it.body == parent }
+        val parent = node.parentNode ?: return
+        graph.igNodes.find { it.body == parent } ?: run { graph.igNodes.add(IGraphNode(parent, packageName(parent))) }
+        val igParent = graph.igNodes.find { it.body == parent } ?: return
+        tmpAbstract.attributes.forEach { graphNode ->
+            igParent.attributes.find { graphNode.body == it.body }
+                ?: igParent.attributes.add(IGraphAttr(graphNode.name, graphNode.parentDistance + 1, graphNode.body))
         }
-        tmpAbstract.attributes.forEach {
-            if (igParent!!.attributes.find { a -> it.body == a.body } == null) {
-                igParent.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
-            }
-        }
-        graph.connect(igParent!!, tmpAbstract)
-        return true
+        graph.connect(igParent, tmpAbstract)
+        return
     }
-
 }

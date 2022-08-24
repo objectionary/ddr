@@ -24,7 +24,11 @@
 
 package org.polystat.eodv.integration.resolver
 
-import com.jcabi.xml.*
+import com.jcabi.xml.ClasspathSources
+import com.jcabi.xml.XML
+import com.jcabi.xml.XMLDocument
+import com.jcabi.xml.XSLDocument
+import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
@@ -43,7 +47,12 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.Path
 
+/**
+ * Base class for integration testing
+ * todo rename
+ */
 open class ResolverBase : TestBase {
+    private val logger = KotlinLogging.logger(this.javaClass.name)
 
     override fun doTest() {
         val path = getTestName()
@@ -68,7 +77,7 @@ open class ResolverBase : TestBase {
                 XMIRToEo(it.toString(), path)
             }
         val outPath = constructOutPath(path)
-        val cmpFiles = mutableListOf<String>()
+        val cmpFiles: MutableList<String> = mutableListOf()
         Files.walk(Paths.get(outPath))
             .filter(Files::isRegularFile)
             .forEach {
@@ -95,28 +104,30 @@ open class ResolverBase : TestBase {
             FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
             File("tmp1").delete()
             File("tmp2").delete()
-        } catch (e:Exception) {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            logger.error { e.printStackTrace() }
         }
     }
 
     @Throws(Exception::class)
+    @Suppress("FUNCTION_NAME_INCORRECT_CASE")
     private fun eoToXMIR(path: String) {
-        val outFile = File(path.replaceFirst("${sep}in${sep}", "${sep}xmirs${sep}").replace(".eo", ".xmir"))
+        val outFile = File(path.replaceFirst("${sep}in$sep", "${sep}xmirs$sep").replace(".eo", ".xmir"))
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
         val syntax = Syntax(
             "transformer",
-            ResourceOf(path.replace("src${sep}test${sep}resources${sep}", "")),
+            ResourceOf(path.replace("src${sep}test${sep}resources$sep", "")),
             OutputTo(outFile.outputStream())
         )
         syntax.parse()
     }
 
     @Throws(Exception::class)
+    @Suppress("FUNCTION_NAME_INCORRECT_CASE")
     private fun XMIRToEo(path: String, testName: String) {
         val outFile = File(
-            path.replaceFirst("xmirs${sep}TMP${sep}${testName}_tmp",
-                "eo_outputs${sep}$testName").replace(".xmir", ".eo")
+            path.replaceFirst("xmirs${sep}TMP$sep${testName}_tmp",
+                "eo_outputs$sep$testName").replace(".xmir", ".eo")
         )
         Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
         val src = File(path).readText()
@@ -130,18 +141,18 @@ open class ResolverBase : TestBase {
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
-    override fun constructOutPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}out${sep}$path"
+    override fun constructOutPath(directoryName: String): String =
+        "src${sep}test${sep}resources${sep}integration${sep}out$sep$directoryName"
 
-    override fun constructInPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}xmirs${sep}$path"
+    override fun constructInPath(directoryName: String): String =
+        "src${sep}test${sep}resources${sep}integration${sep}xmirs$sep$directoryName"
 
     private fun constructEoOutPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}eo_outputs${sep}$path"
+        "src${sep}test${sep}resources${sep}integration${sep}eo_outputs$sep$path"
 
     private fun constructEoPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}in${sep}$path"
+        "src${sep}test${sep}resources${sep}integration${sep}in$sep$path"
 
     private fun constructCmpPath(path: String) =
-        "${constructInPath(path).substringBeforeLast(sep)}${sep}TMP${sep}${path}_tmp"
+        "${constructInPath(path).substringBeforeLast(sep)}${sep}TMP$sep${path}_tmp"
 }

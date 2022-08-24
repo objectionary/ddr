@@ -31,12 +31,25 @@ import kotlin.test.assertEquals
  * Common interface for all test classes
  */
 interface TestBase {
-    
+    /**
+     * File path separator
+     */
+    @Suppress("CUSTOM_GETTERS_SETTERS")
     val sep: Char
         get() = File.separatorChar
 
+    /**
+     * Constructs test execution process
+     */
     fun doTest()
 
+    /**
+     * Compares expected test output with the actual one
+     *
+     * @param expected expected output
+     * @param actual actual output
+     */
+    @Suppress("KDOC_WITHOUT_RETURN_TAG")
     fun checkOutput(
         expected: String,
         actual: String
@@ -46,9 +59,22 @@ interface TestBase {
             actual.replace("\n", "").replace("\r", "")
         )
 
-    fun constructInPath(path: String): String = "src${sep}test${sep}resources${sep}unit${sep}in${sep}$path"
+    /**
+     * @param directoryName name of the input directory
+     * @return path to input location
+     */
+    fun constructInPath(directoryName: String): String = "src${sep}test${sep}resources${sep}unit${sep}in$sep$directoryName"
 
-    fun constructOutPath(path: String): String
+    /**
+     * @param directoryName name of the output directory
+     * @return path to output location
+     */
+    fun constructOutPath(directoryName: String): String
 
-    fun getTestName() = Thread.currentThread().stackTrace[4].methodName.substring(5).replace(' ', '_')
+    /**
+     * @return name of the test being executed
+     */
+    fun getTestName() = Thread.currentThread().stackTrace[4].methodName
+        .substring(5)
+        .replace(' ', '_')
 }

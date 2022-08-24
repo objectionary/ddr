@@ -24,20 +24,22 @@
 
 package org.polystat.eodv.unit.graph.builder
 
-import mu.KotlinLogging
-import org.apache.commons.io.FileUtils
 import org.polystat.eodv.graph.IGraphNode
-import org.polystat.eodv.TestBase
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
+import org.polystat.eodv.TestBase
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Paths
+import mu.KotlinLogging
+import org.apache.commons.io.FileUtils
 
+/**
+ * Base class for graph builder testing
+ */
 open class BuilderBase : TestBase {
-
-    private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger(this.javaClass.name)
 
     override fun doTest() {
         val path = getTestName()
@@ -57,12 +59,12 @@ open class BuilderBase : TestBase {
             File("tmp1").delete()
             File("tmp2").delete()
         } catch (e: Exception) {
-            e.printStackTrace()
+            logger.error { e.printStackTrace() }
         }
     }
 
-    override fun constructOutPath(path: String): String =
-        "src${sep}test${sep}resources${sep}unit${sep}out${sep}builder${sep}$path.txt"
+    override fun constructOutPath(directoryName: String): String =
+        "src${sep}test${sep}resources${sep}unit${sep}out${sep}builder$sep$directoryName.txt"
 
     private fun printOut(
         node: IGraphNode,

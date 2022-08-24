@@ -37,9 +37,11 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Paths
 
+/**
+ * Base class for inner attributes propagation testing
+ */
 open class InnerBase : TestBase {
-
-    private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger(this.javaClass.name)
 
     override fun doTest() {
         val path = getTestName()
@@ -53,7 +55,6 @@ open class InnerBase : TestBase {
         val actual = String(out.toByteArray())
         val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
         val expected = bufferedReader.use { it.readText() }
-//        println(actual) // debug
         logger.debug(actual)
         checkOutput(expected, actual)
         try {
@@ -63,12 +64,12 @@ open class InnerBase : TestBase {
             File("tmp1").delete()
             File("tmp2").delete()
         } catch (e: Exception) {
-            e.printStackTrace()
+            logger.error { e.printStackTrace() }
         }
     }
 
-    override fun constructOutPath(path: String): String =
-        "src${sep}test${sep}resources${sep}unit${sep}out${sep}inner${sep}$path.txt"
+    override fun constructOutPath(directoryName: String): String =
+        "src${sep}test${sep}resources${sep}unit${sep}out${sep}inner$sep$directoryName.txt"
 
     private fun printOut(
         out: ByteArrayOutputStream,

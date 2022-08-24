@@ -26,6 +26,8 @@ package org.polystat.eodv.graph
 
 import org.w3c.dom.Node
 
+typealias Abstracts = MutableMap<String, MutableSet<IGraphNode>>
+
 /**
  * Propagates inner attributes
  */
@@ -33,7 +35,7 @@ class InnerPropagator(
     private val graph: Graph
 ) {
     private val decorators: MutableMap<IGraphNode, Boolean> = mutableMapOf()
-    private val abstracts: MutableMap<String, MutableSet<IGraphNode>> = mutableMapOf()
+    private val abstracts: Abstracts = mutableMapOf()
 
     fun propagateInnerAttrs() {
         collectDecorators()
@@ -54,12 +56,14 @@ class InnerPropagator(
     }
 
     private fun processDecorators() {
-//        while (decorators.containsValue(false)) { // todo
-        for (i in 0..5)
+        val repetitions = 5
+    // while (decorators.containsValue(false)) { // todo
+        for (i in 0..repetitions) {
             decorators.filter { !it.value }.forEach {
                 getBaseAbstract(it.key)
             }
-//        }
+        }
+    // }
     }
 
     private fun getBaseAbstract(key: IGraphNode) {
@@ -85,7 +89,9 @@ class InnerPropagator(
             node
         } else {
             val objects = graph.initialObjects
-            findRef(node, objects, graph)
+            findRef(
+                node, objects, graph
+            )
         }
     }
 

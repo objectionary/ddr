@@ -25,10 +25,8 @@
 package org.polystat.eodv.unit.graph.builder
 
 import org.junit.jupiter.api.Test
-import org.polystat.eodv.unit.graph.builder.BuilderBase
 
 class BuilderTest : BuilderBase() {
-
     @Test
     fun `test basic dir`() = doTest()
 

@@ -61,9 +61,9 @@ data class IGraphNode(
 
 /**
  * Graph attribute representation
- * @param name is the name of the attribute
- * @param parentDistance is the distance to the parent, from which this attribute was pushed to current node
- * @param body represents the corresponding xml file node
+ * @property name is the name of the attribute
+ * @property parentDistance is the distance to the parent, from which this attribute was pushed to current node
+ * @property body represents the corresponding xml file node
  */
 data class IGraphAttr(
     val name: String,

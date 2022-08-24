@@ -135,10 +135,10 @@
   enabled: true
 # Checks that file with zero or >1 classes has header KDoc
 - name: HEADER_MISSING_IN_NON_SINGLE_CLASS_FILE
-  enabled: true
+  enabled: false
 # Checks that copyright exists on top of file and is properly formatted (as a block comment)
 - name: HEADER_MISSING_OR_WRONG_COPYRIGHT
-  enabled: true
+  enabled: false
   configuration:
     isCopyrightMandatory: false
     copyrightText: ''
@@ -159,7 +159,7 @@
   enabled: true
 # Orders imports alphabetically
 - name: FILE_UNORDERED_IMPORTS
-  enabled: true
+  enabled: false
   configuration:
     # use logical imports grouping with sorting inside of a group
     useRecommendedImportsOrder: true
@@ -407,7 +407,7 @@
   enabled: true
 # Checks that function length isn't too long
 - name: TOO_LONG_FUNCTION
-  enabled: true
+  enabled: false
   configuration:
     maxFunctionLength: 35 # max length of function
     isIncludeHeader: false # count function's header

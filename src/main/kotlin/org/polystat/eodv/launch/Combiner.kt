@@ -32,21 +32,21 @@ import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.transform.BasicDecoratorsResolver
 import org.polystat.eodv.transform.XslTransformer
 import org.w3c.dom.Document
-import org.xml.sax.SAXException
 import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-private val logger = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger("org.polystat.eodv.launch.Combiner")
 private val sep = File.separatorChar
-val documents = mutableMapOf<Document, String>()
+val documents: MutableMap<Document, String> = mutableMapOf()
 
 /**
+ * Aggregates all steps of analysis
+ *
  * @param path path to the directory to be analysed
  */
 fun launch(path: String) {
@@ -58,16 +58,18 @@ fun launch(path: String) {
     BasicDecoratorsResolver(graph, documents).resolveDecorators()
 }
 
+/**
+ * Builds a single graph for all the files in the provided directory
+ *
+ * @param path path to the directory with files
+ * @return graph that was built
+ */
 fun buildGraph(path: String): Graph {
     val transformer = XslTransformer()
     Files.walk(Paths.get(path))
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = "${path.substringBeforeLast(sep)}${sep}TMP${sep}${path.substringAfterLast(sep)}_tmp${it.toString().substring(path.length)}"
-            val forDirs = Path(tmpPath.substringBeforeLast(sep))
-            Files.createDirectories(forDirs)
-            val newFilePath = Paths.get(tmpPath)
-            try {Files.createFile(newFilePath)} catch(ignored: Exception) {}
+            val tmpPath = createTempDirectories(path, it.toString())
             transformer.createXsl(it.pathString, tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -76,24 +78,42 @@ fun buildGraph(path: String): Graph {
     return builder.graph
 }
 
+/**
+ * Aggregates attributes propagation
+ *
+ * @param graph graph, whose nodes' attributes will be processed
+ */
 fun processAttributes(graph: Graph) {
     val attributesSetter = AttributesSetter(graph)
     attributesSetter.setDefaultAttributes()
     attributesSetter.pushAttributes()
 }
 
+/**
+ * @param filename source xml filename
+ * @return generated Document
+ */
 fun getDocument(filename: String): Document? {
     try {
         val factory = DocumentBuilderFactory.newInstance()
-        FileInputStream(filename).use { `is` ->
-            return factory.newDocumentBuilder().parse(`is`)
-        }
+        FileInputStream(filename).use { return factory.newDocumentBuilder().parse(it) }
     } catch (e: Exception) {
-        when (e) {
-            is ParserConfigurationException, is SAXException ->
-                logger.error { e.message }
-            else -> throw e
-        }
+        logger.error { e.printStackTrace() }
     }
     return null
+}
+
+private fun createTempDirectories(path: String, filename: String): String {
+    val tmpPath = "${path.substringBeforeLast(sep)}${sep}TMP$sep${path.substringAfterLast(sep)}_tmp${
+        filename.substring(path.length)
+    }"
+    val forDirs = Path(tmpPath.substringBeforeLast(sep))
+    Files.createDirectories(forDirs)
+    val newFilePath = Paths.get(tmpPath)
+    try {
+        Files.createFile(newFilePath)
+    } catch (e: Exception) {
+        logger.error { e.printStackTrace() }
+    }
+    return tmpPath
 }

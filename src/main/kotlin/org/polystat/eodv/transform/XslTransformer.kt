@@ -37,7 +37,7 @@ import javax.xml.transform.stream.StreamSource
  * Transforms xml file using provided xsl
  */
 class XslTransformer {
-    private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger(this.javaClass.name)
     private val sep = File.separatorChar
     private val ADD_REFS = "src${sep}main${sep}resources${sep}add-refs.xsl"
     private val RESOLVE_ALIASES = "src${sep}main${sep}resources${sep}resolve-aliases.xsl"
@@ -93,7 +93,8 @@ class XslTransformer {
             File(outFilename).writeBytes(os2.readBytes())
         } catch (e: Exception) {
             when (e) {
-                is FileNotFoundException, is TransformerConfigurationException -> logger.error { e.printStackTrace() }
+                is FileNotFoundException, is TransformerConfigurationException ->
+                    logger.error { e.printStackTrace() }
                 is TransformerException -> {
                     logger.error { e.printStackTrace() }
                 }

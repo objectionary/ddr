@@ -35,7 +35,7 @@ import javax.xml.transform.TransformerException
  * Builds decoration hierarchy graph
  */
 class GraphBuilder(private val documents: MutableMap<Document, String>) {
-    private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger(this.javaClass.name)
     private val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
     val graph = Graph()
 
@@ -56,11 +56,7 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             thinnedOutHeads.forEach { graph.heads.add(it) }
             processClosedCycles(graph)
         } catch (e: Exception) {
-            when (e) {
-                is IOException, is TransformerException ->
-                    logger.error { e.message }
-                else -> throw e
-            }
+            logger.error { e.printStackTrace() }
         }
     }
 

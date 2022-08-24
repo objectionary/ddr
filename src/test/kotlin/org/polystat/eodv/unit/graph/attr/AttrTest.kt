@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test
  * Tests attributes propagation
  */
 class AttrTest : AttrBase() {
-
     @Test
     fun `test basic tree`() = doTest()
 

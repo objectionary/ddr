@@ -24,16 +24,16 @@
 
 package org.polystat.eodv.unit.graph.builder
 
+import org.polystat.eodv.TestBase
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
-import org.polystat.eodv.TestBase
+import mu.KotlinLogging
+import org.apache.commons.io.FileUtils
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Paths
-import mu.KotlinLogging
-import org.apache.commons.io.FileUtils
 
 /**
  * Base class for graph builder testing
@@ -58,6 +58,7 @@ open class BuilderBase : TestBase {
             FileUtils.deleteDirectory(File(tmpDir))
             File("tmp1").delete()
             File("tmp2").delete()
+            File("tmp3").delete()
         } catch (e: Exception) {
             logger.error { e.printStackTrace() }
         }

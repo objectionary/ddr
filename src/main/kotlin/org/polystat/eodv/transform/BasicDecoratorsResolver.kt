@@ -24,7 +24,17 @@
 
 package org.polystat.eodv.transform
 
-import org.polystat.eodv.graph.*
+import org.polystat.eodv.graph.Graph
+import org.polystat.eodv.graph.IGraphAttr
+import org.polystat.eodv.graph.IGraphNode
+import org.polystat.eodv.graph.abstract
+import org.polystat.eodv.graph.base
+import org.polystat.eodv.graph.findRef
+import org.polystat.eodv.graph.line
+import org.polystat.eodv.graph.name
+import org.polystat.eodv.graph.packageName
+import org.polystat.eodv.graph.pos
+import org.polystat.eodv.graph.ref
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -39,21 +49,27 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
-
+/**
+ * Collects all decorators and inserts desired .@ applications
+ */
 class BasicDecoratorsResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-
     private val declarations: MutableMap<Node, Node?> = mutableMapOf()
 
+    /**
+     * Aggregates process of resolving all decorators:
+     * collects decorations, finds references of the decorators
+     * and injects all needed .@ elements into the corresponding documents
+     */
     fun resolveDecorators() {
         collectDeclarations()
         resolveRefs()
         injectAttributes()
-        documents.forEach {
-            val outputStream = FileOutputStream(it.value)
-            outputStream.use { os -> writeXml(os, it.key) }
+        documents.forEach {doc ->
+            val outputStream = FileOutputStream(doc.value)
+            outputStream.use { writeXml(it, doc.key) }
         }
     }
 
@@ -67,23 +83,33 @@ class BasicDecoratorsResolver(
         }
     }
 
-    private fun resolveRefs() = declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
+    private fun resolveRefs() =
+        declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
 
+    @Suppress("AVOID_NULL_CHECKS")
     private fun injectAttributes() {
         val objects = graph.initialObjects
         for (node in objects) {
-//            val ref = ref(node) ?: continue // todo ^ doesn't have ref attr
             if (name(node) == null) {
                 val baseObject = firstRef(node, objects)
                 val abstract = getIgAbstract(baseObject) ?: continue
-                var sibling = node.nextSibling?.nextSibling
-                while (base(sibling)?.startsWith(".") == true) {
-                    val base = base(sibling)
-                    val attr = abstract.attributes.find { it.name == base?.substring(1) }
-                    if (attr != null && sibling != null) insert(sibling, attr)
-                    sibling = sibling?.nextSibling
-                }
+                traverseDotChain(node, abstract)
             }
+        }
+    }
+
+    private fun traverseDotChain(
+        node: Node,
+        abstract: IGraphNode
+    ) {
+        var sibling = node.nextSibling?.nextSibling
+        while (base(sibling)?.startsWith(".") == true) {
+            val base = base(sibling)
+            val attr = abstract.attributes.find { it.name == base?.substring(1) }
+            if (attr != null && sibling != null) {
+                insert(sibling, attr)
+            }
+            sibling = sibling?.nextSibling
         }
     }
 
@@ -105,7 +131,6 @@ class BasicDecoratorsResolver(
             val newChild: Element = document.createElement("o")
             newChild.setAttribute("base", ".@")
             newChild.setAttribute("line", line(node))
-//            newChild.setAttribute("method", "")
             newChild.setAttribute("pos", "${base(node)?.length?.plus(pos(node)?.toInt()!!)?.plus(offset)}")
             parent.appendChild(newChild)
         }
@@ -113,7 +138,7 @@ class BasicDecoratorsResolver(
     }
 
     private fun getIgAbstract(node: Node?): IGraphNode? {
-        if (abstract(node) != null) return graph.igNodes.find { it.body == node }
+        abstract(node)?.let { return graph.igNodes.find { it.body == node } }
         val abstract = declarations[node] ?: return null
         return graph.igNodes.find { it.body == abstract }
     }
@@ -122,18 +147,17 @@ class BasicDecoratorsResolver(
         node: Node,
         objects: MutableList<Node>
     ): Node? {
-        val ref = ref(node)
-        if (ref != null) {
+        ref(node)?.let { ref ->
             objects.forEach {
-                if (line(it) == ref && packageName(node) == packageName(it)) return it
+                if (line(it) == ref && packageName(node) == packageName(it)) {
+                    return it
+                }
             }
-        } else {
-            if (base(node) == "^") {
-                return node.parentNode.parentNode
-            }
-            return getAbstractViaPackage(base(node))?.body
         }
-        return null
+        if (base(node) == "^") {
+            return node.parentNode.parentNode
+        }
+        return getAbstractViaPackage(base(node))?.body
     }
 
     private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {

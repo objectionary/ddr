@@ -26,6 +26,9 @@ package org.polystat.eodv.graph
 
 /**
  * Processes decoration cycles
+ *
+ * @param graph graph to be analysed
+ * @throws IllegalStateException if after the analysis it turns out that not all nodes of the graph were traversed
  */
 @Throws(IllegalStateException::class)
 fun processClosedCycles(graph: Graph) {
@@ -50,8 +53,11 @@ private fun dfsReachable(
     node: IGraphNode,
     reached: MutableMap<IGraphNode, Boolean>
 ) {
-    if (reached[node] == true) return
-    else reached[node] = true
+    if (reached[node] == true) {
+        return
+    } else {
+        reached[node] = true
+    }
     node.children.forEach { dfsReachable(it, reached) }
 }
 
@@ -59,7 +65,9 @@ private fun traverseCycles(
     node: IGraphNode,
     reached: MutableMap<IGraphNode, Boolean>
 ) {
-    if (reached[node]!!) return
+    if (reached[node]!!) {
+        return
+    }
     reached[node] = true
     node.children.forEach { traverseCycles(it, reached) }
 }

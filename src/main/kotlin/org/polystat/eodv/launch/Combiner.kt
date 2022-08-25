@@ -24,13 +24,13 @@
 
 package org.polystat.eodv.launch
 
-import mu.KotlinLogging
 import org.polystat.eodv.graph.AttributesSetter
 import org.polystat.eodv.graph.Graph
 import org.polystat.eodv.graph.GraphBuilder
 import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.transform.BasicDecoratorsResolver
 import org.polystat.eodv.transform.XslTransformer
+import mu.KotlinLogging
 import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
@@ -70,7 +70,7 @@ fun buildGraph(path: String): Graph {
         .filter(Files::isRegularFile)
         .forEach {
             val tmpPath = createTempDirectories(path, it.toString())
-            transformer.createXsl(it.pathString, tmpPath)
+            transformer.transformXml(it.pathString, tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
     val builder = GraphBuilder(documents)
@@ -113,7 +113,7 @@ private fun createTempDirectories(path: String, filename: String): String {
     try {
         Files.createFile(newFilePath)
     } catch (e: Exception) {
-        logger.error { e.printStackTrace() }
+        logger.error { e.message }
     }
     return tmpPath
 }

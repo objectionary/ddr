@@ -24,14 +24,14 @@
 
 package org.polystat.eodv.unit.graph.inner
 
-import mu.KotlinLogging
-import org.apache.commons.io.FileUtils
+import org.polystat.eodv.TestBase
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.graph.InnerPropagator
-import org.polystat.eodv.TestBase
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
 import org.polystat.eodv.launch.processAttributes
+import mu.KotlinLogging
+import org.apache.commons.io.FileUtils
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -63,6 +63,7 @@ open class InnerBase : TestBase {
             FileUtils.deleteDirectory(File(tmpDir))
             File("tmp1").delete()
             File("tmp2").delete()
+            File("tmp3").delete()
         } catch (e: Exception) {
             logger.error { e.printStackTrace() }
         }

@@ -24,6 +24,13 @@
 
 package org.polystat.eodv.integration.resolver
 
+import org.polystat.eodv.TestBase
+import org.polystat.eodv.graph.InnerPropagator
+import org.polystat.eodv.launch.buildGraph
+import org.polystat.eodv.launch.documents
+import org.polystat.eodv.launch.processAttributes
+import org.polystat.eodv.transform.BasicDecoratorsResolver
+import org.polystat.eodv.transform.XslTransformer
 import com.jcabi.xml.ClasspathSources
 import com.jcabi.xml.XML
 import com.jcabi.xml.XMLDocument
@@ -34,13 +41,6 @@ import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
-import org.polystat.eodv.TestBase
-import org.polystat.eodv.graph.InnerPropagator
-import org.polystat.eodv.launch.buildGraph
-import org.polystat.eodv.launch.documents
-import org.polystat.eodv.launch.processAttributes
-import org.polystat.eodv.transform.BasicDecoratorsResolver
-import org.polystat.eodv.transform.XslTransformer
 import java.io.BufferedReader
 import java.io.File
 import java.nio.file.Files
@@ -86,14 +86,14 @@ open class ResolverBase : TestBase {
         val eoOutPath = constructEoOutPath(path)
         Files.walk(Paths.get(eoOutPath))
             .filter(Files::isRegularFile)
-            .forEach {
-                val actualBr: BufferedReader = File(it.toString()).bufferedReader()
-                val actual = actualBr.use { br -> br.readText() }
-                val expectedFile = cmpFiles.find { fn ->
-                    fn.substringAfterLast(path) == it.toString().substringAfterLast(path)
+            .forEach {file ->
+                val actualBr: BufferedReader = File(file.toString()).bufferedReader()
+                val actual = actualBr.use { it.readText() }
+                val expectedFile = cmpFiles.find {
+                    it.substringAfterLast(path) == file.toString().substringAfterLast(path)
                 }
                 val expectedBr: BufferedReader = File(expectedFile.toString()).bufferedReader()
-                val expected = expectedBr.use { br -> br.readText() }
+                val expected = expectedBr.use { it.readText() }
                 checkOutput(expected, actual)
             }
         try {
@@ -104,6 +104,7 @@ open class ResolverBase : TestBase {
             FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
             File("tmp1").delete()
             File("tmp2").delete()
+            File("tmp3").delete()
         } catch (e: Exception) {
             logger.error { e.printStackTrace() }
         }

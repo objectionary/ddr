@@ -28,17 +28,24 @@ import mu.KotlinLogging
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 
-import java.io.*
-import javax.xml.transform.TransformerException
+typealias GraphAbstracts = MutableMap<String, MutableSet<Node>>
 
 /**
  * Builds decoration hierarchy graph
  */
 class GraphBuilder(private val documents: MutableMap<Document, String>) {
     private val logger = KotlinLogging.logger(this.javaClass.name)
-    private val abstracts: MutableMap<String, MutableSet<Node>> = mutableMapOf()
+    private val abstracts: GraphAbstracts = mutableMapOf()
+
+    /**
+     * Graph of the program to be analysed
+     */
     val graph = Graph()
 
+    /**
+     * Aggregates the process of graph creation:
+     * Constructs inheritance graph, sets heads and leaves and processes cycles
+     */
     fun createGraph() {
         try {
             constructInheritance()
@@ -59,7 +66,7 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             logger.error { e.printStackTrace() }
         }
     }
-
+    @Suppress("PARAMETER_NAME_IN_OUTER_LAMBDA")
     private fun abstracts(objects: MutableList<Node>, packageName: String) =
         objects.forEach {
             val name = name(it)
@@ -77,9 +84,12 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             abstracts[baseName]!!.find {
                 line(it) == baseRef
             }
-        } else null
+        } else {
+            null
+        }
 
-    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? { // todo может быть там что-то импортится из пакета и несколько методов вызыватеся, тогда так отсекать последнюю точку плохо
+    // todo может быть там что-то импортится из пакета и несколько методов вызыватеся, тогда так отсекать последнюю точку плохо
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')
         return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
@@ -87,7 +97,7 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
 
     private fun constructInheritance() {
         documents.forEach {
-            val objects = mutableListOf<Node>()
+            val objects: MutableList<Node> = mutableListOf()
             val docObjects = it.key.getElementsByTagName("o")
             val packageName = packageName(docObjects.item(0))
             for (i in 0 until docObjects.length) {
@@ -97,42 +107,29 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             graph.initialObjects.addAll(objects)
         }
         for (node in graph.initialObjects) {
-            val name = name(node)
-            if (name != null && name == "@") {
+            val name = name(node) ?: continue
+            if (name == "@") {
                 // check that @ attribute's base has an abstract object in this program
                 val baseNodeName = base(node)
                 val baseNodeRef = ref(node)
-                var abstractBaseNode = getAbstractViaRef(baseNodeName, baseNodeRef)
-                if (abstractBaseNode == null) {
-                    abstractBaseNode = getAbstractViaPackage(baseNodeName)?.body
-                }
-                if (abstractBaseNode != null) {
-                    val parentNode = node.parentNode
-                    if (parentNode != null) {
-                        var igChild = IGraphNode(node.parentNode, packageName(node.parentNode))
-                        val checkedChild = checkNodes(igChild)
-                        if (checkedChild == null) {
-                            graph.igNodes.add(igChild)
-                        } else {
-                            igChild = checkedChild
-                        }
-                        var igParent = IGraphNode(abstractBaseNode, packageName(abstractBaseNode))
-                        val checkedParent = checkNodes(igParent)
-                        if (checkedParent == null) {
-                            graph.igNodes.add(igParent)
-                        } else {
-                            igParent = checkedParent
-                        }
-                        graph.connect(igChild, igParent)
-                    }
+                val abstractBaseNode =
+                    getAbstractViaRef(baseNodeName, baseNodeRef) ?: getAbstractViaPackage(baseNodeName)?.body
+                abstractBaseNode?.let {
+                    val parentNode = node.parentNode ?: return
+                    graph.igNodes.find { it.body.attributes == parentNode.attributes }
+                        ?: run { graph.igNodes.add(IGraphNode(parentNode, packageName(parentNode))) }
+                    val igChild = graph.igNodes.find { it.body.attributes == parentNode.attributes }!!
+                    graph.igNodes.find { it.body.attributes == abstractBaseNode.attributes }
+                        ?: run { graph.igNodes.add(IGraphNode(abstractBaseNode, packageName(abstractBaseNode))) }
+                    val igParent = graph.igNodes.find { it.body.attributes == abstractBaseNode.attributes }!!
+                    graph.connect(igChild, igParent)
                 }
             }
         }
     }
 
-    private fun checkNodes(node: IGraphNode): IGraphNode? {
-        return graph.igNodes.find { it.body.attributes == node.body.attributes }
-    }
+    private fun checkNodes(node: IGraphNode): IGraphNode? =
+        graph.igNodes.find { it.body.attributes == node.body.attributes }
 
     private fun setLeaves() =
         graph.igNodes.filter { it.children.isEmpty() }.forEach { graph.leaves.add(it) }

@@ -39,7 +39,7 @@ import java.nio.file.Paths
  * Base class for graph builder testing
  */
 open class BuilderBase : TestBase {
-    private val logger = KotlinLogging.logger(this.javaClass.name)
+    private val logger = KotlinLogging.logger {}
 
     override fun doTest() {
         val path = getTestName()

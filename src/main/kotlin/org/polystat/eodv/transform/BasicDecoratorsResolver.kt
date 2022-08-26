@@ -31,7 +31,6 @@ import org.polystat.eodv.graph.abstract
 import org.polystat.eodv.graph.base
 import org.polystat.eodv.graph.findRef
 import org.polystat.eodv.graph.line
-import org.polystat.eodv.graph.name
 import org.polystat.eodv.graph.packageName
 import org.polystat.eodv.graph.pos
 import org.polystat.eodv.graph.ref
@@ -67,7 +66,7 @@ class BasicDecoratorsResolver(
         collectDeclarations()
         resolveRefs()
         injectAttributes()
-        documents.forEach {doc ->
+        documents.forEach { doc ->
             val outputStream = FileOutputStream(doc.value)
             outputStream.use { writeXml(it, doc.key) }
         }
@@ -90,11 +89,9 @@ class BasicDecoratorsResolver(
     private fun injectAttributes() {
         val objects = graph.initialObjects
         for (node in objects) {
-            if (name(node) == null) {
-                val baseObject = firstRef(node, objects)
-                val abstract = getIgAbstract(baseObject) ?: continue
-                traverseDotChain(node, abstract)
-            }
+            val baseObject = firstRef(node, objects)
+            val abstract = getIgAbstract(baseObject) ?: continue
+            traverseDotChain(node, abstract)
         }
     }
 
@@ -156,6 +153,9 @@ class BasicDecoratorsResolver(
         }
         if (base(node) == "^") {
             return node.parentNode.parentNode
+        }
+        if (base(node) == "$") {
+            return node.parentNode
         }
         return getAbstractViaPackage(base(node))?.body
     }

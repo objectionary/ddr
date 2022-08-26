@@ -84,7 +84,11 @@ class InnerPropagator(
                 resolveAttrs(tmpKey, abstract, key)
             }
             // todo handle
-            "$" -> {}
+            "$" -> {
+                val abstract = tmpKey
+                resolveAttrs(tmpKey, abstract, key)
+            }
+
             else -> {
                 val abstract = resolveRefs(tmpKey) ?: return
                 resolveAttrs(tmpKey, abstract, key)

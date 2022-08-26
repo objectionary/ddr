@@ -32,4 +32,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test multiple aliases`() = doTest()
+
+    @Test
+    fun `test local object`() = doTest()
 }

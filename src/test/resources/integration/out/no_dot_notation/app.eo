@@ -1,0 +1,17 @@
++alias util utils.util
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
+
+[] > main
+  util > @
+  @
+  .action > xx
+  [] > main_action
+    stdout > @
+      sprintf
+        "hehe %d"
+        xx
+
+[] > app
+  main
+  .main_action > @

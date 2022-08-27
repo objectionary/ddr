@@ -31,6 +31,7 @@ import org.polystat.eodv.graph.abstract
 import org.polystat.eodv.graph.base
 import org.polystat.eodv.graph.findRef
 import org.polystat.eodv.graph.line
+import org.polystat.eodv.graph.name
 import org.polystat.eodv.graph.packageName
 import org.polystat.eodv.graph.pos
 import org.polystat.eodv.graph.ref
@@ -90,14 +91,23 @@ class BasicDecoratorsResolver(
         val objects = graph.initialObjects
         for (node in objects) {
             val baseObject = firstRef(node, objects)
+            if (baseObject?.attributes?.getNamedItem("name")?.textContent == "action") {
+                println()
+            }
             val abstract = getIgAbstract(baseObject) ?: continue
-            traverseDotChain(node, abstract)
+            traverseDotChain(node, abstract, baseObject)
+            graph.igNodes.find { node.parentNode == it.body }?.let { parentNode ->
+                val dist = parentNode.attributes.find { it.name == name(baseObject) }?.parentDistance
+                if (dist != null)
+                    insertBefore(node, parentNode.body, dist)
+            }
         }
     }
 
     private fun traverseDotChain(
         node: Node,
-        abstract: IGraphNode
+        abstract: IGraphNode,
+        baseObject: Node?
     ) {
         var sibling = node.nextSibling?.nextSibling
         while (base(sibling)?.startsWith(".") == true) {
@@ -108,6 +118,47 @@ class BasicDecoratorsResolver(
             }
             sibling = sibling?.nextSibling
         }
+    }
+
+    private fun insertBefore(node: Node, parent: Node, dist: Int) {
+        val siblings: MutableSet<Node> = mutableSetOf() // don't add node
+        var tmpNode = node
+        while (tmpNode.nextSibling != null) {
+            siblings.add(tmpNode.nextSibling)
+            tmpNode = tmpNode.nextSibling
+        }
+        parent.removeChild(node)
+        siblings.forEach {
+            parent.removeChild(it)
+        }
+        val document = parent.ownerDocument
+        // template: <o base=".@" line="13" method="" pos="5"/>
+        if (dist > 0) {
+            val newChild: Element = document.createElement("o")
+            newChild.setAttribute("base", "@")
+            newChild.setAttribute("line", line(node))
+            newChild.setAttribute("pos", "${base(node)?.length?.plus(pos(node)?.toInt()!!)?.plus(0)}")
+            parent.appendChild(newChild)
+        }
+        for (i in 1 until dist) {
+            val offset = 2 * i
+            val newChild: Element = document.createElement("o")
+            newChild.setAttribute("base", ".@")
+            newChild.setAttribute("line", line(node))
+            newChild.setAttribute("pos", "${base(node)?.length?.plus(pos(node)?.toInt()!!)?.plus(offset)}")
+            parent.appendChild(newChild)
+        }
+        val newChild: Element = document.createElement("o")
+        for (i in 0 until node.attributes.length) {
+            val attr = node.attributes.item(i)
+            if (attr.nodeName == "base") {
+                newChild.setAttribute("base", ".${attr.textContent}")
+            } else {
+                newChild.setAttribute(attr.nodeName, attr.textContent)
+            }
+        }
+        parent.appendChild(newChild)
+        siblings.forEach { parent.appendChild(it) }
     }
 
     private fun insert(node: Node, attr: IGraphAttr) {
@@ -121,10 +172,11 @@ class BasicDecoratorsResolver(
         siblings.forEach {
             parent.removeChild(it)
         }
+        val document = parent.ownerDocument
         // template: <o base=".@" line="13" method="" pos="5"/>
         for (i in 0 until attr.parentDistance) {
             val offset = 2 * i
-            val document = parent.ownerDocument
+//            val document = parent.ownerDocument
             val newChild: Element = document.createElement("o")
             newChild.setAttribute("base", ".@")
             newChild.setAttribute("line", line(node))
@@ -157,7 +209,8 @@ class BasicDecoratorsResolver(
         if (base(node) == "$") {
             return node.parentNode
         }
-        return getAbstractViaPackage(base(node))?.body
+        getAbstractViaPackage(base(node))?.body?.let { return it }
+        return graph.igNodes.find { it.body == node.parentNode }?.attributes?.find { it.name == base(node) }?.body
     }
 
     private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {

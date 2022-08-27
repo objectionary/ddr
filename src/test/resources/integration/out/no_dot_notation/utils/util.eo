@@ -1,0 +1,10 @@
++package utils
+
+[] > util
+  [i] > action
+    i
+    .gt
+      5
+    .if > @
+      7
+      8

@@ -35,4 +35,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test local object`() = doTest()
+
+    @Test
+    fun `test no dot notation`() = doTest()
 }

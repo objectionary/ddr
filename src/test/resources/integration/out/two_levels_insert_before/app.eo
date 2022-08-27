@@ -1,4 +1,4 @@
-+alias org.eolang.io.stdout
++alias stdout org.eolang.io.stdout
 
 [] > animal
   [t] > talk
@@ -10,8 +10,13 @@
 
 [] > bengal
   cat > @
-  talk "hello" > meow
+  @
+  .@
+  .talk > meow
 
 [args...] > app
   cat > tom
-  tom.talk "My name is Tom" > @
+  tom
+  .@
+  .talk > @
+    "My name is Tom"

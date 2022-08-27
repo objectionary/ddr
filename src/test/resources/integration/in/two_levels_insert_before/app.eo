@@ -1,0 +1,17 @@
++alias org.eolang.io.stdout
+
+[] > animal
+  [t] > talk
+    stdout > @
+      t
+
+[] > cat
+  animal > @
+
+[] > bengal
+  cat > @
+  talk "hello" > meow
+
+[args...] > app
+  cat > tom
+  tom.talk "My name is Tom" > @

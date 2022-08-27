@@ -92,7 +92,7 @@ class BasicDecoratorsResolver(
         for (node in objects) {
             val baseObject = firstRef(node, objects)
             val abstract = getIgAbstract(baseObject) ?: continue
-            traverseDotChain(node, abstract, baseObject)
+            traverseDotChain(node, abstract)
             graph.igNodes.find { node.parentNode == it.body }?.let { parentNode ->
                 val dist = parentNode.attributes.find { it.name == name(baseObject) }?.parentDistance
                 if (dist != null) {
@@ -104,8 +104,7 @@ class BasicDecoratorsResolver(
 
     private fun traverseDotChain(
         node: Node,
-        abstract: IGraphNode,
-        baseObject: Node?
+        abstract: IGraphNode
     ) {
         var sibling = node.nextSibling?.nextSibling
         while (base(sibling)?.startsWith(".") == true) {

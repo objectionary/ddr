@@ -38,4 +38,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test no dot notation`() = doTest()
+
+    @Test
+    fun `test two levels insert before`() = doTest()
 }

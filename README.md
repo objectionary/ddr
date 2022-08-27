@@ -37,4 +37,7 @@ Test:
 fun `test basic example`() = doTest()
 ```
 
+If your tests don't pass - you can take a look at temporary files in `src/test/resources/integration/eo_outputs` directory.
+It should be more convenient for you, because you will have all your actual `.eo` files located there.
+
 That's it :)

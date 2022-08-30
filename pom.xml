@@ -36,19 +36,6 @@
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-jar-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <configuration>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-<!--                            <addClasspath>true</addClasspath>-->
-<!--                            <mainClass>org.polystat.eodv.launch.MainKt</mainClass>-->
-<!--                        </manifest>-->
-<!--                    </archive>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -95,6 +82,9 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+                <configuration>
+                    <argLine>-Xmx1024m</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -137,11 +127,6 @@
     </build>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>net.sourceforge.saxon</groupId>-->
-<!--            <artifactId>saxon</artifactId>-->
-<!--            <version>9.1.0.8</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.cactoos</groupId>
             <artifactId>cactoos</artifactId>
@@ -155,13 +140,7 @@
         <dependency>
             <groupId>com.yegor256</groupId>
             <artifactId>xsline</artifactId>
-            <version>0.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>11.4</version>
-            <scope>runtime</scope>
+            <version>0.10.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -199,7 +178,6 @@
             <groupId>org.eolang</groupId>
             <artifactId>eo-parser</artifactId>
             <version>0.27.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eolang</groupId>

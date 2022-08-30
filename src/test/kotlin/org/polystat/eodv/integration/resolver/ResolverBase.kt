@@ -70,10 +70,8 @@ open class ResolverBase : TestBase {
         Files.walk(Paths.get(cmpPath))
             .filter(Files::isRegularFile)
             .forEach {
-                val compressAliases = "src${sep}main${sep}resources${sep}compress-aliases.xsl"
-                XslTransformer().singleTransformation(it.toString(), it.toString(), compressAliases)
-                val wrapMethodCalls = "src${sep}main${sep}resources${sep}wrap-method-calls.xsl"
-                XslTransformer().singleTransformation(it.toString(), it.toString(), wrapMethodCalls)
+                XslTransformer().singleTransformation(it.toString(), it.toString(), "/compress-aliases.xsl")
+                XslTransformer().singleTransformation(it.toString(), it.toString(), "/org/eolang/parser/wrap-method-calls.xsl")
                 XMIRToEo(it.toString(), path)
             }
         val outPath = constructOutPath(path)

@@ -24,21 +24,19 @@
 
 package org.polystat.eodv.transform
 
+import com.jcabi.xml.XML
+import com.jcabi.xml.XMLDocument
+import com.yegor256.xsline.TrClasspath
+import com.yegor256.xsline.Xsline
 import mu.KotlinLogging
+import org.eolang.parser.ParsingTrain
 import java.io.File
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.stream.StreamResult
-import javax.xml.transform.stream.StreamSource
 
 /**
  * Transforms xml file using provided xsl
  */
 class XslTransformer {
     private val logger = KotlinLogging.logger(this.javaClass.name)
-    private val sep = File.separatorChar
-    private val addRefsXsl = "src${sep}main${sep}resources${sep}add-refs.xsl"
-    private val expandAliasesXsl = "src${sep}main${sep}resources${sep}expand-aliases.xsl"
-    private val resolveAliasesXsl = "src${sep}main${sep}resources${sep}resolve-aliases.xsl"
 
     /**
      * Creates a new xml by applying several xsl transformations to it
@@ -50,9 +48,16 @@ class XslTransformer {
         inFilename: String,
         outFilename: String
     ) {
-        singleTransformation(inFilename, "tmp1", addRefsXsl)
-        singleTransformation("tmp1", "tmp2", expandAliasesXsl)
-        singleTransformation("tmp2", outFilename, resolveAliasesXsl)
+        val xmir: XML = XMLDocument(File(inFilename))
+        val after = Xsline(
+            TrClasspath(
+                ParsingTrain().empty(),
+                "/org/eolang/parser/add-refs.xsl",
+                "/org/eolang/parser/expand-aliases.xsl",
+                "/org/eolang/parser/resolve-aliases.xsl"
+            ).back()
+        ).pass(xmir)
+        File(outFilename).outputStream().write(after.toString().toByteArray())
     }
 
     /**
@@ -67,16 +72,13 @@ class XslTransformer {
         outFilename: String,
         xslMod: String
     ) {
-        try {
-            val factory = TransformerFactory.newInstance()
-            val transformer = factory.newTemplates(StreamSource(File(xslMod).inputStream())).newTransformer()
-            val source = StreamSource(File(inFilename).inputStream())
-            val os = File("tmp3")
-            val tmp2res = StreamResult(os.outputStream())
-            transformer.transform(source, tmp2res)
-            File(outFilename).writeBytes(os.readBytes())
-        } catch (e: Exception) {
-            logger.error { e.printStackTrace() }
-        }
+        val xmir: XML = XMLDocument(File(inFilename))
+        val after = Xsline(
+            TrClasspath(
+                ParsingTrain().empty(),
+                xslMod
+            ).back()
+        ).pass(xmir)
+        File(outFilename).outputStream().write(after.toString().toByteArray())
     }
 }

@@ -11,11 +11,19 @@ DDR is an Experimental Dynamic Dispatch Removal Toolkit for [EO](https://www.eol
 
 ### Launch
 
+#### From IntelliJ Idea
 You can launch the tool from IntelliJ Idea using MainKt configuration.  
 Just click `Edit configuration` in the `'Edit run/debug configurations' dialog` and
 type an absolute path to your input directory with `.xmir` files in the `Program arguments` field.
 
 After the execution a new directory named `${YOUR_DIRECTORY_NAME}_ddr` will be created near your directory.
+
+#### From console
+Use this command to launch the tool from console
+```
+$ mvn clean install
+$ java -jar target/ddr-1.0-SNAPSHOT-jar-with-dependencies.jar "${PATH_TO_YOUR_DIRECTORY}"
+```
 
 ### Tests
 

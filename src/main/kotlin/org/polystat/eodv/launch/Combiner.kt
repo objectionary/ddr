@@ -51,7 +51,7 @@ val documents: MutableMap<Document, String> = mutableMapOf()
  */
 fun launch(path: String) {
     documents.clear()
-    val graph = buildGraph(path)
+    val graph = buildGraph(path, false)
     processAttributes(graph)
     val innerPropagator = InnerPropagator(graph)
     innerPropagator.propagateInnerAttrs()

@@ -61,7 +61,7 @@ open class ResolverBase : TestBase {
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)
-        val graph = buildGraph(constructInPath(path))
+        val graph = buildGraph(constructInPath(path), true)
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()

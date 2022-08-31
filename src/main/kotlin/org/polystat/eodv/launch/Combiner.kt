@@ -62,14 +62,15 @@ fun launch(path: String) {
  * Builds a single graph for all the files in the provided directory
  *
  * @param path path to the directory with files
+ * @param gather if outputs should be gathered
  * @return graph that was built
  */
-fun buildGraph(path: String): Graph {
+fun buildGraph(path: String, gather: Boolean = true): Graph {
     val transformer = XslTransformer()
     Files.walk(Paths.get(path))
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = createTempDirectories(path, it.toString())
+            val tmpPath = createTempDirectories(path, it.toString(), gather)
             transformer.transformXml(it.pathString, tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -103,10 +104,17 @@ fun getDocument(filename: String): Document? {
     return null
 }
 
-private fun createTempDirectories(path: String, filename: String): String {
-    val tmpPath = "${path.substringBeforeLast(sep)}${sep}TMP$sep${path.substringAfterLast(sep)}_tmp${
-        filename.substring(path.length)
-    }"
+private fun createTempDirectories(
+    path: String,
+    filename: String,
+    gather: Boolean = true
+): String {
+    val tmpPath =
+        if (gather) {
+            "${path.substringBeforeLast(sep)}${sep}TMP$sep${path.substringAfterLast(sep)}_tmp${filename.substring(path.length)}"
+        } else {
+            "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_ddr${filename.substring(path.length)}"
+        }
     val forDirs = Path(tmpPath.substringBeforeLast(sep))
     Files.createDirectories(forDirs)
     val newFilePath = Paths.get(tmpPath)

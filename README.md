@@ -11,6 +11,10 @@ DDR is an Experimental Dynamic Dispatch Removal Toolkit for [EO](https://www.eol
 
 ### Launch
 
+You can launch the tool from IntelliJ Idea using MainKt configuration.  
+Just click `Edit configuration` in the `'Edit run/debug configurations' dialog` and
+type an absolute path to your input directory with `.xmir` files in the `Program arguments` field.
+
 ### Tests
 
 #### How to add integration tests:

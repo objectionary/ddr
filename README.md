@@ -19,7 +19,7 @@ type an absolute path to your input directory with `.xmir` files in the `Program
 After the execution a new directory named `${YOUR_DIRECTORY_NAME}_ddr` will be created near your directory.
 
 #### From console
-Use this command to launch the tool from console
+Use these commands to launch the tool from console
 ```
 $ mvn clean install
 $ java -jar target/ddr-1.0-SNAPSHOT-jar-with-dependencies.jar "${PATH_TO_YOUR_DIRECTORY}"

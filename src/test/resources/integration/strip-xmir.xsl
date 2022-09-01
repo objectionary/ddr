@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2022 Objectionary.com
+Copyright (c) 2022 Olesia Subbotina
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ SOFTWARE.
   <!--
   This one removes all 'meaningless' elements from XMIR. We
   use this one to compare two XMIR documents for semantic
-  equivalence.
+  equivalence. TODO: fix license
   -->
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:strip-space elements="*"/>

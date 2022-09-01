@@ -26,7 +26,7 @@ SOFTWARE.
   <!--
   This one removes all 'meaningless' elements from XMIR. We
   use this one to compare two XMIR documents for semantic
-  equivalence. TODO: fix license
+  equivalence.
   -->
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:strip-space elements="*"/>

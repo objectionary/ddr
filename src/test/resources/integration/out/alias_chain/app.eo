@@ -1,0 +1,11 @@
++alias utils util.utils
+
+[] > user
+  utils
+  .doUtil
+  .attr > @
+
+[] > app
+  user
+  .@
+  .inner > @

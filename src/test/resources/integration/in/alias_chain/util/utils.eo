@@ -1,0 +1,9 @@
++package util
+
+[] > utils
+  [] > doUtil
+    QQ.io.stdout "util" > @
+    [] > attr
+      QQ.io.stdout "in attr" > @
+      [] > inner
+        QQ.io.stdout "inner" > @

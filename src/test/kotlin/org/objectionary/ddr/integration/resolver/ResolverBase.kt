@@ -47,8 +47,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 /**
- * Base class for integration testing
- * todo rename
+ * Base class for testing decorators resolver
  */
 open class ResolverBase : TestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)

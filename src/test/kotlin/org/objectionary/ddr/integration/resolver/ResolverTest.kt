@@ -41,4 +41,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test two levels insert before`() = doTest()
+
+    @Test
+    fun `test alias chain`() = doTest()
 }

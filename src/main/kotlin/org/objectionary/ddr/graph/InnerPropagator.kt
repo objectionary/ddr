@@ -83,7 +83,6 @@ class InnerPropagator(
                 val abstract = tmpKey.parentNode.parentNode
                 resolveAttrs(tmpKey, abstract, key)
             }
-            // todo handle
             "$" -> {
                 val abstract = tmpKey
                 resolveAttrs(tmpKey, abstract, key)

@@ -24,7 +24,7 @@
 
 package org.polystat.eodv.graph
 
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 
@@ -34,7 +34,7 @@ typealias GraphAbstracts = MutableMap<String, MutableSet<Node>>
  * Builds decoration hierarchy graph
  */
 class GraphBuilder(private val documents: MutableMap<Document, String>) {
-    private val logger = KotlinLogging.logger(this.javaClass.name)
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
     private val abstracts: GraphAbstracts = mutableMapOf()
 
     /**
@@ -63,7 +63,7 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             thinnedOutHeads.forEach { graph.heads.add(it) }
             processClosedCycles(graph)
         } catch (e: Exception) {
-            logger.error { e.printStackTrace() }
+            logger.error(e.printStackTrace().toString())
         }
     }
     @Suppress("PARAMETER_NAME_IN_OUTER_LAMBDA")

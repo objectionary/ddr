@@ -30,17 +30,15 @@ import org.polystat.eodv.graph.GraphBuilder
 import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.transform.BasicDecoratorsResolver
 import org.polystat.eodv.transform.XslTransformer
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
-import kotlin.io.path.Path
-import kotlin.io.path.pathString
 
-private val logger = KotlinLogging.logger("org.polystat.eodv.launch.Combiner")
+private val logger = LoggerFactory.getLogger("org.polystat.eodv.launch.Combiner")
 private val sep = File.separatorChar
 val documents: MutableMap<Document, String> = mutableMapOf()
 
@@ -71,7 +69,7 @@ fun buildGraph(path: String, gather: Boolean = true): Graph {
         .filter(Files::isRegularFile)
         .forEach {
             val tmpPath = createTempDirectories(path, it.toString(), gather)
-            transformer.transformXml(it.pathString, tmpPath)
+            transformer.transformXml(it.toString(), tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
     val builder = GraphBuilder(documents)
@@ -99,7 +97,7 @@ fun getDocument(filename: String): Document? {
         val factory = DocumentBuilderFactory.newInstance()
         FileInputStream(filename).use { return factory.newDocumentBuilder().parse(it) }
     } catch (e: Exception) {
-        logger.error { e.printStackTrace() }
+        logger.error(e.printStackTrace().toString())
     }
     return null
 }
@@ -115,13 +113,13 @@ private fun createTempDirectories(
         } else {
             "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_ddr${filename.substring(path.length)}"
         }
-    val forDirs = Path(tmpPath.substringBeforeLast(sep))
+    val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)
     val newFilePath = Paths.get(tmpPath)
     try {
         Files.createFile(newFilePath)
     } catch (e: Exception) {
-        logger.error { e.message }
+        logger.error(e.message)
     }
     return tmpPath
 }

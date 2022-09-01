@@ -30,8 +30,8 @@ import org.polystat.eodv.graph.InnerPropagator
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
 import org.polystat.eodv.launch.processAttributes
-import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -41,7 +41,7 @@ import java.nio.file.Paths
  * Base class for inner attributes propagation testing
  */
 open class InnerBase : TestBase {
-    private val logger = KotlinLogging.logger(this.javaClass.name)
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun doTest() {
         val path = getTestName()
@@ -65,7 +65,7 @@ open class InnerBase : TestBase {
             File("tmp2").delete()
             File("tmp3").delete()
         } catch (e: Exception) {
-            logger.error { e.printStackTrace() }
+            logger.error(e.printStackTrace().toString())
         }
     }
 

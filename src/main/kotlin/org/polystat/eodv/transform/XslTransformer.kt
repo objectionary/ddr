@@ -28,15 +28,15 @@ import com.jcabi.xml.XML
 import com.jcabi.xml.XMLDocument
 import com.yegor256.xsline.TrClasspath
 import com.yegor256.xsline.Xsline
-import mu.KotlinLogging
 import org.eolang.parser.ParsingTrain
+import org.slf4j.LoggerFactory
 import java.io.File
 
 /**
  * Transforms xml file using provided xsl
  */
 class XslTransformer {
-    private val logger = KotlinLogging.logger(this.javaClass.name)
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     /**
      * Creates a new xml by applying several xsl transformations to it

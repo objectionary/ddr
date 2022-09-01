@@ -35,24 +35,23 @@ import com.jcabi.xml.ClasspathSources
 import com.jcabi.xml.XML
 import com.jcabi.xml.XMLDocument
 import com.jcabi.xml.XSLDocument
-import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
-import kotlin.io.path.Path
 
 /**
  * Base class for integration testing
  * todo rename
  */
 open class ResolverBase : TestBase {
-    private val logger = KotlinLogging.logger(this.javaClass.name)
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun doTest() {
         val path = getTestName()
@@ -104,7 +103,7 @@ open class ResolverBase : TestBase {
             File("tmp2").delete()
             File("tmp3").delete()
         } catch (e: Exception) {
-            logger.error { e.printStackTrace() }
+            logger.error(e.printStackTrace().toString())
         }
     }
 
@@ -112,7 +111,7 @@ open class ResolverBase : TestBase {
     @Suppress("FUNCTION_NAME_INCORRECT_CASE")
     private fun eoToXMIR(path: String) {
         val outFile = File(path.replaceFirst("${sep}in$sep", "${sep}xmirs$sep").replace(".eo", ".xmir"))
-        Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
+        Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
         val syntax = Syntax(
             "transformer",
             ResourceOf(path.replace("src${sep}test${sep}resources$sep", "")),
@@ -128,7 +127,7 @@ open class ResolverBase : TestBase {
             path.replaceFirst("xmirs${sep}TMP$sep${testName}_tmp",
                 "eo_outputs$sep$testName").replace(".xmir", ".eo")
         )
-        Files.createDirectories(Path(outFile.toPath().toString().substringBeforeLast(File.separator)))
+        Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
         val src = File(path).readText()
         val first: XML = clean(XMLDocument(src))
         val eolang = XMIR(first).toEO()

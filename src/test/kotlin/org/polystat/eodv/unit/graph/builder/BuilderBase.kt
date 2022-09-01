@@ -28,8 +28,8 @@ import org.polystat.eodv.TestBase
 import org.polystat.eodv.graph.IGraphNode
 import org.polystat.eodv.launch.buildGraph
 import org.polystat.eodv.launch.documents
-import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -39,7 +39,7 @@ import java.nio.file.Paths
  * Base class for graph builder testing
  */
 open class BuilderBase : TestBase {
-    private val logger = KotlinLogging.logger(this.javaClass.name)
+    private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun doTest() {
         val path = getTestName()
@@ -60,7 +60,7 @@ open class BuilderBase : TestBase {
             File("tmp2").delete()
             File("tmp3").delete()
         } catch (e: Exception) {
-            logger.error { e.printStackTrace() }
+            logger.error(e.printStackTrace().toString())
         }
     }
 

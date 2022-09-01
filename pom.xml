@@ -82,7 +82,6 @@ SOFTWARE.
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kotlin.code.style>official</kotlin.code.style>
-    <!--        <kotlin.compiler.jvmTarget>1.17</kotlin.compiler.jvmTarget>-->
     <kotlin.version>1.7.10</kotlin.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>

@@ -55,7 +55,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.polystat.eodv.launch.MainKt</mainClass>
+                                    <mainClass>org.objectionary.ddr.launch.MainKt</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

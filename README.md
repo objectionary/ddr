@@ -41,7 +41,7 @@ Note that `.eo` files in the output directory must use dot notation like shown b
     "Hello, world!"
 ```
 
-3) Add a test to [ResolverTest](src/test/kotlin/org/polystat/eodv/integration/resolver/ResolverTest.kt).  
+3) Add a test to [ResolverTest](src/test/kotlin/org/objectionary/ddr/integration/resolver/ResolverTest.kt).  
 Your test name must be identical to your added directory name with `_` symbols replaced with spaces and a word `test` inserted in the beginning.  
 Example:  
 Directory name: `basic_example`  

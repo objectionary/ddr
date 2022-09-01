@@ -38,7 +38,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 
-private val logger = LoggerFactory.getLogger("org.polystat.eodv.launch.Combiner")
+private val logger = LoggerFactory.getLogger("org.objectionary.ddr.launch.Combiner")
 private val sep = File.separatorChar
 val documents: MutableMap<Document, String> = mutableMapOf()
 

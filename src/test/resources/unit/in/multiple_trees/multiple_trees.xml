@@ -3,119 +3,119 @@
          name="ex-1"
          time="2022-08-05T11:01:08.537156600Z"
          version="1.0-SNAPSHOT">
-    <listing>+alias org.eolang.io.stdout
+  <listing>+alias org.eolang.io.stdout
 
-        [] &gt; animal
-        [] &gt; live
-        stdout &gt; @
-        "I'm alive animal"
-        [t] &gt; talk
-        stdout &gt; @
-        "animal talks"
+    [] &gt; animal
+    [] &gt; live
+    stdout &gt; @
+    "I'm alive animal"
+    [t] &gt; talk
+    stdout &gt; @
+    "animal talks"
 
-        [] &gt; human
-        [] &gt; live
-        stdout &gt; @
-        "I'm alive human"
-        [t] &gt; talk
-        stdout &gt; @
-        "human talks"
+    [] &gt; human
+    [] &gt; live
+    stdout &gt; @
+    "I'm alive human"
+    [t] &gt; talk
+    stdout &gt; @
+    "human talks"
 
-        [] &gt; cat
-        animal &gt; @
-        [m] &gt; meow
-        ^.talk "meow" &gt; @
+    [] &gt; cat
+    animal &gt; @
+    [m] &gt; meow
+    ^.talk "meow" &gt; @
 
-        [] &gt; dog
-        animal &gt; @
-        [] &gt; live
-        ^.talk "I am a dog" &gt; @
-        [] &gt; woof
-        stdout &gt; @
-        "woof"
+    [] &gt; dog
+    animal &gt; @
+    [] &gt; live
+    ^.talk "I am a dog" &gt; @
+    [] &gt; woof
+    stdout &gt; @
+    "woof"
 
-        [] &gt; sam
-        human &gt; @
-        [job] &gt; work
-        ^.live &gt; @
+    [] &gt; sam
+    human &gt; @
+    [job] &gt; work
+    ^.live &gt; @
 
-        [args...] &gt; main
-        dog &gt; tom
-        dog.woof &gt; @
-    </listing>
-    <errors/>
-    <sheets/>
-    <metas>
-        <meta line="1">
-            <head>alias</head>
-            <tail>org.eolang.io.stdout</tail>
-            <part>org.eolang.io.stdout</part>
-        </meta>
-    </metas>
-    <objects>
-        <o abstract="" line="3" name="animal" pos="0">
-            <o abstract="" line="4" name="live" pos="2">
-                <o base="stdout" line="5" name="@" pos="4">
-                    <o base="string" data="string" line="6" pos="6">I'm alive animal</o>
-                </o>
-            </o>
-            <o abstract="" line="7" name="talk" pos="2">
-                <o line="7" name="t" pos="3"/>
-                <o base="stdout" line="8" name="@" pos="4">
-                    <o base="string" data="string" line="9" pos="6">animal talks</o>
-                </o>
-            </o>
+    [args...] &gt; main
+    dog &gt; tom
+    dog.woof &gt; @
+  </listing>
+  <errors/>
+  <sheets/>
+  <metas>
+    <meta line="1">
+      <head>alias</head>
+      <tail>org.eolang.io.stdout</tail>
+      <part>org.eolang.io.stdout</part>
+    </meta>
+  </metas>
+  <objects>
+    <o abstract="" line="3" name="animal" pos="0">
+      <o abstract="" line="4" name="live" pos="2">
+        <o base="stdout" line="5" name="@" pos="4">
+          <o base="string" data="string" line="6" pos="6">I'm alive animal</o>
         </o>
-        <o abstract="" line="11" name="human" pos="0">
-            <o abstract="" line="12" name="live" pos="2">
-                <o base="stdout" line="13" name="@" pos="4">
-                    <o base="string" data="string" line="14" pos="6">I'm alive human</o>
-                </o>
-            </o>
-            <o abstract="" line="15" name="talk" pos="2">
-                <o line="15" name="t" pos="3"/>
-                <o base="stdout" line="16" name="@" pos="4">
-                    <o base="string" data="string" line="17" pos="6">human talks</o>
-                </o>
-            </o>
+      </o>
+      <o abstract="" line="7" name="talk" pos="2">
+        <o line="7" name="t" pos="3"/>
+        <o base="stdout" line="8" name="@" pos="4">
+          <o base="string" data="string" line="9" pos="6">animal talks</o>
         </o>
-        <o abstract="" line="19" name="cat" pos="0">
-            <o base="animal" line="20" name="@" pos="2"/>
-            <o abstract="" line="21" name="meow" pos="2">
-                <o line="21" name="m" pos="3"/>
-                <o base="^" line="22" pos="4"/>
-                <o base=".talk" line="22" method="" name="@" pos="5">
-                    <o base="string" data="string" line="22" pos="11">meow</o>
-                </o>
-            </o>
+      </o>
+    </o>
+    <o abstract="" line="11" name="human" pos="0">
+      <o abstract="" line="12" name="live" pos="2">
+        <o base="stdout" line="13" name="@" pos="4">
+          <o base="string" data="string" line="14" pos="6">I'm alive human</o>
         </o>
-        <o abstract="" line="24" name="dog" pos="0">
-            <o base="animal" line="25" name="@" pos="2"/>
-            <o abstract="" line="26" name="live" pos="2">
-                <o base="^" line="27" pos="4"/>
-                <o base=".talk" line="27" method="" name="@" pos="5">
-                    <o base="string" data="string" line="27" pos="11">I am a dog</o>
-                </o>
-            </o>
-            <o abstract="" line="28" name="woof" pos="2">
-                <o base="stdout" line="29" name="@" pos="4">
-                    <o base="string" data="string" line="30" pos="6">woof</o>
-                </o>
-            </o>
+      </o>
+      <o abstract="" line="15" name="talk" pos="2">
+        <o line="15" name="t" pos="3"/>
+        <o base="stdout" line="16" name="@" pos="4">
+          <o base="string" data="string" line="17" pos="6">human talks</o>
         </o>
-        <o abstract="" line="32" name="sam" pos="0">
-            <o base="human" line="33" name="@" pos="2"/>
-            <o abstract="" line="34" name="work" pos="2">
-                <o line="34" name="job" pos="3"/>
-                <o base="^" line="35" pos="4"/>
-                <o base=".live" line="35" method="" name="@" pos="5"/>
-            </o>
+      </o>
+    </o>
+    <o abstract="" line="19" name="cat" pos="0">
+      <o base="animal" line="20" name="@" pos="2"/>
+      <o abstract="" line="21" name="meow" pos="2">
+        <o line="21" name="m" pos="3"/>
+        <o base="^" line="22" pos="4"/>
+        <o base=".talk" line="22" method="" name="@" pos="5">
+          <o base="string" data="string" line="22" pos="11">meow</o>
         </o>
-        <o abstract="" line="37" name="main" pos="0">
-            <o line="37" name="args" pos="1" vararg=""/>
-            <o base="dog" line="38" name="tom" pos="2"/>
-            <o base="dog" line="39" pos="2"/>
-            <o base=".woof" line="39" method="" name="@" pos="5"/>
+      </o>
+    </o>
+    <o abstract="" line="24" name="dog" pos="0">
+      <o base="animal" line="25" name="@" pos="2"/>
+      <o abstract="" line="26" name="live" pos="2">
+        <o base="^" line="27" pos="4"/>
+        <o base=".talk" line="27" method="" name="@" pos="5">
+          <o base="string" data="string" line="27" pos="11">I am a dog</o>
         </o>
-    </objects>
+      </o>
+      <o abstract="" line="28" name="woof" pos="2">
+        <o base="stdout" line="29" name="@" pos="4">
+          <o base="string" data="string" line="30" pos="6">woof</o>
+        </o>
+      </o>
+    </o>
+    <o abstract="" line="32" name="sam" pos="0">
+      <o base="human" line="33" name="@" pos="2"/>
+      <o abstract="" line="34" name="work" pos="2">
+        <o line="34" name="job" pos="3"/>
+        <o base="^" line="35" pos="4"/>
+        <o base=".live" line="35" method="" name="@" pos="5"/>
+      </o>
+    </o>
+    <o abstract="" line="37" name="main" pos="0">
+      <o line="37" name="args" pos="1" vararg=""/>
+      <o base="dog" line="38" name="tom" pos="2"/>
+      <o base="dog" line="39" pos="2"/>
+      <o base=".woof" line="39" method="" name="@" pos="5"/>
+    </o>
+  </objects>
 </program>

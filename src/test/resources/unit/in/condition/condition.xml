@@ -1,76 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2022 Olesia Subbotina
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <program ms="251"
          name="ex-1"
          time="2022-08-09T10:03:46.124566300Z"
          version="1.0-SNAPSHOT">
-    <listing>+alias org.eolang.io.stdout
+  <listing>+alias org.eolang.io.stdout
 
-        [] &gt; classB
-        [] &gt; foo
-        stdout &gt; @
-        "B"
+    [] &gt; classB
+    [] &gt; foo
+    stdout &gt; @
+    "B"
 
-        [] &gt; classC
-        [] &gt; foo
-        stdout &gt; @
-        "C"
+    [] &gt; classC
+    [] &gt; foo
+    stdout &gt; @
+    "C"
 
-        [] &gt; condition
-        [i] &gt; check
-        if. &gt; @
-        i.gt 5
-        classB
-        classC
+    [] &gt; condition
+    [i] &gt; check
+    if. &gt; @
+    i.gt 5
+    classB
+    classC
 
-        [args...] &gt; main
-        condition.check 2 &gt; instance
-        instance.foo &gt; @
-    </listing>
-    <errors/>
-    <sheets/>
-    <metas>
-        <meta line="1">
-            <head>alias</head>
-            <tail>org.eolang.io.stdout</tail>
-            <part>org.eolang.io.stdout</part>
-        </meta>
-    </metas>
-    <objects>
-        <o abstract="" line="3" name="classB" pos="0">
-            <o abstract="" line="4" name="foo" pos="2">
-                <o base="stdout" line="5" name="@" pos="4">
-                    <o base="string" data="string" line="6" pos="6">B</o>
-                </o>
-            </o>
+    [args...] &gt; main
+    condition.check 2 &gt; instance
+    instance.foo &gt; @
+  </listing>
+  <errors/>
+  <sheets/>
+  <metas>
+    <meta line="1">
+      <head>alias</head>
+      <tail>org.eolang.io.stdout</tail>
+      <part>org.eolang.io.stdout</part>
+    </meta>
+  </metas>
+  <objects>
+    <o abstract="" line="3" name="classB" pos="0">
+      <o abstract="" line="4" name="foo" pos="2">
+        <o base="stdout" line="5" name="@" pos="4">
+          <o base="string" data="string" line="6" pos="6">B</o>
         </o>
-        <o abstract="" line="8" name="classC" pos="0">
-            <o abstract="" line="9" name="foo" pos="2">
-                <o base="stdout" line="10" name="@" pos="4">
-                    <o base="string" data="string" line="11" pos="6">C</o>
-                </o>
-            </o>
+      </o>
+    </o>
+    <o abstract="" line="8" name="classC" pos="0">
+      <o abstract="" line="9" name="foo" pos="2">
+        <o base="stdout" line="10" name="@" pos="4">
+          <o base="string" data="string" line="11" pos="6">C</o>
         </o>
-        <o abstract="" line="13" name="condition" pos="0">
-            <o abstract="" line="14" name="check" pos="2">
-                <o line="14" name="i" pos="3"/>
-                <o base=".if" line="15" name="@" pos="4">
-                    <o base="i" line="16" pos="6"/>
-                    <o base=".gt" line="16" method="" pos="7">
-                        <o base="int" data="int" line="16" pos="11">5</o>
-                    </o>
-                    <o base="classB" line="17" pos="6"/>
-                    <o base="classC" line="18" pos="6"/>
-                </o>
-            </o>
+      </o>
+    </o>
+    <o abstract="" line="13" name="condition" pos="0">
+      <o abstract="" line="14" name="check" pos="2">
+        <o line="14" name="i" pos="3"/>
+        <o base=".if" line="15" name="@" pos="4">
+          <o base="i" line="16" pos="6"/>
+          <o base=".gt" line="16" method="" pos="7">
+            <o base="int" data="int" line="16" pos="11">5</o>
+          </o>
+          <o base="classB" line="17" pos="6"/>
+          <o base="classC" line="18" pos="6"/>
         </o>
-        <o abstract="" line="20" name="main" pos="0">
-            <o line="20" name="args" pos="1" vararg=""/>
-            <o base="condition" line="21" pos="2"/>
-            <o base=".check" line="21" method="" name="instance" pos="11">
-                <o base="int" data="int" line="21" pos="18">2</o>
-            </o>
-            <o base="instance" line="22" pos="2"/>
-            <o base=".foo" line="22" method="" name="@" pos="10"/>
-        </o>
-    </objects>
+      </o>
+    </o>
+    <o abstract="" line="20" name="main" pos="0">
+      <o line="20" name="args" pos="1" vararg=""/>
+      <o base="condition" line="21" pos="2"/>
+      <o base=".check" line="21" method="" name="instance" pos="11">
+        <o base="int" data="int" line="21" pos="18">2</o>
+      </o>
+      <o base="instance" line="22" pos="2"/>
+      <o base=".foo" line="22" method="" name="@" pos="10"/>
+    </o>
+  </objects>
 </program>

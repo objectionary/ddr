@@ -1,46 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2022 Olesia Subbotina
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <program ms="4"
          name="transformer"
          time="2022-08-22T15:47:52.201586131Z"
          version="0.26.0">
-   <listing>+package org.animals
-+alias org.eolang.io.stdout
-+alias org.life.creature
+  <listing>+package org.animals
+    +alias org.eolang.io.stdout
+    +alias org.life.creature
 
-[t] &gt; cat
-  creature &gt; @
-  [] &gt; talk
+    [t] &gt; cat
+    creature &gt; @
+    [] &gt; talk
     stdout &gt; @
-      "cat talks"
-</listing>
-   <errors/>
-   <sheets/>
-   <metas>
-      <meta line="1">
-         <head>package</head>
-         <tail>org.animals</tail>
-         <part>org.animals</part>
-      </meta>
-      <meta line="2">
-         <head>alias</head>
-         <tail>org.eolang.io.stdout</tail>
-         <part>org.eolang.io.stdout</part>
-      </meta>
-      <meta line="3">
-         <head>alias</head>
-         <tail>org.life.creature</tail>
-         <part>org.life.creature</part>
-      </meta>
-   </metas>
-   <objects>
-      <o abstract="" line="5" name="cat" pos="0">
-         <o line="5" name="t" pos="1"/>
-         <o base="creature" line="6" name="@" pos="2"/>
-         <o abstract="" line="7" name="talk" pos="2">
-            <o base="stdout" line="8" name="@" pos="4">
-               <o base="string" data="string" line="9" pos="6">cat talks</o>
-            </o>
-         </o>
+    "cat talks"
+  </listing>
+  <errors/>
+  <sheets/>
+  <metas>
+    <meta line="1">
+      <head>package</head>
+      <tail>org.animals</tail>
+      <part>org.animals</part>
+    </meta>
+    <meta line="2">
+      <head>alias</head>
+      <tail>org.eolang.io.stdout</tail>
+      <part>org.eolang.io.stdout</part>
+    </meta>
+    <meta line="3">
+      <head>alias</head>
+      <tail>org.life.creature</tail>
+      <part>org.life.creature</part>
+    </meta>
+  </metas>
+  <objects>
+    <o abstract="" line="5" name="cat" pos="0">
+      <o line="5" name="t" pos="1"/>
+      <o base="creature" line="6" name="@" pos="2"/>
+      <o abstract="" line="7" name="talk" pos="2">
+        <o base="stdout" line="8" name="@" pos="4">
+          <o base="string" data="string" line="9" pos="6">cat talks</o>
+        </o>
       </o>
-   </objects>
+    </o>
+  </objects>
 </program>

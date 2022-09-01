@@ -3,121 +3,121 @@
          name="ex-1"
          time="2022-08-08T08:33:22.958223500Z"
          version="1.0-SNAPSHOT">
-    <listing>+alias org.eolang.io.stdout
+  <listing>+alias org.eolang.io.stdout
 
-        [] &gt; classA
-        classB &gt; @
-        [] &gt; doA
-        stdout &gt; @
-        "A"
+    [] &gt; classA
+    classB &gt; @
+    [] &gt; doA
+    stdout &gt; @
+    "A"
 
-        [] &gt; classB
-        classA &gt; @
-        [] &gt; doBA
-        ^.doA &gt; @
+    [] &gt; classB
+    classA &gt; @
+    [] &gt; doBA
+    ^.doA &gt; @
 
-        [] &gt; classC
-        classB &gt; @
-        [] &gt; doC
-        stdout &gt; @
-        "C"
+    [] &gt; classC
+    classB &gt; @
+    [] &gt; doC
+    stdout &gt; @
+    "C"
 
-        [] &gt; classD
-        classC &gt; @
+    [] &gt; classD
+    classC &gt; @
 
-        [] &gt; classE
-        classA &gt; @
+    [] &gt; classE
+    classA &gt; @
 
-        [] &gt; classA2
-        classB2 &gt; @
-        [] &gt; doA2
-        stdout &gt; @
-        "A2"
+    [] &gt; classA2
+    classB2 &gt; @
+    [] &gt; doA2
+    stdout &gt; @
+    "A2"
 
-        [] &gt; classB2
-        classA2 &gt; @
-        [] &gt; doBA2
-        ^.doA2 &gt; @
+    [] &gt; classB2
+    classA2 &gt; @
+    [] &gt; doBA2
+    ^.doA2 &gt; @
 
-        [] &gt; classC2
-        classB2 &gt; @
-        [] &gt; doC2
-        stdout &gt; @
-        "C2"
+    [] &gt; classC2
+    classB2 &gt; @
+    [] &gt; doC2
+    stdout &gt; @
+    "C2"
 
-        [args...] &gt; main
-        classC2 &gt; instance
-        instance.doC2 &gt; @
-    </listing>
-    <errors/>
-    <sheets/>
-    <metas>
-        <meta line="1">
-            <head>alias</head>
-            <tail>org.eolang.io.stdout</tail>
-            <part>org.eolang.io.stdout</part>
-        </meta>
-    </metas>
-    <objects>
-        <o abstract="" line="3" name="classA" pos="0">
-            <o base="classB" line="4" name="@" pos="2"/>
-            <o abstract="" line="5" name="doA" pos="2">
-                <o base="stdout" line="6" name="@" pos="4">
-                    <o base="string" data="string" line="7" pos="6">A</o>
-                </o>
-            </o>
+    [args...] &gt; main
+    classC2 &gt; instance
+    instance.doC2 &gt; @
+  </listing>
+  <errors/>
+  <sheets/>
+  <metas>
+    <meta line="1">
+      <head>alias</head>
+      <tail>org.eolang.io.stdout</tail>
+      <part>org.eolang.io.stdout</part>
+    </meta>
+  </metas>
+  <objects>
+    <o abstract="" line="3" name="classA" pos="0">
+      <o base="classB" line="4" name="@" pos="2"/>
+      <o abstract="" line="5" name="doA" pos="2">
+        <o base="stdout" line="6" name="@" pos="4">
+          <o base="string" data="string" line="7" pos="6">A</o>
         </o>
-        <o abstract="" line="9" name="classB" pos="0">
-            <o base="classA" line="10" name="@" pos="2"/>
-            <o abstract="" line="11" name="doBA" pos="2">
-                <o base="^" line="12" pos="4"/>
-                <o base=".doA" line="12" method="" name="@" pos="5"/>
-            </o>
+      </o>
+    </o>
+    <o abstract="" line="9" name="classB" pos="0">
+      <o base="classA" line="10" name="@" pos="2"/>
+      <o abstract="" line="11" name="doBA" pos="2">
+        <o base="^" line="12" pos="4"/>
+        <o base=".doA" line="12" method="" name="@" pos="5"/>
+      </o>
+    </o>
+    <o abstract="" line="14" name="classC" pos="0">
+      <o base="classB" line="15" name="@" pos="2"/>
+      <o abstract="" line="16" name="doC" pos="2">
+        <o base="stdout" line="17" name="@" pos="4">
+          <o base="string" data="string" line="18" pos="6">C</o>
         </o>
-        <o abstract="" line="14" name="classC" pos="0">
-            <o base="classB" line="15" name="@" pos="2"/>
-            <o abstract="" line="16" name="doC" pos="2">
-                <o base="stdout" line="17" name="@" pos="4">
-                    <o base="string" data="string" line="18" pos="6">C</o>
-                </o>
-            </o>
+      </o>
+    </o>
+    <o abstract="" line="20" name="classD" pos="0">
+      <o base="classC" line="21" name="@" pos="2"/>
+    </o>
+    <o abstract="" line="23" name="classE" pos="0">
+      <o base="classA" line="24" name="@" pos="2"/>
+    </o>
+    <o abstract="" line="26" name="classA2" pos="0">
+      <o base="classB2" line="27" name="@" pos="2"/>
+      <o abstract="" line="28" name="doA2" pos="2">
+        <o base="stdout" line="29" name="@" pos="4">
+          <o base="string" data="string" line="30" pos="6">A2</o>
         </o>
-        <o abstract="" line="20" name="classD" pos="0">
-            <o base="classC" line="21" name="@" pos="2"/>
+      </o>
+    </o>
+    <o abstract="" line="32" name="classB2" pos="0">
+      <o base="classA2" line="33" name="@" pos="2"/>
+      <o abstract="" line="34" name="doBA2" pos="2">
+        <o base="^" line="35" pos="4"/>
+        <o base=".doA2" line="35" method="" name="@" pos="5"/>
+      </o>
+    </o>
+    <o abstract="" line="37" name="classC2" pos="0">
+      <o base="classB2" line="38" name="@" pos="2"/>
+      <o abstract="" line="39" name="doC2" pos="2">
+        <o base="stdout" line="40" name="@" pos="4">
+          <o base="string" data="string" line="41" pos="6">C2</o>
         </o>
-        <o abstract="" line="23" name="classE" pos="0">
-            <o base="classA" line="24" name="@" pos="2"/>
-        </o>
-        <o abstract="" line="26" name="classA2" pos="0">
-            <o base="classB2" line="27" name="@" pos="2"/>
-            <o abstract="" line="28" name="doA2" pos="2">
-                <o base="stdout" line="29" name="@" pos="4">
-                    <o base="string" data="string" line="30" pos="6">A2</o>
-                </o>
-            </o>
-        </o>
-        <o abstract="" line="32" name="classB2" pos="0">
-            <o base="classA2" line="33" name="@" pos="2"/>
-            <o abstract="" line="34" name="doBA2" pos="2">
-                <o base="^" line="35" pos="4"/>
-                <o base=".doA2" line="35" method="" name="@" pos="5"/>
-            </o>
-        </o>
-        <o abstract="" line="37" name="classC2" pos="0">
-            <o base="classB2" line="38" name="@" pos="2"/>
-            <o abstract="" line="39" name="doC2" pos="2">
-                <o base="stdout" line="40" name="@" pos="4">
-                    <o base="string" data="string" line="41" pos="6">C2</o>
-                </o>
-            </o>
-        </o>
-        <o abstract="" line="43" name="main" pos="0">
-            <o line="43" name="args" pos="1" vararg=""/>
-            <o base="classC2" line="44" name="instance" pos="2"/>
-            <o base="instance" line="45" pos="2"/>
-            <o base=".@" line="45" pos="15"/>
-            <o base=".@" line="45" pos="17"/>
-            <o base=".doA2" line="45" method="" name="@" pos="10"/>
-        </o>
-    </objects>
+      </o>
+    </o>
+    <o abstract="" line="43" name="main" pos="0">
+      <o line="43" name="args" pos="1" vararg=""/>
+      <o base="classC2" line="44" name="instance" pos="2"/>
+      <o base="instance" line="45" pos="2"/>
+      <o base=".@" line="45" pos="15"/>
+      <o base=".@" line="45" pos="17"/>
+      <o base=".doA2" line="45" method="" name="@" pos="10"/>
+    </o>
+  </objects>
 </program>

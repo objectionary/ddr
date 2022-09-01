@@ -36,18 +36,16 @@ SOFTWARE.
     <xsl:variable name="o" select="."/>
     <xsl:copy>
       <xsl:attribute name="base">
-<!--        <xsl:for-each select="/program/metas/meta/part[1]">-->
-          <xsl:variable name="meta" select="/program/metas/meta[contains(string($o/@base), string(part[1][text()]))]"/>
-          <xsl:choose>
-            <xsl:when test="$meta">
-              <xsl:variable name="tail" select="$meta/part[1]"/>
-              <xsl:value-of select="$tail"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$o/@base"/>
-            </xsl:otherwise>
-          </xsl:choose>
-<!--        </xsl:for-each>-->
+        <xsl:variable name="meta" select="/program/metas/meta[contains(string($o/@base), string(part[1][text()]))]"/>
+        <xsl:choose>
+          <xsl:when test="$meta">
+            <xsl:variable name="tail" select="$meta/part[1]"/>
+            <xsl:value-of select="$tail"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$o/@base"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:attribute>
       <xsl:apply-templates select="node()|@* except @base"/>
     </xsl:copy>

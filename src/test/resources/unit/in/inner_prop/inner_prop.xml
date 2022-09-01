@@ -22,10 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<program ms="316"
-         name="ex-1"
-         time="2022-08-12T11:46:09.609910400Z"
-         version="1.0-SNAPSHOT">
+<program ms="316" name="ex-1" time="2022-08-12T11:46:09.609910400Z" version="1.0-SNAPSHOT">
   <listing>+alias org.eolang.io.stdout
 
     [] &gt; animal

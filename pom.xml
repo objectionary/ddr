@@ -179,6 +179,12 @@ SOFTWARE.
       <artifactId>cactoos</artifactId>
       <version>0.54.0</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kdoc-maven-plugin -->
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kdoc-maven-plugin</artifactId>
+      <version>0.12.213</version>
+    </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>

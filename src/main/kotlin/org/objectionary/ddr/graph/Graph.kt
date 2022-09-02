@@ -36,6 +36,11 @@ class Graph {
     val igNodes: MutableSet<IGraphNode> = mutableSetOf()
 
     /**
+     * Collection of conditional graph nodes
+     */
+    val igCondNodes: MutableSet<IGraphCondNode> = mutableSetOf()
+
+    /**
      * Collection of initial xml objects
      */
     val initialObjects: MutableList<Node> = mutableListOf()
@@ -109,4 +114,12 @@ data class IGraphAttr(
     val name: String,
     val parentDistance: Int,
     val body: Node
+)
+
+@Suppress("CLASS_NAME_INCORRECT")
+data class IGraphCondNode(
+    val name: String,
+    val cond: MutableList<Node>,
+    val fstOption: Node,
+    val sndOption: Node
 )

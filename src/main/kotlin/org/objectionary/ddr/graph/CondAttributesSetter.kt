@@ -7,15 +7,35 @@ class CondAttributesSetter(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-    private val conditions : MutableSet<Node> = mutableSetOf()
+    private val conditions: MutableSet<Node> = mutableSetOf()
+
+    fun processConditions() {
+        collectConditions()
+        processApplicationsToNames()
+    }
 
     private fun collectConditions() {
         val objects = graph.initialObjects
         for (node in objects) {
             val base = base(node) ?: continue
             if (base == ".if") {
-//                declarations[node] = null
+                conditions.add(node)
             }
+        }
+    }
+
+    private fun processApplicationsToNames() {
+        conditions.filter { name(it) != "@" }.forEach {node ->
+            val cond: MutableList<Node> = mutableListOf()
+            var tmpNode = node
+            var line = line(tmpNode.nextSibling)
+            cond.add(tmpNode.nextSibling)
+            while(line(tmpNode.nextSibling) == line) {
+                cond.add(tmpNode.nextSibling)
+                tmpNode.nextSibling
+                line = line(tmpNode)
+            }
+//            graph.igCondNodes.add(IGraphCondNode(name(node), ))
         }
     }
 }

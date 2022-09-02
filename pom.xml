@@ -83,6 +83,7 @@ SOFTWARE.
   </distributionManagement>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>17</java.version>
     <kotlin.code.style>official</kotlin.code.style>
     <kotlin.version>1.7.10</kotlin.version>
     <maven.compiler.source>17</maven.compiler.source>

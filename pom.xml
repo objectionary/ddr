@@ -53,6 +53,8 @@ SOFTWARE.
       <id>1</id>
       <name>Olesia Subbotina</name>
       <email>lesya.sub@mail.ru</email>
+      <organization>yegor256.com</organization>
+      <organizationUrl>https://www.yegor256.com</organizationUrl>
       <roles>
         <role>Architect</role>
         <role>Developer</role>

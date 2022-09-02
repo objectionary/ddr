@@ -88,6 +88,7 @@ SOFTWARE.
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <diktat-check.version>1.2.3</diktat-check.version>
+    <dokka.version>1.7.10</dokka.version>
   </properties>
   <repositories>
     <repository>
@@ -170,6 +171,28 @@ SOFTWARE.
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jetbrains.dokka</groupId>
+        <artifactId>dokka-maven-plugin</artifactId>
+        <version>${dokka.version}</version>
+        <executions>
+          <execution>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>dokka</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <sourceLinks>
+            <link>
+              <path>${project.basedir}</path>
+              <url>https://github.com/objectionary/ddr</url>
+              <lineSuffix>#L</lineSuffix>
+            </link>
+          </sourceLinks>
+        </configuration>
       </plugin>
     </plugins>
   </build>

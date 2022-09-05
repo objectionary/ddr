@@ -12,6 +12,22 @@ DDR is an Experimental Dynamic Dispatch Removal Toolkit for [EO](https://www.eol
 
 ### Launch
 
+#### Using Maven
+Just add this to your `pom.xml`
+
+```
+<dependency>
+  <groupId>org.eolang</groupId>
+  <artifactId>ddr</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+And then you'll be able to use the tool like this:
+```
+CombinerKt.launch("${PATH_TO_YOUR_DIRECTORY}");
+```
+
 #### From IntelliJ Idea
 You can launch the tool from IntelliJ Idea using MainKt configuration.  
 Just click `Edit configuration` in the `'Edit run/debug configurations' dialog` and

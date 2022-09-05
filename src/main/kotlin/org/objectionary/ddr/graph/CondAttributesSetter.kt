@@ -1,14 +1,20 @@
 package org.objectionary.ddr.graph
 
-import org.w3c.dom.Document
 import org.w3c.dom.Node
 
+/**
+ * Class for processing conditional attributes
+ *
+ * @property graph graph of the program
+ */
 class CondAttributesSetter(
-    private val graph: Graph,
-    private val documents: MutableMap<Document, String>
+    private val graph: Graph
 ) {
     private val conditions: MutableSet<Node> = mutableSetOf()
 
+    /**
+     * Aggregates the process of processing conditional attributes
+     */
     fun processConditions() {
         collectConditions()
         processApplicationsToNames()
@@ -25,17 +31,16 @@ class CondAttributesSetter(
     }
 
     private fun processApplicationsToNames() {
-        conditions.filter { name(it) != "@" }.forEach {node ->
+        conditions.filter { name(it) != "@" }.forEach { node ->
             val cond: MutableList<Node> = mutableListOf()
             var tmpNode = node
             var line = line(tmpNode.nextSibling)
             cond.add(tmpNode.nextSibling)
-            while(line(tmpNode.nextSibling) == line) {
+            while (line(tmpNode.nextSibling) == line) {
                 cond.add(tmpNode.nextSibling)
                 tmpNode.nextSibling
                 line = line(tmpNode)
             }
-//            graph.igCondNodes.add(IGraphCondNode(name(node), ))
         }
     }
 }

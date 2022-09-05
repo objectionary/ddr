@@ -105,9 +105,9 @@ data class IGraphNode(
 /**
  * Graph attribute representation
  *
- * @property name is the name of the attribute
- * @property parentDistance is the distance to the parent, from which this attribute was pushed to current node
- * @property body represents the corresponding xml file node
+ * @property name name of the attribute
+ * @property parentDistance distance to the parent, from which this attribute was pushed to current node
+ * @property body corresponding xml file node
  */
 @Suppress("CLASS_NAME_INCORRECT")
 data class IGraphAttr(
@@ -116,6 +116,14 @@ data class IGraphAttr(
     val body: Node
 )
 
+/**
+ * Conditional graph attribute representation
+ *
+ * @property name name of the attribute
+ * @property cond list of nodes representing the condition
+ * @property fstOption option on the true branch
+ * @property sndOption option on the false branch
+ */
 @Suppress("CLASS_NAME_INCORRECT")
 data class IGraphCondNode(
     val name: String,

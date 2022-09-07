@@ -24,6 +24,8 @@
 
 package org.objectionary.ddr.graph
 
+import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphNode
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Node

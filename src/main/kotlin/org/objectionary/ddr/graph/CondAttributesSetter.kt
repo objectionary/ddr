@@ -1,5 +1,7 @@
 package org.objectionary.ddr.graph
 
+import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.w3c.dom.Node
 
 /**
@@ -54,7 +56,7 @@ class CondAttributesSetter(
                 tmpNode = tmpNode.nextSibling.nextSibling
                 line = line(tmpNode)
             }
-            graph.igCondNodes.add(IGraphCondNode(name(node)!!, cond, fstOption, sndOption))
+            graph.igCondNodes.add(IGraphCondNode(node, packageName(node), cond, fstOption, sndOption))
         }
     }
 }

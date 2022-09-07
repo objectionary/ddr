@@ -3,6 +3,13 @@ package org.objectionary.ddr.graph.repr
 import org.objectionary.ddr.graph.name
 import org.w3c.dom.Node
 
+/**
+ * Common class for all node types
+ *
+ * @property body represents the corresponding xml file node
+ * @property packageName name of the package in which the described EO object is located
+ */
+@Suppress("CLASS_NAME_INCORRECT")
 open class IGraphNode(
     open val body: Node,
     open val packageName: String
@@ -31,7 +38,6 @@ open class IGraphNode(
 /**
  * Graph node representation. Alternative representation of EO object
  *
- * @property name name of the node
  * @property body represents the corresponding xml file node
  * @property packageName name of the package in which the described EO object is located
  */
@@ -43,6 +49,12 @@ class IGraphBasicNode(
 
 /**
  * Conditional graph attribute representation
+ *
+ * @property body represents the corresponding xml file node
+ * @property packageName name of the package in which the described EO object is located
+ * @property cond list of nodes representing the condition
+ * @property fstOption list of nodes representing the option on the true branch
+ * @property sndOption list of nodes representing the option on the false branch
  */
 @Suppress("CLASS_NAME_INCORRECT")
 class IGraphCondNode(

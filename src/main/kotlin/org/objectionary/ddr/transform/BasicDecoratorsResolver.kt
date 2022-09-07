@@ -24,8 +24,6 @@
 
 package org.objectionary.ddr.transform
 
-import org.objectionary.ddr.graph.repr.Graph
-import org.objectionary.ddr.graph.repr.IGraphAttr
 import org.objectionary.ddr.graph.abstract
 import org.objectionary.ddr.graph.base
 import org.objectionary.ddr.graph.findRef
@@ -34,6 +32,8 @@ import org.objectionary.ddr.graph.name
 import org.objectionary.ddr.graph.packageName
 import org.objectionary.ddr.graph.pos
 import org.objectionary.ddr.graph.ref
+import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphAttr
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Element

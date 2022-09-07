@@ -26,9 +26,9 @@ package org.objectionary.ddr.launch
 
 import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.CondAttributesSetter
-import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
+import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.transform.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.XslTransformer
 import org.slf4j.LoggerFactory

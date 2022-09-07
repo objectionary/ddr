@@ -1,6 +1,7 @@
 package org.objectionary.ddr.graph
 
 import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.w3c.dom.Node
 
@@ -33,7 +34,7 @@ class CondAttributesSetter(
     }
 
     private fun processApplicationsToNames() {
-        conditions.filter { name(it) != "@" }.forEach { node ->
+        conditions.forEach { node ->
             var tmpNode = node.firstChild.nextSibling
             var line = line(tmpNode)
             val cond: MutableList<Node> = mutableListOf(tmpNode)
@@ -56,7 +57,12 @@ class CondAttributesSetter(
                 tmpNode = tmpNode.nextSibling.nextSibling
                 line = line(tmpNode)
             }
-            graph.igCondNodes.add(IGraphCondNode(node, packageName(node), cond, fstOption, sndOption))
+            if (name(node) != "@") {
+                graph.igNodes.add(IGraphCondNode(node, packageName(node), cond, fstOption, sndOption))
+            } else {
+                val parent = graph.igNodes.find { it.body == node.parentNode }
+                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, cond, fstOption, sndOption))
+            }
         }
     }
 }

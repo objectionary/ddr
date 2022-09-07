@@ -16,8 +16,26 @@ open class IGraphAttr(
     open val body: Node
 )
 
+/**
+ * Conditional graph attribute representation
+ *
+ * @property name name of the attribute
+ * @property parentDistance distance to the parent, from which this attribute was pushed to current node
+ * @property body corresponding xml file node
+ * @property cond list of nodes representing the condition
+ * @property fstOption list of nodes representing the option on the true branch
+ * @property sndOption list of nodes representing the option on the false branch
+ */
+@Suppress("CLASS_NAME_INCORRECT")
 class IGraphCondAttr(
-    override val name: String,
-    override val parentDistance: Int,
-    override val body: Node
-) : IGraphAttr(name, parentDistance, body)
+    name: String,
+    parentDistance: Int,
+    body: Node,
+    val cond: MutableList<Node>,
+    val fstOption: MutableList<Node>,
+    val sndOption: MutableList<Node>
+) : IGraphAttr(
+    name,
+    parentDistance,
+    body
+)

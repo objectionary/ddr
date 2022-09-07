@@ -24,6 +24,9 @@
 
 package org.objectionary.ddr.graph
 
+import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphNode
+
 /**
  * Processes decoration cycles
  *

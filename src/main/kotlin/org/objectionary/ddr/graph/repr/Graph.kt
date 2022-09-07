@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.objectionary.ddr.graph
+package org.objectionary.ddr.graph.repr
 
 import org.w3c.dom.Node
 
@@ -34,11 +34,6 @@ class Graph {
      * Collection of all graph nodes
      */
     val igNodes: MutableSet<IGraphNode> = mutableSetOf()
-
-    /**
-     * Collection of conditional graph nodes
-     */
-    val igCondNodes: MutableSet<IGraphCondNode> = mutableSetOf()
 
     /**
      * Collection of initial xml objects
@@ -69,65 +64,3 @@ class Graph {
         parent.children.add(child)
     }
 }
-
-/**
- * Graph node representation. Alternative representation of EO object
- *
- * @property body represents the corresponding xml file node
- * @property packageName name of the package in which the described EO object is located
- */
-@Suppress("CLASS_NAME_INCORRECT")
-data class IGraphNode(
-    val body: Node,
-    val packageName: String
-) {
-    /**
-     * Node name
-     */
-    val name: String? = name(body)
-
-    /**
-     * Children of this node
-     */
-    val children: MutableSet<IGraphNode> = mutableSetOf()
-
-    /**
-     * Parents of this node
-     */
-    val parents: MutableSet<IGraphNode> = mutableSetOf()
-
-    /**
-     * List of attributes of this node (inner objects and propagated attributes)
-     */
-    val attributes: MutableList<IGraphAttr> = mutableListOf()
-}
-
-/**
- * Graph attribute representation
- *
- * @property name name of the attribute
- * @property parentDistance distance to the parent, from which this attribute was pushed to current node
- * @property body corresponding xml file node
- */
-@Suppress("CLASS_NAME_INCORRECT")
-data class IGraphAttr(
-    val name: String,
-    val parentDistance: Int,
-    val body: Node
-)
-
-/**
- * Conditional graph attribute representation
- *
- * @property name name of the attribute
- * @property cond list of nodes representing the condition
- * @property fstOption option on the true branch
- * @property sndOption option on the false branch
- */
-@Suppress("CLASS_NAME_INCORRECT")
-data class IGraphCondNode(
-    val name: String,
-    val cond: MutableList<Node>,
-    val fstOption: Node,
-    val sndOption: Node
-)

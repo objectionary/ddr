@@ -25,7 +25,7 @@
 package org.objectionary.ddr.unit.graph.attr
 
 import org.objectionary.ddr.TestBase
-import org.objectionary.ddr.graph.IGraphNode
+import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.launch.processAttributes

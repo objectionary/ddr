@@ -1,5 +1,8 @@
 package org.objectionary.ddr.graph
 
+import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphCondAttr
+import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.w3c.dom.Node
 
 /**
@@ -31,15 +34,34 @@ class CondAttributesSetter(
     }
 
     private fun processApplicationsToNames() {
-        conditions.filter { name(it) != "@" }.forEach { node ->
-            val cond: MutableList<Node> = mutableListOf()
-            var tmpNode = node
-            var line = line(tmpNode.nextSibling)
-            cond.add(tmpNode.nextSibling)
-            while (line(tmpNode.nextSibling) == line) {
-                cond.add(tmpNode.nextSibling)
-                tmpNode.nextSibling
+        conditions.forEach { node ->
+            var tmpNode = node.firstChild.nextSibling
+            var line = line(tmpNode)
+            val cond: MutableList<Node> = mutableListOf(tmpNode)
+            while (line(tmpNode.nextSibling.nextSibling) == line) {
+                cond.add(tmpNode.nextSibling.nextSibling)
+                tmpNode = tmpNode.nextSibling.nextSibling
                 line = line(tmpNode)
+            }
+            tmpNode = tmpNode.nextSibling.nextSibling
+            val fstOption: MutableList<Node> = mutableListOf(tmpNode)
+            while (line(tmpNode.nextSibling.nextSibling) == line) {
+                fstOption.add(tmpNode.nextSibling.nextSibling)
+                tmpNode = tmpNode.nextSibling.nextSibling
+                line = line(tmpNode)
+            }
+            tmpNode = tmpNode.nextSibling.nextSibling
+            val sndOption: MutableList<Node> = mutableListOf(tmpNode)
+            while (line(tmpNode.nextSibling.nextSibling) == line) {
+                sndOption.add(tmpNode.nextSibling.nextSibling)
+                tmpNode = tmpNode.nextSibling.nextSibling
+                line = line(tmpNode)
+            }
+            if (name(node) != "@") {
+                graph.igNodes.add(IGraphCondNode(node, packageName(node), cond, fstOption, sndOption))
+            } else {
+                val parent = graph.igNodes.find { it.body == node.parentNode }
+                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, cond, fstOption, sndOption))
             }
         }
     }

@@ -25,9 +25,10 @@
 package org.objectionary.ddr.launch
 
 import org.objectionary.ddr.graph.AttributesSetter
-import org.objectionary.ddr.graph.Graph
+import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
+import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.transform.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.XslTransformer
 import org.slf4j.LoggerFactory
@@ -50,6 +51,7 @@ val documents: MutableMap<Document, String> = mutableMapOf()
 fun launch(path: String) {
     documents.clear()
     val graph = buildGraph(path, false)
+    CondAttributesSetter(graph).processConditions()
     processAttributes(graph)
     val innerPropagator = InnerPropagator(graph)
     innerPropagator.propagateInnerAttrs()

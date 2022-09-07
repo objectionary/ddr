@@ -69,17 +69,3 @@ class Graph {
         parent.children.add(child)
     }
 }
-
-/**
- * Graph attribute representation
- *
- * @property name name of the attribute
- * @property parentDistance distance to the parent, from which this attribute was pushed to current node
- * @property body corresponding xml file node
- */
-@Suppress("CLASS_NAME_INCORRECT")
-data class IGraphAttr(
-    val name: String,
-    val parentDistance: Int,
-    val body: Node
-)

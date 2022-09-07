@@ -36,18 +36,6 @@ open class IGraphNode(
 }
 
 /**
- * Graph node representation. Alternative representation of EO object
- *
- * @property body represents the corresponding xml file node
- * @property packageName name of the package in which the described EO object is located
- */
-@Suppress("CLASS_NAME_INCORRECT")
-class IGraphBasicNode(
-    override val body: Node,
-    override val packageName: String
-) : IGraphNode(body, packageName)
-
-/**
  * Conditional graph attribute representation
  *
  * @property body represents the corresponding xml file node

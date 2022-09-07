@@ -32,15 +32,29 @@ class CondAttributesSetter(
 
     private fun processApplicationsToNames() {
         conditions.filter { name(it) != "@" }.forEach { node ->
-            val cond: MutableList<Node> = mutableListOf()
-            var tmpNode = node
-            var line = line(tmpNode.nextSibling)
-            cond.add(tmpNode.nextSibling)
-            while (line(tmpNode.nextSibling) == line) {
-                cond.add(tmpNode.nextSibling)
-                tmpNode.nextSibling
+            var tmpNode = node.firstChild.nextSibling
+            var line = line(tmpNode)
+            val cond: MutableList<Node> = mutableListOf(tmpNode)
+            while (line(tmpNode.nextSibling.nextSibling) == line) {
+                cond.add(tmpNode.nextSibling.nextSibling)
+                tmpNode = tmpNode.nextSibling.nextSibling
                 line = line(tmpNode)
             }
+            tmpNode = tmpNode.nextSibling.nextSibling
+            val fstOption: MutableList<Node> = mutableListOf(tmpNode)
+            while (line(tmpNode.nextSibling.nextSibling) == line) {
+                fstOption.add(tmpNode.nextSibling.nextSibling)
+                tmpNode = tmpNode.nextSibling.nextSibling
+                line = line(tmpNode)
+            }
+            tmpNode = tmpNode.nextSibling.nextSibling
+            val sndOption: MutableList<Node> = mutableListOf(tmpNode)
+            while (line(tmpNode.nextSibling.nextSibling) == line) {
+                sndOption.add(tmpNode.nextSibling.nextSibling)
+                tmpNode = tmpNode.nextSibling.nextSibling
+                line = line(tmpNode)
+            }
+            graph.igCondNodes.add(IGraphCondNode(name(node)!!, cond, fstOption, sndOption))
         }
     }
 }

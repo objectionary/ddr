@@ -121,13 +121,13 @@ data class IGraphAttr(
  *
  * @property name name of the attribute
  * @property cond list of nodes representing the condition
- * @property fstOption option on the true branch
- * @property sndOption option on the false branch
+ * @property fstOption list of nodes representing option on the true branch
+ * @property sndOption list of nodes representing option on the false branch
  */
 @Suppress("CLASS_NAME_INCORRECT")
 data class IGraphCondNode(
     val name: String,
     val cond: MutableList<Node>,
-    val fstOption: Node,
-    val sndOption: Node
+    val fstOption: MutableList<Node>,
+    val sndOption: MutableList<Node>
 )

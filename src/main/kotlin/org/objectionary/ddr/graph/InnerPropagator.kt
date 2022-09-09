@@ -76,9 +76,13 @@ class InnerPropagator(
     /**
      * @return abstract object corresponding to the base attribute of the [key] node
      */
+    @Suppress("AVOID_NULL_CHECKS")
     private fun getBaseAbstract(key: IGraphNode) {
         var tmpKey = key.body
         while (base(tmpKey)?.startsWith('.') == true) {
+            if (tmpKey.previousSibling.previousSibling == null) {
+                break
+            }
             tmpKey = tmpKey.previousSibling.previousSibling
         }
         when (base(tmpKey)) {
@@ -90,7 +94,6 @@ class InnerPropagator(
                 val abstract = tmpKey
                 resolveAttrs(tmpKey, abstract, key)
             }
-
             else -> {
                 val abstract = resolveRefs(tmpKey) ?: return
                 resolveAttrs(tmpKey, abstract, key)

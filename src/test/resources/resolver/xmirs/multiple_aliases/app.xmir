@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="1"
+          name="transformer"
+          time="2022-09-09T14:30:54.241033391Z"
+          version="0.28.2">
+   <listing>+alias breeds.bengal
+
+[] &gt; app
+  bengal &gt; tom
+  tom.live &gt; @
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>alias</head>
+         <tail>breeds.bengal</tail>
+         <part>breeds.bengal</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="app" pos="0">
+         <o base="bengal" line="4" name="tom" pos="2"/>
+         <o base="tom" line="5" pos="2"/>
+         <o base=".live" line="5" method="" name="@" pos="5"/>
+      </o>
+   </objects>
+</program>

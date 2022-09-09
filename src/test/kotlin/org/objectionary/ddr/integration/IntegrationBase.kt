@@ -24,10 +24,10 @@
 
 package org.objectionary.ddr.integration
 
-import org.apache.commons.io.FileUtils
 import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.launch.launch
+import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
@@ -52,23 +52,18 @@ open class IntegrationBase : TestBase {
             .filter(Files::isRegularFile)
             .forEach { file ->
                 val actualBr: BufferedReader = File(file.toString()).bufferedReader()
-                val actual = actualBr.use { it.readText() }
+                val actual = actualBr.use { it.readText() }.replace(" ", "")
                 val expectedFile = actualFiles.find {
-                    val a = it.replace("out$sep", "in$sep").replaceFirst(path, "${path}_ddr")
-                    val b = file.toString()
                     it.replace("out$sep", "in$sep").replaceFirst(path, "${path}_ddr") == file.toString()
                 }
                 val expectedBr: BufferedReader = File(expectedFile.toString()).bufferedReader()
-                val expected = expectedBr.use { it.readText() }
+                val expected = expectedBr.use { it.readText() }.replace(" ", "")
                 checkOutput(expected, actual)
             }
         try {
             val tmpDir =
                 Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
             FileUtils.deleteDirectory(File(tmpDir))
-            File("tmp1").delete()
-            File("tmp2").delete()
-            File("tmp3").delete()
         } catch (e: Exception) {
             logger.error(e.printStackTrace().toString())
         }

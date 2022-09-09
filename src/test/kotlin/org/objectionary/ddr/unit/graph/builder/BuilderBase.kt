@@ -56,9 +56,6 @@ open class BuilderBase : TestBase {
             val tmpDir =
                 Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
             FileUtils.deleteDirectory(File(tmpDir))
-            File("tmp1").delete()
-            File("tmp2").delete()
-            File("tmp3").delete()
         } catch (e: Exception) {
             logger.error(e.printStackTrace().toString())
         }

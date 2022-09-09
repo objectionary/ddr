@@ -19,7 +19,7 @@ Just add this to your `pom.xml`
 <dependency>
   <groupId>org.eolang</groupId>
   <artifactId>ddr</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.4</version>
 </dependency>
 ```
 

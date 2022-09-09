@@ -69,18 +69,22 @@ open class ResolverBase : TestBase {
             .filter(Files::isRegularFile)
             .forEach {
                 XslTransformer().singleTransformation(it.toString(), it.toString(), "/compress-aliases.xsl")
-                XslTransformer().singleTransformation(it.toString(), it.toString(), "/org/eolang/parser/wrap-method-calls.xsl")
+                XslTransformer().singleTransformation(
+                    it.toString(),
+                    it.toString(),
+                    "/org/eolang/parser/wrap-method-calls.xsl"
+                )
                 XMIRToEo(it.toString(), path)
             }
         val outPath = constructOutPath(path)
         val cmpFiles: MutableList<String> = mutableListOf()
         Files.walk(Paths.get(outPath))
             .filter(Files::isRegularFile)
-            .forEach {cmpFiles.add(it.toString()) }
+            .forEach { cmpFiles.add(it.toString()) }
         val eoOutPath = constructEoOutPath(path)
         Files.walk(Paths.get(eoOutPath))
             .filter(Files::isRegularFile)
-            .forEach {file ->
+            .forEach { file ->
                 val actualBr: BufferedReader = File(file.toString()).bufferedReader()
                 val actual = actualBr.use { it.readText() }
                 val expectedFile = cmpFiles.find {
@@ -96,9 +100,6 @@ open class ResolverBase : TestBase {
             FileUtils.deleteDirectory(File(tmpDir))
             FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
             FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
-            File("tmp1").delete()
-            File("tmp2").delete()
-            File("tmp3").delete()
         } catch (e: Exception) {
             logger.error(e.printStackTrace().toString())
         }
@@ -121,8 +122,10 @@ open class ResolverBase : TestBase {
     @Suppress("FUNCTION_NAME_INCORRECT_CASE")
     private fun XMIRToEo(path: String, testName: String) {
         val outFile = File(
-            path.replaceFirst("xmirs${sep}TMP$sep${testName}_tmp",
-                "eo_outputs$sep$testName").replace(".xmir", ".eo")
+            path.replaceFirst(
+                "xmirs${sep}TMP$sep${testName}_tmp",
+                "eo_outputs$sep$testName"
+            ).replace(".xmir", ".eo")
         )
         Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
         val src = File(path).readText()

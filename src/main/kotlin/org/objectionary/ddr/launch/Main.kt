@@ -24,8 +24,6 @@
 
 package org.objectionary.ddr.launch
 
-import java.io.File
-
 /**
  * @param args command line arguments
  * - args[0] path to the folder with the program to be analyzed

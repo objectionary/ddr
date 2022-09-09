@@ -26,7 +26,7 @@ SOFTWARE.
          name="ex-1"
          time="2022-08-05T13:21:36.479066800Z"
          version="1.0-SNAPSHOT">
-  <listing>+alias org.eolang.io.stdout
+    <listing>+alias org.eolang.io.stdout
 
     [] &gt; classA
     classB &gt; @

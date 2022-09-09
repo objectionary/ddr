@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="3"
+          name="org.eolang.math.angle"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/math/angle.eo"
+          time="2022-09-09T13:01:06.653516418Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+# Copyright (c) 2021-2022 Max Trunnikov
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++alias org.eolang.math.nan
++alias org.eolang.math.pi
++home https://github.com/objectionary/eo-math
++package org.eolang.math
++rt jvm org.eolang:eo-math:0.2.3
++version 0.2.3
+
+# The angle in radians
+[f] &gt; angle
+  f &gt; @
+
+  # Sine of $
+  [] &gt; sin /float
+
+  # Cosine of $
+  [] &gt; cos /float
+
+  # Tangent of $
+  [] &gt; tan
+    ^.cos &gt; cosine!
+    if. &gt; @
+      cosine.eq 0.0
+      nan
+      div.
+        ^.sin
+        cosine
+
+  # Cotangent of $
+  [] &gt; ctan
+    ^.sin &gt; sine!
+    if. &gt; @
+      sine.eq 0.0
+      nan
+      div.
+        ^.cos
+        sine
+
+  # Converts this from radians to degrees
+  [] &gt; as-degrees
+    div. &gt; @
+      ^.times 180.0
+      pi
+
+  # Converts this from degrees to radians
+  [] &gt; as-radians
+    div. &gt; @
+      ^.times pi
+      180.0
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+Copyright (c) 2021-2022 Max Trunnikov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>alias</head>
+         <tail>org.eolang.math.nan</tail>
+         <part>org.eolang.math.nan</part>
+      </meta>
+      <meta line="24">
+         <head>alias</head>
+         <tail>org.eolang.math.pi</tail>
+         <part>org.eolang.math.pi</part>
+      </meta>
+      <meta line="25">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-math</tail>
+         <part>https://github.com/objectionary/eo-math</part>
+      </meta>
+      <meta line="26">
+         <head>package</head>
+         <tail>org.eolang.math</tail>
+         <part>org.eolang.math</part>
+      </meta>
+      <meta line="27">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-math:0.2.3</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-math:0.2.3</part>
+      </meta>
+      <meta line="28">
+         <head>version</head>
+         <tail>0.2.3</tail>
+         <part>0.2.3</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="31" name="angle" pos="0">
+         <o line="31" name="f" pos="1"/>
+         <o base="f" line="32" name="@" pos="2"/>
+         <o abstract="" atom="float" line="34" name="sin" pos="2"/>
+         <o abstract="" atom="float" line="37" name="cos" pos="2"/>
+         <o abstract="" line="40" name="tan" pos="2">
+            <o base="^" line="42" pos="4"/>
+            <o base=".cos"
+                const=""
+                line="42"
+                method=""
+                name="cosine"
+                pos="5"/>
+            <o base=".if" line="43" name="@" pos="4">
+               <o base="cosine" line="44" pos="6"/>
+               <o base=".eq" line="44" method="" pos="12">
+                  <o base="float" data="float" line="44" pos="16">0.0</o>
+               </o>
+               <o base="nan" line="45" pos="6"/>
+               <o base=".div" line="46" pos="6">
+                  <o base="^" line="47" pos="8"/>
+                  <o base=".sin" line="47" method="" pos="9"/>
+                  <o base="cosine" line="48" pos="8"/>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="50" name="ctan" pos="2">
+            <o base="^" line="52" pos="4"/>
+            <o base=".sin"
+                const=""
+                line="52"
+                method=""
+                name="sine"
+                pos="5"/>
+            <o base=".if" line="53" name="@" pos="4">
+               <o base="sine" line="54" pos="6"/>
+               <o base=".eq" line="54" method="" pos="10">
+                  <o base="float" data="float" line="54" pos="14">0.0</o>
+               </o>
+               <o base="nan" line="55" pos="6"/>
+               <o base=".div" line="56" pos="6">
+                  <o base="^" line="57" pos="8"/>
+                  <o base=".cos" line="57" method="" pos="9"/>
+                  <o base="sine" line="58" pos="8"/>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="60" name="as-degrees" pos="2">
+            <o base=".div" line="62" name="@" pos="4">
+               <o base="^" line="63" pos="6"/>
+               <o base=".times" line="63" method="" pos="7">
+                  <o base="float" data="float" line="63" pos="14">180.0</o>
+               </o>
+               <o base="pi" line="64" pos="6"/>
+            </o>
+         </o>
+         <o abstract="" line="66" name="as-radians" pos="2">
+            <o base=".div" line="68" name="@" pos="4">
+               <o base="^" line="69" pos="6"/>
+               <o base=".times" line="69" method="" pos="7">
+                  <o base="pi" line="69" pos="14"/>
+               </o>
+               <o base="float" data="float" line="70" pos="6">180.0</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

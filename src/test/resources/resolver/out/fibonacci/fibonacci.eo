@@ -1,0 +1,18 @@
++architect yegor256@gmail.com
++package org.eolang.examples
+
+[n] > fibonacci
+  n
+  .lt
+    2
+  .if > @
+    n
+    fibonacci
+      n
+      .minus
+        1
+    .plus
+      fibonacci
+        n
+        .minus
+          2

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="4"
+          name="org.eolang.ram"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/ram.eo"
+          time="2022-09-09T13:00:57.189751191Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+#  2016-2022 Objectionary.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++architect yegor256@gmail.com
++home https://github.com/objectionary/eo
++package org.eolang
++rt jvm org.eolang:eo-runtime:0.28.2
++version 0.28.2
+
+# Random-access memory (RAM).
+[size] &gt; ram
+
+  # Write bytes from position.
+  [position data] &gt; write /true
+
+  # Slice fixed size of bytes from position.
+  [position size] &gt; slice /ram-slice
+
+  [position size] &gt; ram-slice
+
+    [] &gt; @ /bytes
+
+    [data] &gt; write /bytes
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+2016-2022 Objectionary.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>architect</head>
+         <tail>yegor256@gmail.com</tail>
+         <part>yegor256@gmail.com</part>
+      </meta>
+      <meta line="24">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo</tail>
+         <part>https://github.com/objectionary/eo</part>
+      </meta>
+      <meta line="25">
+         <head>package</head>
+         <tail>org.eolang</tail>
+         <part>org.eolang</part>
+      </meta>
+      <meta line="26">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-runtime:0.28.2</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-runtime:0.28.2</part>
+      </meta>
+      <meta line="27">
+         <head>version</head>
+         <tail>0.28.2</tail>
+         <part>0.28.2</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="30" name="ram" pos="0">
+         <o line="30" name="size" pos="1"/>
+         <o abstract="" atom="true" line="32" name="write" pos="2">
+            <o line="33" name="position" pos="3"/>
+            <o line="33" name="data" pos="12"/>
+         </o>
+         <o abstract="" atom="ram-slice" line="35" name="slice" pos="2">
+            <o line="36" name="position" pos="3"/>
+            <o line="36" name="size" pos="12"/>
+         </o>
+         <o abstract="" line="38" name="ram-slice" pos="2">
+            <o line="38" name="position" pos="3"/>
+            <o line="38" name="size" pos="12"/>
+            <o abstract="" atom="bytes" line="40" name="@" pos="4"/>
+            <o abstract="" atom="bytes" line="42" name="write" pos="4">
+               <o line="42" name="data" pos="5"/>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

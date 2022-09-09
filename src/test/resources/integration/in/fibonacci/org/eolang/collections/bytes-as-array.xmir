@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="2"
+          name="org.eolang.collections.bytes-as-array"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/collections/bytes-as-array.eo"
+          time="2022-09-09T13:00:57.275895696Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+# Copyright (c) 2016-2022 Yegor Bugayenko
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++home https://github.com/objectionary/eo-collections
++package org.eolang.collections
++rt jvm org.eolang:eo-collections:0.0.4
++version 0.0.4
+
+[b] &gt; bytes-as-array
+  slice-byte &gt; @
+    *
+    0
+  [a i] &gt; slice-byte
+    if. &gt; @
+      i.lt
+        b.size
+      ^.slice-byte
+        a.with (b.slice i 1)
+        i.plus 1
+      a
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+Copyright (c) 2016-2022 Yegor Bugayenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-collections</tail>
+         <part>https://github.com/objectionary/eo-collections</part>
+      </meta>
+      <meta line="24">
+         <head>package</head>
+         <tail>org.eolang.collections</tail>
+         <part>org.eolang.collections</part>
+      </meta>
+      <meta line="25">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-collections:0.0.4</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-collections:0.0.4</part>
+      </meta>
+      <meta line="26">
+         <head>version</head>
+         <tail>0.0.4</tail>
+         <part>0.0.4</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="28" name="bytes-as-array" pos="0">
+         <o line="28" name="b" pos="1"/>
+         <o base="slice-byte" line="29" name="@" pos="2">
+            <o base="array" data="array" line="30" pos="4"/>
+            <o base="int" data="bytes" line="31" pos="4">00 00 00 00 00 00 00 00</o>
+         </o>
+         <o abstract="" line="32" name="slice-byte" pos="2">
+            <o line="32" name="a" pos="3"/>
+            <o line="32" name="i" pos="5"/>
+            <o base=".if" line="33" name="@" pos="4">
+               <o base="i" line="34" pos="6"/>
+               <o base=".lt" line="34" method="" pos="7">
+                  <o base="b" line="35" pos="8"/>
+                  <o base=".size" line="35" method="" pos="9"/>
+               </o>
+               <o base="^" line="36" pos="6"/>
+               <o base=".slice-byte" line="36" method="" pos="7">
+                  <o base="a" line="37" pos="8"/>
+                  <o base=".with" line="37" method="" pos="9">
+                     <o alias="1" base="b" line="37" pos="16"/>
+                     <o base=".slice" line="37" method="" pos="17">
+                        <o base="i" line="37" pos="24"/>
+                        <o base="int" data="bytes" line="37" pos="26">00 00 00 00 00 00 00 01</o>
+                     </o>
+                  </o>
+                  <o base="i" line="38" pos="8"/>
+                  <o base=".plus" line="38" method="" pos="9">
+                     <o base="int" data="bytes" line="38" pos="15">00 00 00 00 00 00 00 01</o>
+                  </o>
+               </o>
+               <o base="a" line="39" pos="6"/>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

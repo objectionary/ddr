@@ -1,0 +1,34 @@
++package org.eolang.examples
++alias org.eolang.examples.fibonacci
++alias org.eolang.io.stdout
++alias org.eolang.txt.sprintf
++architect yegor256@gmail.com
+
+[args...] > app
+  at. > n!
+    QQ.txt.sscanf
+      "%d"
+      args.at 0
+    0
+  at. > e!
+    QQ.txt.sscanf
+      "%d"
+      args.at 1
+    0
+  and. > @
+    stdout
+      sprintf
+        "%dth Fibonacci number is %d\n"
+        n
+        fibonacci n > f
+    if.
+      not.
+        eq.
+          e
+          f
+      []
+        sprintf > msg
+          "%d not equal to %d"
+          e
+          f
+      TRUE

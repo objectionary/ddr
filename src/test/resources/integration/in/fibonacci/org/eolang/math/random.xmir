@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="1"
+          name="org.eolang.math.random"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/math/random.eo"
+          time="2022-09-09T13:01:06.672480819Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+# Copyright (c) 2016-2022 Yegor Bugayenko
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++alias org.eolang.math.number
++home https://github.com/objectionary/eo-math
++package org.eolang.math
++rt jvm org.eolang:eo-math:0.2.3
++version 0.2.3
+
+[seed] &gt; random
+
+  # Get float value for current seed
+  # Divide seed to maximum possible value of the seed
+  [] &gt; @
+    div. &gt; @
+      as-float.
+        number seed
+      as-float.
+        number
+          left.
+            number 1
+            53
+
+  # Next random.
+  # Formula is based on linear congruential pseudorandom number generator, as defined by
+  # D. H. Lehmer and described by Donald E. Knuth in The Art of Computer Programming, Volume 2,
+  # Third edition: Seminumerical Algorithms, section 3.2.1.
+  # Magic numbers are taken from Java implementation. 48 lower bits are considered.
+  # next = (seed * 25214903917 + 11) AND ((1 &lt;LEFT SHIFT&gt; 48) - 1)
+  [] &gt; next
+    random &gt; @
+      and.
+        number
+          plus.
+            11
+            times.
+              ^.seed
+              25214903917
+        minus.
+          left.
+            number 1
+            53
+          1
+
+  # New random with pseudo-random seed
+  [] &gt; pseudo /random
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+Copyright (c) 2016-2022 Yegor Bugayenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>alias</head>
+         <tail>org.eolang.math.number</tail>
+         <part>org.eolang.math.number</part>
+      </meta>
+      <meta line="24">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-math</tail>
+         <part>https://github.com/objectionary/eo-math</part>
+      </meta>
+      <meta line="25">
+         <head>package</head>
+         <tail>org.eolang.math</tail>
+         <part>org.eolang.math</part>
+      </meta>
+      <meta line="26">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-math:0.2.3</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-math:0.2.3</part>
+      </meta>
+      <meta line="27">
+         <head>version</head>
+         <tail>0.2.3</tail>
+         <part>0.2.3</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="29" name="random" pos="0">
+         <o line="29" name="seed" pos="1"/>
+         <o abstract="" line="31" name="@" pos="2">
+            <o base=".div" line="34" name="@" pos="4">
+               <o base=".as-float" line="35" pos="6">
+                  <o base="number" line="36" pos="8">
+                     <o base="seed" line="36" pos="15"/>
+                  </o>
+               </o>
+               <o base=".as-float" line="37" pos="6">
+                  <o base="number" line="38" pos="8">
+                     <o base=".left" line="39" pos="10">
+                        <o base="number" line="40" pos="12">
+                           <o base="int" data="bytes" line="40" pos="19">00 00 00 00 00 00 00 01</o>
+                        </o>
+                        <o base="int" data="bytes" line="41" pos="12">00 00 00 00 00 00 00 35</o>
+                     </o>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="43" name="next" pos="2">
+            <o base="random" line="50" name="@" pos="4">
+               <o base=".and" line="51" pos="6">
+                  <o base="number" line="52" pos="8">
+                     <o base=".plus" line="53" pos="10">
+                        <o base="int" data="bytes" line="54" pos="12">00 00 00 00 00 00 00 0B</o>
+                        <o base=".times" line="55" pos="12">
+                           <o base="^" line="56" pos="14"/>
+                           <o base=".seed" line="56" method="" pos="15"/>
+                           <o base="int" data="bytes" line="57" pos="14">00 00 00 05 DE EC E6 6D</o>
+                        </o>
+                     </o>
+                  </o>
+                  <o base=".minus" line="58" pos="8">
+                     <o base=".left" line="59" pos="10">
+                        <o base="number" line="60" pos="12">
+                           <o base="int" data="bytes" line="60" pos="19">00 00 00 00 00 00 00 01</o>
+                        </o>
+                        <o base="int" data="bytes" line="61" pos="12">00 00 00 00 00 00 00 35</o>
+                     </o>
+                     <o base="int" data="bytes" line="62" pos="10">00 00 00 00 00 00 00 01</o>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" atom="random" line="64" name="pseudo" pos="2"/>
+      </o>
+   </objects>
+</program>

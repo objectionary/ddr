@@ -44,4 +44,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test alias chain`() = doTest()
+
+    @Test
+    fun `test fibonacci`() = doTest()
 }

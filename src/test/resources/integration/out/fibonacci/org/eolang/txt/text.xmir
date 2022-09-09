@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="9"
+          name="org.eolang.txt.text"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/txt/text.eo"
+          time="2022-09-09T13:00:57.237514908Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+#  2016-2022 Objectionary.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++alias org.eolang.collections.list
++alias org.eolang.txt.sscanf
++architect yegor256@gmail.com
++home https://github.com/objectionary/eo-strings
++package org.eolang.txt
++rt jvm org.eolang:eo-strings:0.0.3
++version 0.0.3
+
+[s] &gt; text
+
+  s &gt; @
+
+  # Trim it from both sides
+  [] &gt; trim /string
+
+  # Joins an array of strings, using current string
+  # as a delimiter
+  [items] &gt; joined
+    reducedi. &gt; res!
+      list
+        items
+      ("".as-bytes)
+      [acc i x]
+        if. &gt; @
+          i.eq ((items.length).minus 1)
+          (acc.concat (x.as-bytes))
+          ((acc.concat (x.as-bytes)).concat (s.as-bytes))
+    res.as-string &gt; @
+
+  # Checks that string contains substr
+  [substr] &gt; contains /bool
+
+  # Checks that string ends with substr
+  [substr] &gt; ends-with /bool
+
+  # Checks that string starts with substr
+  [substr] &gt; starts-with /bool
+
+  # Returns index of substr in string,
+  # if no element was found, it returns -1
+  [substr] &gt; index-of /int
+
+  # Returns string in lower case
+  [] &gt; lower-case /string
+
+  # Returns string in upper case
+  [] &gt; upper-case /string
+
+  [i] &gt; at
+    ^.s.slice i 1 &gt; @
+
+  # Returns string where all substrings
+  # target changed to replacement
+  [target replacement] &gt; replaced /string
+
+  # Returns the text as integer
+  [] &gt; as-int
+    at. &gt; @
+      sscanf
+        "%d"
+        s
+      0
+
+  # Returns the text as float
+  [] &gt; as-float
+    at. &gt; @
+      sscanf
+        "%f"
+        s
+      0
+
+  # Compares two strings in lexicographic order.
+  # Returns 0 if two strings are equal,
+  # a negative number if the first string comes before the argument,
+  # a positive number if the first string comes after the argument
+  [other] &gt; compare /int
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+2016-2022 Objectionary.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>alias</head>
+         <tail>org.eolang.collections.list</tail>
+         <part>org.eolang.collections.list</part>
+      </meta>
+      <meta line="24">
+         <head>alias</head>
+         <tail>org.eolang.txt.sscanf</tail>
+         <part>org.eolang.txt.sscanf</part>
+      </meta>
+      <meta line="25">
+         <head>architect</head>
+         <tail>yegor256@gmail.com</tail>
+         <part>yegor256@gmail.com</part>
+      </meta>
+      <meta line="26">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-strings</tail>
+         <part>https://github.com/objectionary/eo-strings</part>
+      </meta>
+      <meta line="27">
+         <head>package</head>
+         <tail>org.eolang.txt</tail>
+         <part>org.eolang.txt</part>
+      </meta>
+      <meta line="28">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-strings:0.0.3</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-strings:0.0.3</part>
+      </meta>
+      <meta line="29">
+         <head>version</head>
+         <tail>0.0.3</tail>
+         <part>0.0.3</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="31" name="text" pos="0">
+         <o line="31" name="s" pos="1"/>
+         <o base="s" line="33" name="@" pos="2"/>
+         <o abstract="" atom="string" line="35" name="trim" pos="2"/>
+         <o abstract="" line="38" name="joined" pos="2">
+            <o line="40" name="items" pos="3"/>
+            <o base=".reducedi" const="" line="41" name="res" pos="4">
+               <o base="list" line="42" pos="6">
+                  <o base="items" line="43" pos="8"/>
+               </o>
+               <o alias="1" base="string" data="string" line="44" pos="7"/>
+               <o base=".as-bytes" line="44" method="" pos="9"/>
+               <o abstract="" line="45" pos="6">
+                  <o line="45" name="acc" pos="7"/>
+                  <o line="45" name="i" pos="11"/>
+                  <o line="45" name="x" pos="13"/>
+                  <o base=".if" line="46" name="@" pos="8">
+                     <o base="i" line="47" pos="10"/>
+                     <o base=".eq" line="47" method="" pos="11">
+                        <o alias="3" base="items" line="47" pos="17"/>
+                        <o alias="2" base=".length" line="47" method="" pos="22"/>
+                        <o base=".minus" line="47" method="" pos="30">
+                           <o base="int" data="bytes" line="47" pos="37">00 00 00 00 00 00 00 01</o>
+                        </o>
+                     </o>
+                     <o alias="4" base="acc" line="48" pos="11"/>
+                     <o base=".concat" line="48" method="" pos="14">
+                        <o alias="5" base="x" line="48" pos="23"/>
+                        <o base=".as-bytes" line="48" method="" pos="24"/>
+                     </o>
+                     <o alias="7" base="acc" line="49" pos="12"/>
+                     <o alias="6" base=".concat" line="49" method="" pos="15">
+                        <o alias="8" base="x" line="49" pos="24"/>
+                        <o base=".as-bytes" line="49" method="" pos="25"/>
+                     </o>
+                     <o base=".concat" line="49" method="" pos="36">
+                        <o alias="9" base="s" line="49" pos="45"/>
+                        <o base=".as-bytes" line="49" method="" pos="46"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+            <o base="res" line="50" pos="4"/>
+            <o base=".as-string" line="50" method="" name="@" pos="7"/>
+         </o>
+         <o abstract="" atom="bool" line="52" name="contains" pos="2">
+            <o line="53" name="substr" pos="3"/>
+         </o>
+         <o abstract="" atom="bool" line="55" name="ends-with" pos="2">
+            <o line="56" name="substr" pos="3"/>
+         </o>
+         <o abstract=""
+             atom="bool"
+             line="58"
+             name="starts-with"
+             pos="2">
+            <o line="59" name="substr" pos="3"/>
+         </o>
+         <o abstract="" atom="int" line="61" name="index-of" pos="2">
+            <o line="63" name="substr" pos="3"/>
+         </o>
+         <o abstract=""
+             atom="string"
+             line="65"
+             name="lower-case"
+             pos="2"/>
+         <o abstract=""
+             atom="string"
+             line="68"
+             name="upper-case"
+             pos="2"/>
+         <o abstract="" line="71" name="at" pos="2">
+            <o line="71" name="i" pos="3"/>
+            <o base="^" line="72" pos="4"/>
+            <o base=".s" line="72" method="" pos="5"/>
+            <o base=".slice" line="72" method="" name="@" pos="7">
+               <o base="i" line="72" pos="14"/>
+               <o base="int" data="bytes" line="72" pos="16">00 00 00 00 00 00 00 01</o>
+            </o>
+         </o>
+         <o abstract="" atom="string" line="74" name="replaced" pos="2">
+            <o line="76" name="target" pos="3"/>
+            <o line="76" name="replacement" pos="10"/>
+         </o>
+         <o abstract="" line="78" name="as-int" pos="2">
+            <o base=".at" line="80" name="@" pos="4">
+               <o base="sscanf" line="81" pos="6">
+                  <o base="string" data="string" line="82" pos="8">%d</o>
+                  <o base="s" line="83" pos="8"/>
+               </o>
+               <o base="int" data="bytes" line="84" pos="6">00 00 00 00 00 00 00 00</o>
+            </o>
+         </o>
+         <o abstract="" line="86" name="as-float" pos="2">
+            <o base=".at" line="88" name="@" pos="4">
+               <o base="sscanf" line="89" pos="6">
+                  <o base="string" data="string" line="90" pos="8">%f</o>
+                  <o base="s" line="91" pos="8"/>
+               </o>
+               <o base="int" data="bytes" line="92" pos="6">00 00 00 00 00 00 00 00</o>
+            </o>
+         </o>
+         <o abstract="" atom="int" line="94" name="compare" pos="2">
+            <o line="98" name="other" pos="3"/>
+         </o>
+      </o>
+   </objects>
+</program>

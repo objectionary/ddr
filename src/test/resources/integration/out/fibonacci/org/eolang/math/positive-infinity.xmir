@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="3"
+          name="org.eolang.math.positive-infinity"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/math/positive-infinity.eo"
+          time="2022-09-09T13:01:04.683841561Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+# Copyright (c) 2021-2022 Max Trunnikov
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++alias org.eolang.math.nan
++alias org.eolang.math.negative-infinity
++home https://github.com/objectionary/eo-math
++package org.eolang.math
++rt jvm org.eolang:eo-math:0.2.3
++version 0.2.3
+
+# Positive infinity
+[] &gt; positive-infinity
+  # Tests that $ = x
+  [x] &gt; eq
+    eq. &gt; @
+      ^.as-bytes
+      x.as-bytes
+
+  # Tests that $ ≠ x
+  [x] &gt; neq
+    (^.eq x).not &gt; @
+
+  # Tests that $ &lt; x
+  [x] &gt; lt
+    FALSE &gt; @
+
+  # Tests that $ ≤ x
+  [x] &gt; lte
+    ^.eq x &gt; @
+
+  # Tests that $ &gt; x
+  [x] &gt; gt
+    not. &gt; @
+      or.
+        x.as-bytes.eq (nan.as-bytes)
+        ^.eq x
+
+  # Tests that $ ≥ x
+  [x] &gt; gte
+    not. &gt; @
+      eq.
+        x.as-bytes
+        nan.as-bytes
+
+  # Multiplication of $ and x
+  [x] &gt; times
+    if. &gt; @
+      or.
+        x.as-bytes.eq (nan.as-bytes)
+        x.eq 0.0
+      nan
+      if.
+        x.eq negative-infinity
+        negative-infinity
+        ^
+
+  # Sum of $ and x
+  [x] &gt; plus
+    if. &gt; @
+      or.
+        x.as-bytes.eq (nan.as-bytes)
+        x.eq negative-infinity
+      nan
+      ^
+
+  # Negation of $
+  [] &gt; neg
+    negative-infinity &gt; @
+
+  # Sign of $ (-1.0, 0.0, or 1.0)
+  [] &gt; signum
+    1.0 &gt; @
+
+  # Difference between $ and x
+  [x] &gt; minus
+    ^.plus (x.neg) &gt; @
+
+  # x'th power of $
+  [x] &gt; pow
+    if. &gt; @
+      x.gt 0.0
+      ^
+      if.
+        x.lt 0.0
+        0.0
+        if.
+          x.eq 0.0
+          1.0
+          nan
+
+  # Quotient of the division of $ by x
+  [x] &gt; div
+    if. &gt; @
+      or.
+        x.as-bytes.eq (nan.as-bytes)
+        x.eq negative-infinity
+        x.eq ^
+      nan
+      ^
+
+  # Remainder of $
+  [] &gt; mod
+    nan &gt; @
+
+  # Absolute value of $ (i.e., with no sign)
+  [] &gt; abs
+    ^ &gt; @
+
+  # Converts this to bytes
+  [] &gt; as-bytes
+    7F-80-00-00 &gt; @
+
+  # Converts this to int
+  [] &gt; as-int
+    [] &gt; @
+      "You can not convert positive infinity to int" &gt; msg
+
+  # Converts this to string
+  [] &gt; as-string
+    "+∞" &gt; @
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+Copyright (c) 2021-2022 Max Trunnikov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>alias</head>
+         <tail>org.eolang.math.nan</tail>
+         <part>org.eolang.math.nan</part>
+      </meta>
+      <meta line="24">
+         <head>alias</head>
+         <tail>org.eolang.math.negative-infinity</tail>
+         <part>org.eolang.math.negative-infinity</part>
+      </meta>
+      <meta line="25">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-math</tail>
+         <part>https://github.com/objectionary/eo-math</part>
+      </meta>
+      <meta line="26">
+         <head>package</head>
+         <tail>org.eolang.math</tail>
+         <part>org.eolang.math</part>
+      </meta>
+      <meta line="27">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-math:0.2.3</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-math:0.2.3</part>
+      </meta>
+      <meta line="28">
+         <head>version</head>
+         <tail>0.2.3</tail>
+         <part>0.2.3</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="31" name="positive-infinity" pos="0">
+         <o abstract="" line="32" name="eq" pos="2">
+            <o line="33" name="x" pos="3"/>
+            <o base=".eq" line="34" name="@" pos="4">
+               <o base="^" line="35" pos="6"/>
+               <o base=".as-bytes" line="35" method="" pos="7"/>
+               <o base="x" line="36" pos="6"/>
+               <o base=".as-bytes" line="36" method="" pos="7"/>
+            </o>
+         </o>
+         <o abstract="" line="38" name="neq" pos="2">
+            <o line="39" name="x" pos="3"/>
+            <o alias="1" base="^" line="40" pos="5"/>
+            <o base=".eq" line="40" method="" pos="6">
+               <o base="x" line="40" pos="10"/>
+            </o>
+            <o base=".not" line="40" method="" name="@" pos="12"/>
+         </o>
+         <o abstract="" line="42" name="lt" pos="2">
+            <o line="43" name="x" pos="3"/>
+            <o base="bool" data="bytes" line="44" name="@" pos="4">00</o>
+         </o>
+         <o abstract="" line="46" name="lte" pos="2">
+            <o line="47" name="x" pos="3"/>
+            <o base="^" line="48" pos="4"/>
+            <o base=".eq" line="48" method="" name="@" pos="5">
+               <o base="x" line="48" pos="9"/>
+            </o>
+         </o>
+         <o abstract="" line="50" name="gt" pos="2">
+            <o line="51" name="x" pos="3"/>
+            <o base=".not" line="52" name="@" pos="4">
+               <o base=".or" line="53" pos="6">
+                  <o base="x" line="54" pos="8"/>
+                  <o base=".as-bytes" line="54" method="" pos="9"/>
+                  <o base=".eq" line="54" method="" pos="18">
+                     <o alias="2" base="nan" line="54" pos="23"/>
+                     <o base=".as-bytes" line="54" method="" pos="26"/>
+                  </o>
+                  <o base="^" line="55" pos="8"/>
+                  <o base=".eq" line="55" method="" pos="9">
+                     <o base="x" line="55" pos="13"/>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="57" name="gte" pos="2">
+            <o line="58" name="x" pos="3"/>
+            <o base=".not" line="59" name="@" pos="4">
+               <o base=".eq" line="60" pos="6">
+                  <o base="x" line="61" pos="8"/>
+                  <o base=".as-bytes" line="61" method="" pos="9"/>
+                  <o base="nan" line="62" pos="8"/>
+                  <o base=".as-bytes" line="62" method="" pos="11"/>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="64" name="times" pos="2">
+            <o line="65" name="x" pos="3"/>
+            <o base=".if" line="66" name="@" pos="4">
+               <o base=".or" line="67" pos="6">
+                  <o base="x" line="68" pos="8"/>
+                  <o base=".as-bytes" line="68" method="" pos="9"/>
+                  <o base=".eq" line="68" method="" pos="18">
+                     <o alias="3" base="nan" line="68" pos="23"/>
+                     <o base=".as-bytes" line="68" method="" pos="26"/>
+                  </o>
+                  <o base="x" line="69" pos="8"/>
+                  <o base=".eq" line="69" method="" pos="9">
+                     <o base="float" data="float" line="69" pos="13">0.0</o>
+                  </o>
+               </o>
+               <o base="nan" line="70" pos="6"/>
+               <o base=".if" line="71" pos="6">
+                  <o base="x" line="72" pos="8"/>
+                  <o base=".eq" line="72" method="" pos="9">
+                     <o base="negative-infinity" line="72" pos="13"/>
+                  </o>
+                  <o base="negative-infinity" line="73" pos="8"/>
+                  <o base="^" line="74" pos="8"/>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="76" name="plus" pos="2">
+            <o line="77" name="x" pos="3"/>
+            <o base=".if" line="78" name="@" pos="4">
+               <o base=".or" line="79" pos="6">
+                  <o base="x" line="80" pos="8"/>
+                  <o base=".as-bytes" line="80" method="" pos="9"/>
+                  <o base=".eq" line="80" method="" pos="18">
+                     <o alias="4" base="nan" line="80" pos="23"/>
+                     <o base=".as-bytes" line="80" method="" pos="26"/>
+                  </o>
+                  <o base="x" line="81" pos="8"/>
+                  <o base=".eq" line="81" method="" pos="9">
+                     <o base="negative-infinity" line="81" pos="13"/>
+                  </o>
+               </o>
+               <o base="nan" line="82" pos="6"/>
+               <o base="^" line="83" pos="6"/>
+            </o>
+         </o>
+         <o abstract="" line="85" name="neg" pos="2">
+            <o base="negative-infinity" line="87" name="@" pos="4"/>
+         </o>
+         <o abstract="" line="89" name="signum" pos="2">
+            <o base="float" data="float" line="91" name="@" pos="4">1.0</o>
+         </o>
+         <o abstract="" line="93" name="minus" pos="2">
+            <o line="94" name="x" pos="3"/>
+            <o base="^" line="95" pos="4"/>
+            <o base=".plus" line="95" method="" name="@" pos="5">
+               <o alias="5" base="x" line="95" pos="12"/>
+               <o base=".neg" line="95" method="" pos="13"/>
+            </o>
+         </o>
+         <o abstract="" line="97" name="pow" pos="2">
+            <o line="98" name="x" pos="3"/>
+            <o base=".if" line="99" name="@" pos="4">
+               <o base="x" line="100" pos="6"/>
+               <o base=".gt" line="100" method="" pos="7">
+                  <o base="float" data="float" line="100" pos="11">0.0</o>
+               </o>
+               <o base="^" line="101" pos="6"/>
+               <o base=".if" line="102" pos="6">
+                  <o base="x" line="103" pos="8"/>
+                  <o base=".lt" line="103" method="" pos="9">
+                     <o base="float" data="float" line="103" pos="13">0.0</o>
+                  </o>
+                  <o base="float" data="float" line="104" pos="8">0.0</o>
+                  <o base=".if" line="105" pos="8">
+                     <o base="x" line="106" pos="10"/>
+                     <o base=".eq" line="106" method="" pos="11">
+                        <o base="float" data="float" line="106" pos="15">0.0</o>
+                     </o>
+                     <o base="float" data="float" line="107" pos="10">1.0</o>
+                     <o base="nan" line="108" pos="10"/>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="110" name="div" pos="2">
+            <o line="111" name="x" pos="3"/>
+            <o base=".if" line="112" name="@" pos="4">
+               <o base=".or" line="113" pos="6">
+                  <o base="x" line="114" pos="8"/>
+                  <o base=".as-bytes" line="114" method="" pos="9"/>
+                  <o base=".eq" line="114" method="" pos="18">
+                     <o alias="6" base="nan" line="114" pos="23"/>
+                     <o base=".as-bytes" line="114" method="" pos="26"/>
+                  </o>
+                  <o base="x" line="115" pos="8"/>
+                  <o base=".eq" line="115" method="" pos="9">
+                     <o base="negative-infinity" line="115" pos="13"/>
+                  </o>
+                  <o base="x" line="116" pos="8"/>
+                  <o base=".eq" line="116" method="" pos="9">
+                     <o base="^" line="116" pos="13"/>
+                  </o>
+               </o>
+               <o base="nan" line="117" pos="6"/>
+               <o base="^" line="118" pos="6"/>
+            </o>
+         </o>
+         <o abstract="" line="120" name="mod" pos="2">
+            <o base="nan" line="122" name="@" pos="4"/>
+         </o>
+         <o abstract="" line="124" name="abs" pos="2">
+            <o base="^" line="126" name="@" pos="4"/>
+         </o>
+         <o abstract="" line="128" name="as-bytes" pos="2">
+            <o base="bytes" data="bytes" line="130" name="@" pos="4">7F 80 00 00</o>
+         </o>
+         <o abstract="" line="132" name="as-int" pos="2">
+            <o abstract="" line="134" name="@" pos="4">
+               <o base="string" data="string" line="135" name="msg" pos="6">You can not convert positive infinity to int</o>
+            </o>
+         </o>
+         <o abstract="" line="137" name="as-string" pos="2">
+            <o base="string" data="string" line="139" name="@" pos="4">+∞</o>
+         </o>
+      </o>
+   </objects>
+</program>

@@ -76,9 +76,7 @@ open class ResolverBase : TestBase {
         val cmpFiles: MutableList<String> = mutableListOf()
         Files.walk(Paths.get(outPath))
             .filter(Files::isRegularFile)
-            .forEach {
-                cmpFiles.add(it.toString())
-            }
+            .forEach {cmpFiles.add(it.toString()) }
         val eoOutPath = constructEoOutPath(path)
         Files.walk(Paths.get(eoOutPath))
             .filter(Files::isRegularFile)
@@ -134,21 +132,21 @@ open class ResolverBase : TestBase {
     }
 
     private fun clean(xmir: XML): XML {
-        val stripXml = File("src${sep}test${sep}resources${sep}integration${sep}strip-xmir.xsl").inputStream()
+        val stripXml = File("src${sep}test${sep}resources${sep}resolver${sep}strip-xmir.xsl").inputStream()
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
     override fun constructOutPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}out$sep$directoryName"
+        "src${sep}test${sep}resources${sep}resolver${sep}out$sep$directoryName"
 
     override fun constructInPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}xmirs$sep$directoryName"
+        "src${sep}test${sep}resources${sep}resolver${sep}xmirs$sep$directoryName"
 
     private fun constructEoOutPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}eo_outputs$sep$path"
+        "src${sep}test${sep}resources${sep}resolver${sep}eo_outputs$sep$path"
 
     private fun constructEoPath(path: String): String =
-        "src${sep}test${sep}resources${sep}integration${sep}in$sep$path"
+        "src${sep}test${sep}resources${sep}resolver${sep}in$sep$path"
 
     private fun constructCmpPath(path: String) =
         "${constructInPath(path).substringBeforeLast(sep)}${sep}TMP$sep${path}_tmp"

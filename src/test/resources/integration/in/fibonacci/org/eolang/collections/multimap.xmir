@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="10"
+          name="org.eolang.collections.multimap"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/collections/multimap.eo"
+          time="2022-09-09T13:01:00.899903888Z"
+          version="1.0-SNAPSHOT">
+   <listing># MIT License
+#
+# Copyright (c) 2022 Eugene Darashkevich
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++alias org.eolang.collections.list
++alias org.eolang.math.number
++home https://github.com/objectionary/eo-collections
++package org.eolang.collections
++rt jvm org.eolang:eo-collections:0.0.4
++version 0.0.4
+
+[m] &gt; multimap
+
+  memory 0 &gt; elements-amount
+
+  # Returns list of all keys in multimap
+  [] &gt; keys
+    ^.concat-all-arrays m &gt; caa!
+    mapped. &gt; @
+      list
+        caa
+      [curr]
+        curr.at 0 &gt; @
+
+  # Returns amount of elements in multimap
+  [] &gt; size
+    elements-amount &gt; @
+
+  [arr] &gt; concat-all-arrays
+    reduced. &gt; @
+      list
+        arr
+      *
+      [a x]
+        concat. &gt; @
+          list a
+          x
+
+  [arr] &gt; pairs-to-hash
+    reduced. &gt; @
+      list
+        arr
+      *
+      [a x]
+        (a.with ((x.at 0).as-hash)) &gt; @
+
+  # Returns the new map with added object
+  [key value] &gt; with
+    * key value &gt; new-pair!
+    ^.concat-all-arrays m &gt; caa!
+    caa.with new-pair &gt; arr!
+    ^.pairs-to-hash arr &gt; harr!
+    ^.rebuild harr arr &gt; table!
+    multimap table &gt; mmp
+    seq &gt; @
+      (mmp.elements-amount).write (arr.length)
+      mmp
+
+  [key arr] &gt; find-in-list
+    reduced. &gt; @
+      list
+        arr
+      *
+      [a x]
+        if. &gt; @
+          eq.
+            key
+            (x.at 0)
+          a.with (x.at 1)
+          a
+
+  # Returns an array with the found value
+  # If no element was found, it returns an empty array
+  [key] &gt; found
+    number (key.as-hash) &gt; num!
+    if. &gt; @
+      eq.
+        m.length
+        0
+      *
+      ^.find-in-list key (m.at (num.mod (m.length)))
+
+  [key arr] &gt; without-in-list
+    reduced. &gt; @
+      list
+        arr
+      *
+      [a x]
+        if. &gt; @
+          eq.
+            key
+            (x.at 0)
+          a
+          a.with x
+
+  [harr arr] &gt; rebuild /array
+
+  # Returns a new map, without elements with the given key
+  # Returns the map itself, if there was no item with this key
+  [key] &gt; without
+    ^.concat-all-arrays m &gt; caa!
+    ^.without-in-list key caa &gt; arr!
+    ^.pairs-to-hash arr &gt; harr!
+    ^.rebuild harr arr &gt; table!
+    multimap table &gt; mmp
+    seq &gt; @
+      (mmp.elements-amount).write (arr.length)
+      mmp
+</listing>
+   <errors/>
+   <sheets/>
+   <license>MIT License
+
+Copyright (c) 2022 Eugene Darashkevich
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>alias</head>
+         <tail>org.eolang.collections.list</tail>
+         <part>org.eolang.collections.list</part>
+      </meta>
+      <meta line="24">
+         <head>alias</head>
+         <tail>org.eolang.math.number</tail>
+         <part>org.eolang.math.number</part>
+      </meta>
+      <meta line="25">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-collections</tail>
+         <part>https://github.com/objectionary/eo-collections</part>
+      </meta>
+      <meta line="26">
+         <head>package</head>
+         <tail>org.eolang.collections</tail>
+         <part>org.eolang.collections</part>
+      </meta>
+      <meta line="27">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-collections:0.0.4</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-collections:0.0.4</part>
+      </meta>
+      <meta line="28">
+         <head>version</head>
+         <tail>0.0.4</tail>
+         <part>0.0.4</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="30" name="multimap" pos="0">
+         <o line="30" name="m" pos="1"/>
+         <o base="memory" line="32" name="elements-amount" pos="2">
+            <o base="int" data="bytes" line="32" pos="9">00 00 00 00 00 00 00 00</o>
+         </o>
+         <o abstract="" line="34" name="keys" pos="2">
+            <o base="^" line="36" pos="4"/>
+            <o base=".concat-all-arrays"
+                const=""
+                line="36"
+                method=""
+                name="caa"
+                pos="5">
+               <o base="m" line="36" pos="24"/>
+            </o>
+            <o base=".mapped" line="37" name="@" pos="4">
+               <o base="list" line="38" pos="6">
+                  <o base="caa" line="39" pos="8"/>
+               </o>
+               <o abstract="" line="40" pos="6">
+                  <o line="40" name="curr" pos="7"/>
+                  <o base="curr" line="41" pos="8"/>
+                  <o base=".at" line="41" method="" name="@" pos="12">
+                     <o base="int" data="bytes" line="41" pos="16">00 00 00 00 00 00 00 00</o>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="43" name="size" pos="2">
+            <o base="elements-amount" line="45" name="@" pos="4"/>
+         </o>
+         <o abstract="" line="47" name="concat-all-arrays" pos="2">
+            <o line="47" name="arr" pos="3"/>
+            <o base=".reduced" line="48" name="@" pos="4">
+               <o base="list" line="49" pos="6">
+                  <o base="arr" line="50" pos="8"/>
+               </o>
+               <o base="array" data="array" line="51" pos="6"/>
+               <o abstract="" line="52" pos="6">
+                  <o line="52" name="a" pos="7"/>
+                  <o line="52" name="x" pos="9"/>
+                  <o base=".concat" line="53" name="@" pos="8">
+                     <o base="list" line="54" pos="10">
+                        <o base="a" line="54" pos="15"/>
+                     </o>
+                     <o base="x" line="55" pos="10"/>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="57" name="pairs-to-hash" pos="2">
+            <o line="57" name="arr" pos="3"/>
+            <o base=".reduced" line="58" name="@" pos="4">
+               <o base="list" line="59" pos="6">
+                  <o base="arr" line="60" pos="8"/>
+               </o>
+               <o base="array" data="array" line="61" pos="6"/>
+               <o abstract="" line="62" pos="6">
+                  <o line="62" name="a" pos="7"/>
+                  <o line="62" name="x" pos="9"/>
+                  <o alias="1" base="a" line="63" pos="9"/>
+                  <o base=".with" line="63" method="" name="@" pos="10">
+                     <o alias="3" base="x" line="63" pos="18"/>
+                     <o alias="2" base=".at" line="63" method="" pos="19">
+                        <o base="int" data="bytes" line="63" pos="23">00 00 00 00 00 00 00 00</o>
+                     </o>
+                     <o base=".as-hash" line="63" method="" pos="25"/>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="65" name="with" pos="2">
+            <o line="66" name="key" pos="3"/>
+            <o line="66" name="value" pos="7"/>
+            <o base="array"
+                const=""
+                data="array"
+                line="67"
+                name="new-pair"
+                pos="4">
+               <o base="key" line="67" pos="6"/>
+               <o base="value" line="67" pos="10"/>
+            </o>
+            <o base="^" line="68" pos="4"/>
+            <o base=".concat-all-arrays"
+                const=""
+                line="68"
+                method=""
+                name="caa"
+                pos="5">
+               <o base="m" line="68" pos="24"/>
+            </o>
+            <o base="caa" line="69" pos="4"/>
+            <o base=".with"
+                const=""
+                line="69"
+                method=""
+                name="arr"
+                pos="7">
+               <o base="new-pair" line="69" pos="13"/>
+            </o>
+            <o base="^" line="70" pos="4"/>
+            <o base=".pairs-to-hash"
+                const=""
+                line="70"
+                method=""
+                name="harr"
+                pos="5">
+               <o base="arr" line="70" pos="20"/>
+            </o>
+            <o base="^" line="71" pos="4"/>
+            <o base=".rebuild"
+                const=""
+                line="71"
+                method=""
+                name="table"
+                pos="5">
+               <o base="harr" line="71" pos="14"/>
+               <o base="arr" line="71" pos="19"/>
+            </o>
+            <o base="multimap" line="72" name="mmp" pos="4">
+               <o base="table" line="72" pos="13"/>
+            </o>
+            <o base="seq" line="73" name="@" pos="4">
+               <o alias="4" base="mmp" line="74" pos="7"/>
+               <o base=".elements-amount" line="74" method="" pos="10"/>
+               <o base=".write" line="74" method="" pos="27">
+                  <o alias="5" base="arr" line="74" pos="35"/>
+                  <o base=".length" line="74" method="" pos="38"/>
+               </o>
+               <o base="mmp" line="75" pos="6"/>
+            </o>
+         </o>
+         <o abstract="" line="77" name="find-in-list" pos="2">
+            <o line="77" name="key" pos="3"/>
+            <o line="77" name="arr" pos="7"/>
+            <o base=".reduced" line="78" name="@" pos="4">
+               <o base="list" line="79" pos="6">
+                  <o base="arr" line="80" pos="8"/>
+               </o>
+               <o base="array" data="array" line="81" pos="6"/>
+               <o abstract="" line="82" pos="6">
+                  <o line="82" name="a" pos="7"/>
+                  <o line="82" name="x" pos="9"/>
+                  <o base=".if" line="83" name="@" pos="8">
+                     <o base=".eq" line="84" pos="10">
+                        <o base="key" line="85" pos="12"/>
+                        <o alias="6" base="x" line="86" pos="13"/>
+                        <o base=".at" line="86" method="" pos="14">
+                           <o base="int" data="bytes" line="86" pos="18">00 00 00 00 00 00 00 00</o>
+                        </o>
+                     </o>
+                     <o base="a" line="87" pos="10"/>
+                     <o base=".with" line="87" method="" pos="11">
+                        <o alias="7" base="x" line="87" pos="18"/>
+                        <o base=".at" line="87" method="" pos="19">
+                           <o base="int" data="bytes" line="87" pos="23">00 00 00 00 00 00 00 01</o>
+                        </o>
+                     </o>
+                     <o base="a" line="88" pos="10"/>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="90" name="found" pos="2">
+            <o line="92" name="key" pos="3"/>
+            <o base="number" const="" line="93" name="num" pos="4">
+               <o alias="8" base="key" line="93" pos="12"/>
+               <o base=".as-hash" line="93" method="" pos="15"/>
+            </o>
+            <o base=".if" line="94" name="@" pos="4">
+               <o base=".eq" line="95" pos="6">
+                  <o base="m" line="96" pos="8"/>
+                  <o base=".length" line="96" method="" pos="9"/>
+                  <o base="int" data="bytes" line="97" pos="8">00 00 00 00 00 00 00 00</o>
+               </o>
+               <o base="array" data="array" line="98" pos="6"/>
+               <o base="^" line="99" pos="6"/>
+               <o base=".find-in-list" line="99" method="" pos="7">
+                  <o base="key" line="99" pos="21"/>
+                  <o alias="9" base="m" line="99" pos="26"/>
+                  <o base=".at" line="99" method="" pos="27">
+                     <o alias="10" base="num" line="99" pos="32"/>
+                     <o base=".mod" line="99" method="" pos="35">
+                        <o alias="11" base="m" line="99" pos="41"/>
+                        <o base=".length" line="99" method="" pos="42"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="101" name="without-in-list" pos="2">
+            <o line="101" name="key" pos="3"/>
+            <o line="101" name="arr" pos="7"/>
+            <o base=".reduced" line="102" name="@" pos="4">
+               <o base="list" line="103" pos="6">
+                  <o base="arr" line="104" pos="8"/>
+               </o>
+               <o base="array" data="array" line="105" pos="6"/>
+               <o abstract="" line="106" pos="6">
+                  <o line="106" name="a" pos="7"/>
+                  <o line="106" name="x" pos="9"/>
+                  <o base=".if" line="107" name="@" pos="8">
+                     <o base=".eq" line="108" pos="10">
+                        <o base="key" line="109" pos="12"/>
+                        <o alias="12" base="x" line="110" pos="13"/>
+                        <o base=".at" line="110" method="" pos="14">
+                           <o base="int" data="bytes" line="110" pos="18">00 00 00 00 00 00 00 00</o>
+                        </o>
+                     </o>
+                     <o base="a" line="111" pos="10"/>
+                     <o base="a" line="112" pos="10"/>
+                     <o base=".with" line="112" method="" pos="11">
+                        <o base="x" line="112" pos="17"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" atom="array" line="114" name="rebuild" pos="2">
+            <o line="114" name="harr" pos="3"/>
+            <o line="114" name="arr" pos="8"/>
+         </o>
+         <o abstract="" line="116" name="without" pos="2">
+            <o line="118" name="key" pos="3"/>
+            <o base="^" line="119" pos="4"/>
+            <o base=".concat-all-arrays"
+                const=""
+                line="119"
+                method=""
+                name="caa"
+                pos="5">
+               <o base="m" line="119" pos="24"/>
+            </o>
+            <o base="^" line="120" pos="4"/>
+            <o base=".without-in-list"
+                const=""
+                line="120"
+                method=""
+                name="arr"
+                pos="5">
+               <o base="key" line="120" pos="22"/>
+               <o base="caa" line="120" pos="26"/>
+            </o>
+            <o base="^" line="121" pos="4"/>
+            <o base=".pairs-to-hash"
+                const=""
+                line="121"
+                method=""
+                name="harr"
+                pos="5">
+               <o base="arr" line="121" pos="20"/>
+            </o>
+            <o base="^" line="122" pos="4"/>
+            <o base=".rebuild"
+                const=""
+                line="122"
+                method=""
+                name="table"
+                pos="5">
+               <o base="harr" line="122" pos="14"/>
+               <o base="arr" line="122" pos="19"/>
+            </o>
+            <o base="multimap" line="123" name="mmp" pos="4">
+               <o base="table" line="123" pos="13"/>
+            </o>
+            <o base="seq" line="124" name="@" pos="4">
+               <o alias="13" base="mmp" line="125" pos="7"/>
+               <o base=".elements-amount" line="125" method="" pos="10"/>
+               <o base=".write" line="125" method="" pos="27">
+                  <o alias="14" base="arr" line="125" pos="35"/>
+                  <o base=".length" line="125" method="" pos="38"/>
+               </o>
+               <o base="mmp" line="126" pos="6"/>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

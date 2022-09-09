@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="1"
+          name="org.eolang.txt.sscanf"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/txt/sscanf.eo"
+          time="2022-09-09T13:00:57.247124039Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+#  2016-2022 Objectionary.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++architect yegor256@gmail.com
++home https://github.com/objectionary/eo-strings
++package org.eolang.txt
++rt jvm org.eolang:eo-strings:0.0.3
++version 0.0.3
+
+# Reads formatted input from a string.
+# This object with two free attributes:
+# 1. format - is a formatter string (e.g. "Hello, %s!")
+# 2. read - is a string where data exists (e.g. "Hello, John!")
+# returns an array of formatted values (e.g. * "John").
+[format read] &gt; sscanf /array
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+2016-2022 Objectionary.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>architect</head>
+         <tail>yegor256@gmail.com</tail>
+         <part>yegor256@gmail.com</part>
+      </meta>
+      <meta line="24">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-strings</tail>
+         <part>https://github.com/objectionary/eo-strings</part>
+      </meta>
+      <meta line="25">
+         <head>package</head>
+         <tail>org.eolang.txt</tail>
+         <part>org.eolang.txt</part>
+      </meta>
+      <meta line="26">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-strings:0.0.3</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-strings:0.0.3</part>
+      </meta>
+      <meta line="27">
+         <head>version</head>
+         <tail>0.0.3</tail>
+         <part>0.0.3</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" atom="array" line="34" name="sscanf" pos="0">
+         <o line="34" name="format" pos="1"/>
+         <o line="34" name="read" pos="8"/>
+      </o>
+   </objects>
+</program>

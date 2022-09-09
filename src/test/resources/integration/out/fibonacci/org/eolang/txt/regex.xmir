@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="7"
+          name="org.eolang.txt.regex"
+          source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/txt/regex.eo"
+          time="2022-09-09T13:00:57.256591352Z"
+          version="1.0-SNAPSHOT">
+   <listing># The MIT License (MIT)
+#
+#  2016-2022 Objectionary.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
++alias org.eolang.collections.list
++alias org.eolang.txt.text
++architect yegor256@gmail.com
++home https://github.com/objectionary/eo-strings
++package org.eolang.txt
++rt jvm org.eolang:eo-strings:0.0.3
++version 0.0.3
+
+# Regular expression in Perl format.
+# Free attribute "r" is a string represenation of regex object.
+# It starts and ends with slash (e.g. "/(your-pattern)/s"),
+# Also it can be specified by the flag option,
+# e.g. (QQ.txt.regex "/(word)/i").compile.matches "WORD".
+# other flags:
+# /d - Enables Unix lines mode.
+# /i - Enables case-insensitive matching.
+# /x - Permits whitespace and comments in pattern.
+# /m - Enables multiline mode.
+# /s - Enables dotall mode.
+# /u - Enables Unicode-aware case folding.
+#
+[r] &gt; regex
+
+  [] &gt; compile /regex
+
+  # Match the text and return the array of matched blocks.
+  # Each matched block consists of
+  #  - start position in which match was found
+  #  - matched string
+  #  - array of identified matched groups
+  [txt] &gt; match /array
+
+  # Matches
+  [txt] &gt; matches
+    not. &gt; @
+      is-empty.
+        list (^.match txt)
+
+  # A string with all encounters of pattern in txt
+  # replaced with rpl
+  [txt rpl] &gt; replaced
+
+    # Perform partial replace operation for
+    # pt - next unhandled index in text
+    # acc - replaced text so far
+    # pa - next unhandled index in replaced text
+    # m - matched segments array
+    [pt acc pa m] &gt; replacei
+
+      [] &gt; nextpt
+        plus. &gt; @!
+          mitem.at 0
+          length.
+            mitem.at 1
+
+      [] &gt; mitem
+        m.at 0 &gt; @!
+
+      [] &gt; part
+        joined. &gt; @!
+          (text "")
+          *
+            slice.
+              acc
+              0
+              pa
+            slice.
+              txt
+              pt
+              minus.
+                mitem.at 0
+                pt
+            rpl
+
+      [] &gt; nextacc
+        joined. &gt; @!
+          (text "")
+          *
+            part
+            slice.
+              txt
+              nextpt
+              minus.
+                txt.length
+                nextpt
+
+      if. &gt; @
+        not.
+          is-empty.
+            list m
+        ^.replacei
+          nextpt
+          nextacc
+          part.length
+          without.
+            list m
+            0
+        acc
+
+    replacei &gt; @
+      0
+      txt
+      0
+      (match txt)
+</listing>
+   <errors/>
+   <sheets/>
+   <license>The MIT License (MIT)
+
+2016-2022 Objectionary.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</license>
+   <metas>
+      <meta line="23">
+         <head>alias</head>
+         <tail>org.eolang.collections.list</tail>
+         <part>org.eolang.collections.list</part>
+      </meta>
+      <meta line="24">
+         <head>alias</head>
+         <tail>org.eolang.txt.text</tail>
+         <part>org.eolang.txt.text</part>
+      </meta>
+      <meta line="25">
+         <head>architect</head>
+         <tail>yegor256@gmail.com</tail>
+         <part>yegor256@gmail.com</part>
+      </meta>
+      <meta line="26">
+         <head>home</head>
+         <tail>https://github.com/objectionary/eo-strings</tail>
+         <part>https://github.com/objectionary/eo-strings</part>
+      </meta>
+      <meta line="27">
+         <head>package</head>
+         <tail>org.eolang.txt</tail>
+         <part>org.eolang.txt</part>
+      </meta>
+      <meta line="28">
+         <head>rt</head>
+         <tail>jvm org.eolang:eo-strings:0.0.3</tail>
+         <part>jvm</part>
+         <part>org.eolang:eo-strings:0.0.3</part>
+      </meta>
+      <meta line="29">
+         <head>version</head>
+         <tail>0.0.3</tail>
+         <part>0.0.3</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="44" name="regex" pos="0">
+         <o line="44" name="r" pos="1"/>
+         <o abstract="" atom="regex" line="46" name="compile" pos="2"/>
+         <o abstract="" atom="array" line="48" name="match" pos="2">
+            <o line="53" name="txt" pos="3"/>
+         </o>
+         <o abstract="" line="55" name="matches" pos="2">
+            <o line="56" name="txt" pos="3"/>
+            <o base=".not" line="57" name="@" pos="4">
+               <o base=".is-empty" line="58" pos="6">
+                  <o base="list" line="59" pos="8">
+                     <o alias="1" base="^" line="59" pos="14"/>
+                     <o base=".match" line="59" method="" pos="15">
+                        <o base="txt" line="59" pos="22"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+         </o>
+         <o abstract="" line="61" name="replaced" pos="2">
+            <o line="63" name="txt" pos="3"/>
+            <o line="63" name="rpl" pos="7"/>
+            <o abstract="" line="65" name="replacei" pos="4">
+               <o line="70" name="pt" pos="5"/>
+               <o line="70" name="acc" pos="8"/>
+               <o line="70" name="pa" pos="12"/>
+               <o line="70" name="m" pos="15"/>
+               <o abstract="" line="72" name="nextpt" pos="6">
+                  <o base=".plus" const="" line="73" name="@" pos="8">
+                     <o base="mitem" line="74" pos="10"/>
+                     <o base=".at" line="74" method="" pos="15">
+                        <o base="int" data="bytes" line="74" pos="19">00 00 00 00 00 00 00 00</o>
+                     </o>
+                     <o base=".length" line="75" pos="10">
+                        <o base="mitem" line="76" pos="12"/>
+                        <o base=".at" line="76" method="" pos="17">
+                           <o base="int" data="bytes" line="76" pos="21">00 00 00 00 00 00 00 01</o>
+                        </o>
+                     </o>
+                  </o>
+               </o>
+               <o abstract="" line="78" name="mitem" pos="6">
+                  <o base="m" line="79" pos="8"/>
+                  <o base=".at"
+                      const=""
+                      line="79"
+                      method=""
+                      name="@"
+                      pos="9">
+                     <o base="int" data="bytes" line="79" pos="13">00 00 00 00 00 00 00 00</o>
+                  </o>
+               </o>
+               <o abstract="" line="81" name="part" pos="6">
+                  <o base=".joined" const="" line="82" name="@" pos="8">
+                     <o alias="2" base="text" line="83" pos="11">
+                        <o base="string" data="string" line="83" pos="16"/>
+                     </o>
+                     <o base="array" data="array" line="84" pos="10">
+                        <o base=".slice" line="85" pos="12">
+                           <o base="acc" line="86" pos="14"/>
+                           <o base="int" data="bytes" line="87" pos="14">00 00 00 00 00 00 00 00</o>
+                           <o base="pa" line="88" pos="14"/>
+                        </o>
+                        <o base=".slice" line="89" pos="12">
+                           <o base="txt" line="90" pos="14"/>
+                           <o base="pt" line="91" pos="14"/>
+                           <o base=".minus" line="92" pos="14">
+                              <o base="mitem" line="93" pos="16"/>
+                              <o base=".at" line="93" method="" pos="21">
+                                 <o base="int" data="bytes" line="93" pos="25">00 00 00 00 00 00 00 00</o>
+                              </o>
+                              <o base="pt" line="94" pos="16"/>
+                           </o>
+                        </o>
+                        <o base="rpl" line="95" pos="12"/>
+                     </o>
+                  </o>
+               </o>
+               <o abstract="" line="97" name="nextacc" pos="6">
+                  <o base=".joined" const="" line="98" name="@" pos="8">
+                     <o alias="3" base="text" line="99" pos="11">
+                        <o base="string" data="string" line="99" pos="16"/>
+                     </o>
+                     <o base="array" data="array" line="100" pos="10">
+                        <o base="part" line="101" pos="12"/>
+                        <o base=".slice" line="102" pos="12">
+                           <o base="txt" line="103" pos="14"/>
+                           <o base="nextpt" line="104" pos="14"/>
+                           <o base=".minus" line="105" pos="14">
+                              <o base="txt" line="106" pos="16"/>
+                              <o base=".length" line="106" method="" pos="19"/>
+                              <o base="nextpt" line="107" pos="16"/>
+                           </o>
+                        </o>
+                     </o>
+                  </o>
+               </o>
+               <o base=".if" line="109" name="@" pos="6">
+                  <o base=".not" line="110" pos="8">
+                     <o base=".is-empty" line="111" pos="10">
+                        <o base="list" line="112" pos="12">
+                           <o base="m" line="112" pos="17"/>
+                        </o>
+                     </o>
+                  </o>
+                  <o base="^" line="113" pos="8"/>
+                  <o base=".replacei" line="113" method="" pos="9">
+                     <o base="nextpt" line="114" pos="10"/>
+                     <o base="nextacc" line="115" pos="10"/>
+                     <o base="part" line="116" pos="10"/>
+                     <o base=".length" line="116" method="" pos="14"/>
+                     <o base=".without" line="117" pos="10">
+                        <o base="list" line="118" pos="12">
+                           <o base="m" line="118" pos="17"/>
+                        </o>
+                        <o base="int" data="bytes" line="119" pos="12">00 00 00 00 00 00 00 00</o>
+                     </o>
+                  </o>
+                  <o base="acc" line="120" pos="8"/>
+               </o>
+            </o>
+            <o base="replacei" line="122" name="@" pos="4">
+               <o base="int" data="bytes" line="123" pos="6">00 00 00 00 00 00 00 00</o>
+               <o base="txt" line="124" pos="6"/>
+               <o base="int" data="bytes" line="125" pos="6">00 00 00 00 00 00 00 00</o>
+               <o alias="4" base="match" line="126" pos="7">
+                  <o base="txt" line="126" pos="13"/>
+               </o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

@@ -38,7 +38,6 @@ import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.UnsupportedEncodingException
@@ -218,9 +217,8 @@ class BasicDecoratorsResolver(
 
     @Throws(TransformerException::class, UnsupportedEncodingException::class)
     private fun writeXml(output: OutputStream, document: Document) {
-        val sep = File.separator
-        val prettyPrintXlst = "src${sep}main${sep}resources${sep}pretty_print.xslt"
-        val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(File(prettyPrintXlst)))
+        val prettyPrintXlst = this.javaClass.getResourceAsStream("pretty_print.xslt")
+        val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(prettyPrintXlst))
         transformer.setOutputProperty(OutputKeys.INDENT, "yes")
         transformer.setOutputProperty(OutputKeys.STANDALONE, "no")
         val source = DOMSource(document)

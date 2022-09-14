@@ -34,19 +34,12 @@ import org.objectionary.ddr.graph.pos
 import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphAttr
+import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.io.FileOutputStream
-import java.io.OutputStream
-import java.io.UnsupportedEncodingException
-import javax.xml.transform.OutputKeys
-import javax.xml.transform.TransformerException
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
-import javax.xml.transform.stream.StreamSource
 
 /**
  * Collects all decorators and inserts desired .@ applications
@@ -59,7 +52,7 @@ class BasicDecoratorsResolver(
 
     /**
      * Aggregates process of resolving all decorators:
-     * collects decorations, finds references of the decorators
+     * collects declarations, finds references of the decorators
      * and injects all needed .@ elements into the corresponding documents
      */
     fun resolveDecorators() {
@@ -68,7 +61,7 @@ class BasicDecoratorsResolver(
         injectAttributes()
         documents.forEach { doc ->
             val outputStream = FileOutputStream(doc.value)
-            outputStream.use { writeXml(it, doc.key) }
+            outputStream.use { XslTransformer().writeXml(it, doc.key) }
         }
     }
 
@@ -121,6 +114,9 @@ class BasicDecoratorsResolver(
         parent: Node,
         dist: Int
     ) {
+        if (graph.igNodes.find { it.body == node } is IGraphCondNode) {
+            return
+        }
         val siblings: MutableSet<Node> = mutableSetOf()
         var tmpNode = node
         while (tmpNode.nextSibling != null) {
@@ -150,6 +146,9 @@ class BasicDecoratorsResolver(
     }
 
     private fun insert(node: Node, attr: IGraphAttr) {
+        if (graph.igNodes.find { it.body == node } is IGraphCondNode) {
+            return
+        }
         val parent = node.parentNode
         val siblings = mutableSetOf(node)
         var tmpNode = node
@@ -213,16 +212,5 @@ class BasicDecoratorsResolver(
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')
         return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
-    }
-
-    @Throws(TransformerException::class, UnsupportedEncodingException::class)
-    private fun writeXml(output: OutputStream, document: Document) {
-        val prettyPrintXlst = this.javaClass.getResourceAsStream("pretty_print.xslt")
-        val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(prettyPrintXlst))
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
-        transformer.setOutputProperty(OutputKeys.STANDALONE, "no")
-        val source = DOMSource(document)
-        val result = StreamResult(output)
-        transformer.transform(source, result)
     }
 }

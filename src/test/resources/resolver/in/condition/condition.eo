@@ -17,7 +17,4 @@
     x.eq "cat"
     cat
     dog
-  if. > @
-    x.eq "cat"
-    milo.@.talk "Hello"
-    milo.talk "Hello"
+  milo.talk > @

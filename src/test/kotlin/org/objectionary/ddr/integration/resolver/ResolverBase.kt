@@ -40,6 +40,7 @@ import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
+import org.objectionary.ddr.graph.CondAttributesSetter
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
@@ -60,6 +61,7 @@ open class ResolverBase : TestBase {
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)
         val graph = buildGraph(constructInPath(path), true)
+        CondAttributesSetter(graph).processConditions()
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()

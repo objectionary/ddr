@@ -2,7 +2,7 @@
   [] > y
     QQ.io.stdout "base" > @
   [] > x
-    ...
+    QQ.io.stdout "hehe" > @
 
 [] > derived
   base > @
@@ -16,7 +16,7 @@
       base
       derived
     [] > attr
-      ...
+      QQ.io.stdout "hehe" > @
 
 [cond] > main
   condition.check 20 > instance1

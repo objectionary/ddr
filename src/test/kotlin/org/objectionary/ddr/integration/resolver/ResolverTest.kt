@@ -47,4 +47,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test fibonacci`() = doTest()
+
+    @Test
+    fun `test condition`() = doTest()
 }

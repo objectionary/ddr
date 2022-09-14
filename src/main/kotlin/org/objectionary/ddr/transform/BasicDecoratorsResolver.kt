@@ -98,7 +98,10 @@ class BasicDecoratorsResolver(
         node: Node,
         abstract: IGraphNode
     ) {
-        var sibling = node.nextSibling?.nextSibling
+        var sibling = node.nextSibling
+        sibling?.attributes?: run {
+            sibling = sibling?.nextSibling
+        }
         while (base(sibling)?.startsWith(".") == true) {
             val base = base(sibling)
             val attr = abstract.attributes.find { it.name == base?.substring(1) }
@@ -114,9 +117,6 @@ class BasicDecoratorsResolver(
         parent: Node,
         dist: Int
     ) {
-        if (graph.igNodes.find { it.body == node } is IGraphCondNode) {
-            return
-        }
         val siblings: MutableSet<Node> = mutableSetOf()
         var tmpNode = node
         while (tmpNode.nextSibling != null) {
@@ -146,9 +146,6 @@ class BasicDecoratorsResolver(
     }
 
     private fun insert(node: Node, attr: IGraphAttr) {
-        if (graph.igNodes.find { it.body == node } is IGraphCondNode) {
-            return
-        }
         val parent = node.parentNode
         val siblings = mutableSetOf(node)
         var tmpNode = node

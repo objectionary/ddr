@@ -37,13 +37,19 @@ class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-    private val declarations: MutableMap<Node, Node?> = mutableMapOf()
-
     fun resolveCondNodes() {
         fff()
         documents.forEach { doc ->
             val outputStream = FileOutputStream(doc.value)
             outputStream.use { XslTransformer().writeXml(it, doc.key) }
+        }
+        documents.forEach {
+            val objects: MutableList<Node> = mutableListOf()
+            val docObjects = it.key.getElementsByTagName("o")
+            for (i in 0 until docObjects.length) {
+                objects.add(docObjects.item(i))
+            }
+            graph.initialObjects.addAll(objects)
         }
     }
 

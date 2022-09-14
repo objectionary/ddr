@@ -84,10 +84,6 @@
                <o base="string" data="string" line="20" pos="12">gg</o>
             </o>
          </o>
-         <o base="milo" line="20" pos="2" ref="16"/>
-         <o base=".talk" line="20" method="" name="@" pos="6">
-            <o base="string" data="string" line="20" pos="12">gg</o>
-         </o>
       </o>
    </objects>
 </program>

@@ -41,6 +41,7 @@ import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
 import org.objectionary.ddr.graph.CondAttributesSetter
+import org.objectionary.ddr.transform.CondNodesResolver
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
@@ -65,6 +66,7 @@ open class ResolverBase : TestBase {
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()
+        CondNodesResolver(graph, documents).resolveCondNodes()
         BasicDecoratorsResolver(graph, documents).resolveDecorators()
         val cmpPath = constructCmpPath(path)
         Files.walk(Paths.get(cmpPath))

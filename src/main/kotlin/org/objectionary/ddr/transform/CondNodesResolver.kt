@@ -33,12 +33,14 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.io.FileOutputStream
 
+// todo the code here is quite ugly now, needs refactoring
 class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
+    // todo remove extra "> @"
     fun resolveCondNodes() {
-        fff()
+        processObjects()
         documents.forEach { doc ->
             val outputStream = FileOutputStream(doc.value)
             outputStream.use { XslTransformer().writeXml(it, doc.key) }
@@ -53,7 +55,7 @@ class CondNodesResolver(
         }
     }
 
-    private fun fff() {
+    private fun processObjects() {
         val objects = graph.initialObjects
         val condNodes = graph.igNodes.filterIsInstance<IGraphCondNode>()
         condNodes.forEach { node ->
@@ -61,6 +63,7 @@ class CondNodesResolver(
         }
     }
 
+    // todo use
     private fun traverseDotChain(
         node: Node,
         abstract: IGraphNode
@@ -90,7 +93,7 @@ class CondNodesResolver(
 
     private fun insert(node: Node, igNode: IGraphCondNode) {
         val expr = collectDotChain(node)
-//        val node = igNode.body.parentNode
+        //  todo remove duplicates
         val parent = node.parentNode
         val siblings = mutableSetOf(node)
         var tmpNode = node
@@ -102,26 +105,25 @@ class CondNodesResolver(
             parent.removeChild(it)
         }
         val document = parent.ownerDocument
-        addDocumentChild(document, igNode, node, expr, parent)
-
+        val child = addDocumentChild(document, igNode, node, expr)
+        parent.appendChild(child)
         siblings.forEach { parent.appendChild(it) }
+        parent.removeChild(node)
+        expr.forEach { parent.removeChild(it) }
     }
 
     private fun addDocumentChild(
         document: Document,
         igNode: IGraphCondNode,
         node: Node,
-        expr: MutableList<Node?>,
-        parent: Node
-    ) {
-//        val node = igNode.body
+        expr: MutableList<Node?>
+    ): Element {
         val ifChild: Element = document.createElement("o")
         ifChild.setAttribute("base", ".if")
-        ifChild.setAttribute("line", line(node))
-//        name(node)?.let { ifChild.setAttribute("name", it) }
+        ifChild.setAttribute("line", line(node)) // todo incorrect line (discuss w yegor)
         ifChild.setAttribute("pos", pos(node))
         igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
-        val ref1 = document.createAttribute("ref")
+        val ref1 = document.createAttribute("ref") // todo duplicates
         ref1.value = ref(igNode.fstOption[0])
         val fstNode = node.cloneNode(true)
         fstNode.attributes.setNamedItem(ref1)
@@ -133,6 +135,6 @@ class CondNodesResolver(
         sndNode.attributes.setNamedItem(ref2)
         ifChild.appendChild(sndNode)
         expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }
-        parent.appendChild(ifChild)
+        return ifChild
     }
 }

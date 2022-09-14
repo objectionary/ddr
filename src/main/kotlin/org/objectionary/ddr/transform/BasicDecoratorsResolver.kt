@@ -43,6 +43,7 @@ import java.io.FileOutputStream
 
 /**
  * Collects all decorators and inserts desired .@ applications
+ * todo document better
  */
 class BasicDecoratorsResolver(
     private val graph: Graph,

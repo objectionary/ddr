@@ -29,6 +29,6 @@ package org.objectionary.ddr.launch
  * - args[0] path to the folder with the program to be analyzed
  */
 fun main(args: Array<String>) {
-     launch("/home/olesya/huawei/ssh-ddr/ddr/src/test/resources/unit/in/condition_to_name")
-//    launch(path = args[0])
+    // launch("/home/olesya/huawei/ssh-ddr/ddr/src/test/resources/unit/in/condition_to_name")
+    launch(path = args[0])
 }

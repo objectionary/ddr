@@ -103,7 +103,7 @@ fun packageName(node: Node?): String {
  */
 fun findRef(
     node: Node,
-    objects: MutableList<Node>,
+    objects: MutableSet<Node>,
     graph: Graph
 ): Node? {
     val ref = ref(node) ?: return getAbstractViaPackage(base(node), graph)?.body

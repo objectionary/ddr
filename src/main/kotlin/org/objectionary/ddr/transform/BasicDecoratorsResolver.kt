@@ -185,7 +185,7 @@ class BasicDecoratorsResolver(
 
     private fun firstRef(
         node: Node,
-        objects: MutableList<Node>
+        objects: MutableSet<Node>
     ): Node? {
         ref(node)?.let { ref ->
             objects.forEach {

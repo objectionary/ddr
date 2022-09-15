@@ -50,10 +50,6 @@ class CondNodesResolver(
      */
     fun resolveCondNodes() {
         processObjects()
-        documents.forEach { doc ->
-            val outputStream = FileOutputStream(doc.value)
-            outputStream.use { XslTransformer().writeXml(it, doc.key) }
-        }
         documents.forEach {
             val objects: MutableList<Node> = mutableListOf()
             val docObjects = it.key.getElementsByTagName("o")
@@ -61,6 +57,10 @@ class CondNodesResolver(
                 objects.add(docObjects.item(i))
             }
             graph.initialObjects.addAll(objects)
+        }
+        documents.forEach { doc ->
+            val outputStream = FileOutputStream(doc.value)
+            outputStream.use { XslTransformer().writeXml(it, doc.key) }
         }
     }
 

@@ -83,7 +83,6 @@ SOFTWARE.
          <o abstract="" line="11" name="doBA" pos="2">
             <o base="^" line="12" pos="4"/>
             <o base=".@" line="12" pos="9"/>
-            <o base=".@" line="12" pos="9"/>
             <o base=".doA" line="12" method="" name="@" pos="5"/>
          </o>
       </o>

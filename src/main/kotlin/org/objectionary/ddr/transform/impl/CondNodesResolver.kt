@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.objectionary.ddr.transform
+package org.objectionary.ddr.transform.impl
 
 import org.objectionary.ddr.graph.base
 import org.objectionary.ddr.graph.line
@@ -32,6 +32,7 @@ import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.transform.Resolver
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node

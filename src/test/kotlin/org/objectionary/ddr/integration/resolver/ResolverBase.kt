@@ -30,8 +30,8 @@ import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.launch.processAttributes
-import org.objectionary.ddr.transform.BasicDecoratorsResolver
-import org.objectionary.ddr.transform.CondNodesResolver
+import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
+import org.objectionary.ddr.transform.impl.CondNodesResolver
 import org.objectionary.ddr.transform.XslTransformer
 import com.jcabi.xml.ClasspathSources
 import com.jcabi.xml.XML

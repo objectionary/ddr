@@ -37,7 +37,7 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 
 /**
- * Conditional nodes resolver
+ * Inserts if blocks instead of conditional nodes and attributes application
  */
 class CondNodesResolver(
     private val graph: Graph,

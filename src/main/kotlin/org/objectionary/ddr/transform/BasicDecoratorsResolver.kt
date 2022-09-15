@@ -173,6 +173,9 @@ class BasicDecoratorsResolver(
         val newChild: Element = document.createElement("o")
         newChild.setAttribute("base", baseValue)
         newChild.setAttribute("line", line(node))
+        if (baseValue == ".@") {
+            newChild.setAttribute("method", "")
+        }
         newChild.setAttribute("pos", "${base(node)?.length?.plus(pos(node)?.toInt()!!)?.plus(offset)}")
         parent.appendChild(newChild)
     }

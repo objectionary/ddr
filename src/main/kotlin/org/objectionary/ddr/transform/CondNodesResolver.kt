@@ -130,7 +130,7 @@ class CondNodesResolver(
     ): Element {
         val ifChild: Element = document.createElement("o")
         ifChild.setAttribute("base", ".if")
-        ifChild.setAttribute("line", line(node))  // @todo #42:30min add method="" attribute
+        ifChild.setAttribute("line", line(node))
         ifChild.setAttribute("pos", pos(node))
         igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
         val ref1 = document.createAttribute("ref").apply { value = ref(igNode.fstOption[0]) }  // @todo #46:30min remove duplicates from code

@@ -91,6 +91,12 @@ class XslTransformer {
         File(outFilename).outputStream().write(after.toString().toByteArray())
     }
 
+    /**
+     * Writes transformed [document] to [output]
+     *
+     * @param document transformed document
+     * @param output where to write the result
+     */
     @Throws(TransformerException::class, UnsupportedEncodingException::class)
     fun writeXml(output: OutputStream, document: Document) {
         val prettyPrintXlst = this.javaClass.getResourceAsStream("pretty_print.xslt")

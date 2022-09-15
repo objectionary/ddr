@@ -34,7 +34,6 @@ import org.objectionary.ddr.graph.pos
 import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphAttr
-import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -99,10 +98,10 @@ class BasicDecoratorsResolver(
         node: Node,
         abstract: IGraphNode
     ) {
-        var sibling = node.nextSibling?.nextSibling
-//        sibling?.attributes?: run {
-//            sibling = sibling?.nextSibling
-//        }
+        var sibling = node.nextSibling
+        sibling?.attributes ?: run {
+            sibling = sibling?.nextSibling
+        }
         while (base(sibling)?.startsWith(".") == true) {
             val base = base(sibling)
             val attr = abstract.attributes.find { it.name == base?.substring(1) }

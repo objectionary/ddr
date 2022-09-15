@@ -24,7 +24,10 @@
 
 package org.objectionary.ddr.transform
 
-import org.objectionary.ddr.graph.*
+import org.objectionary.ddr.graph.base
+import org.objectionary.ddr.graph.line
+import org.objectionary.ddr.graph.pos
+import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
@@ -33,12 +36,18 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.io.FileOutputStream
 
-/** @todo #41:30min the code here needs refactoring and documentation */
+/**
+ * Conditional nodes resolver
+ * @todo #41:30min the code here needs refactoring and documentation
+ */
 class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-    /** @todo #40:30min remove extra "> @" and add one to .if */
+    /**
+     * Aggregate process of conditional nodes resolving
+     * @todo #40:30min remove extra "> @" and add one to .if
+     */
     fun resolveCondNodes() {
         processObjects()
         documents.forEach { doc ->
@@ -57,13 +66,13 @@ class CondNodesResolver(
 
     private fun processObjects() {
         val objects = graph.initialObjects
-        val condNodes = graph.igNodes.filterIsInstance<IGraphCondNode>()
+        val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
-            objects.filter { ref(it) == line(node.body) }.forEach{insert(it, node)}
+            objects.filter { ref(it) == line(node.body) }.forEach { insert(it, node) }
         }
     }
 
-    /** @todo #39:30min this method should be used */
+    // @todo #39:30min this method should be used
     private fun traverseDotChain(
         node: Node,
         abstract: IGraphNode
@@ -73,7 +82,7 @@ class CondNodesResolver(
             val base = base(sibling)
             val attr = abstract.attributes.find { it.name == base?.substring(1) }
             if (attr != null && sibling != null) {
-//                insert(sibling, attr)
+                // insert(sibling, attr)
             }
             sibling = sibling?.nextSibling
         }
@@ -93,7 +102,8 @@ class CondNodesResolver(
 
     private fun insert(node: Node, igNode: IGraphCondNode) {
         val expr = collectDotChain(node)
-        /**  @todo #45:30min remove duplicated code */
+
+        // @todo #45:30min remove duplicated code
         val parent = node.parentNode
         val siblings = mutableSetOf(node)
         var tmpNode = node
@@ -120,19 +130,15 @@ class CondNodesResolver(
     ): Element {
         val ifChild: Element = document.createElement("o")
         ifChild.setAttribute("base", ".if")
-        ifChild.setAttribute("line", line(node)) /** @todo #42:30min add method="" attribute*/
+        ifChild.setAttribute("line", line(node))  // @todo #42:30min add method="" attribute
         ifChild.setAttribute("pos", pos(node))
         igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
-        val ref1 = document.createAttribute("ref") /** @todo #46:30min remove duplicates from code */
-        ref1.value = ref(igNode.fstOption[0])
-        val fstNode = node.cloneNode(true)
-        fstNode.attributes.setNamedItem(ref1)
+        val ref1 = document.createAttribute("ref").apply { value = ref(igNode.fstOption[0]) }  // @todo #46:30min remove duplicates from code
+        val fstNode = node.cloneNode(true).apply { attributes.setNamedItem(ref1) }
         ifChild.appendChild(fstNode)
         expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }
-        val ref2 = document.createAttribute("ref")
-        ref2.value = ref(igNode.sndOption[0])
-        val sndNode = node.cloneNode(true)
-        sndNode.attributes.setNamedItem(ref2)
+        val ref2 = document.createAttribute("ref").apply { value = ref(igNode.sndOption[0]) }
+        val sndNode = node.cloneNode(true).apply { attributes.setNamedItem(ref2) }
         ifChild.appendChild(sndNode)
         expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }
         return ifChild

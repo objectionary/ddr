@@ -28,6 +28,7 @@ import org.objectionary.ddr.graph.base
 import org.objectionary.ddr.graph.line
 import org.objectionary.ddr.graph.pos
 import org.objectionary.ddr.graph.ref
+import org.objectionary.ddr.graph.name
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
@@ -46,7 +47,6 @@ class CondNodesResolver(
 ) {
     /**
      * Aggregate process of conditional nodes resolving
-     * @todo #40:30min remove extra "> @" and add one to .if
      */
     fun resolveCondNodes() {
         processObjects()
@@ -129,9 +129,14 @@ class CondNodesResolver(
         expr: MutableList<Node?>
     ): Element {
         val ifChild: Element = document.createElement("o")
+        val phi = expr.any { name(it) == "@" }
         ifChild.setAttribute("base", ".if")
         ifChild.setAttribute("line", line(node))  // @todo #42:30min add method="" attribute
         ifChild.setAttribute("pos", pos(node))
+        if (phi) {
+            ifChild.setAttribute("name", "@")
+            expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
+        }
         igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
         val ref1 = document.createAttribute("ref").apply { value = ref(igNode.fstOption[0]) }  // @todo #46:30min remove duplicates from code
         val fstNode = node.cloneNode(true).apply { attributes.setNamedItem(ref1) }

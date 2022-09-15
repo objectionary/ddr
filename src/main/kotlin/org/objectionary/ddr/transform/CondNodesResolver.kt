@@ -133,14 +133,21 @@ class CondNodesResolver(
         ifChild.setAttribute("line", line(node))  // @todo #42:30min add method="" attribute
         ifChild.setAttribute("pos", pos(node))
         igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
-        val ref1 = document.createAttribute("ref").apply { value = ref(igNode.fstOption[0]) }  // @todo #46:30min remove duplicates from code
-        val fstNode = node.cloneNode(true).apply { attributes.setNamedItem(ref1) }
-        ifChild.appendChild(fstNode)
-        expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }
-        val ref2 = document.createAttribute("ref").apply { value = ref(igNode.sndOption[0]) }
-        val sndNode = node.cloneNode(true).apply { attributes.setNamedItem(ref2) }
-        ifChild.appendChild(sndNode)
-        expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }
+        appendExpr(document, node, expr, ifChild, igNode.fstOption[0])
+        appendExpr(document, node, expr, ifChild, igNode.sndOption[0])
         return ifChild
+    }
+
+    private fun appendExpr(
+        document: Document,
+        node: Node,
+        expr: MutableList<Node?>,
+        ifChild: Node,
+        refOption: Node
+    ) {
+        val ref = document.createAttribute("ref").apply { value = ref(refOption) }
+        val clonedNode = node.cloneNode(true).apply { attributes.setNamedItem(ref) }
+        ifChild.appendChild(clonedNode)
+        expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }
     }
 }

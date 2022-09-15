@@ -56,8 +56,8 @@ fun launch(path: String) {
     processAttributes(graph)
     val innerPropagator = InnerPropagator(graph)
     innerPropagator.propagateInnerAttrs()
-    CondNodesResolver(graph, documents).resolveCondNodes()
-    BasicDecoratorsResolver(graph, documents).resolveDecorators()
+    CondNodesResolver(graph, documents).resolve()
+    BasicDecoratorsResolver(graph, documents).resolve()
 }
 
 /**

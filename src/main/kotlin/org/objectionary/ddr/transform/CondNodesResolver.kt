@@ -44,11 +44,11 @@ import java.io.FileOutputStream
 class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
-) {
+): Resolver(documents) {
     /**
      * Aggregate process of conditional nodes resolving
      */
-    fun resolveCondNodes() {
+    override fun resolve() {
         processObjects()
         documents.forEach {
             val objects: MutableList<Node> = mutableListOf()
@@ -58,10 +58,7 @@ class CondNodesResolver(
             }
             graph.initialObjects.addAll(objects)
         }
-        documents.forEach { doc ->
-            val outputStream = FileOutputStream(doc.value)
-            outputStream.use { XslTransformer().writeXml(it, doc.key) }
-        }
+        transformDocuments()
     }
 
     private fun processObjects() {
@@ -102,18 +99,8 @@ class CondNodesResolver(
 
     private fun insert(node: Node, igNode: IGraphCondNode) {
         val expr = collectDotChain(node)
-
-        // @todo #45:30min remove duplicated code
         val parent = node.parentNode
-        val siblings = mutableSetOf(node)
-        var tmpNode = node
-        while (tmpNode.nextSibling != null) {
-            siblings.add(tmpNode.nextSibling)
-            tmpNode = tmpNode.nextSibling
-        }
-        siblings.forEach {
-            parent.removeChild(it)
-        }
+        val siblings = gg(node)
         val document = parent.ownerDocument
         val child = addDocumentChild(document, igNode, node, expr)
         parent.appendChild(child)

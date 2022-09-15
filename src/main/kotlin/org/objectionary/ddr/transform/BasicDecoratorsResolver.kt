@@ -46,8 +46,8 @@ import java.io.FileOutputStream
  */
 class BasicDecoratorsResolver(
     private val graph: Graph,
-    private val documents: MutableMap<Document, String>
-) {
+    documents: MutableMap<Document, String>
+): Resolver(documents) {
     private val declarations: MutableMap<Node, Node?> = mutableMapOf()
 
     /**
@@ -55,14 +55,11 @@ class BasicDecoratorsResolver(
      * collects declarations, finds references of the decorators
      * and injects all needed .@ elements into the corresponding documents
      */
-    fun resolveDecorators() {
+    override fun resolve() {
         collectDeclarations()
         resolveRefs()
         injectAttributes()
-        documents.forEach { doc ->
-            val outputStream = FileOutputStream(doc.value)
-            outputStream.use { XslTransformer().writeXml(it, doc.key) }
-        }
+        transformDocuments()
     }
 
     private fun collectDeclarations() {
@@ -147,15 +144,7 @@ class BasicDecoratorsResolver(
 
     private fun insert(node: Node, attr: IGraphAttr) {
         val parent = node.parentNode
-        val siblings = mutableSetOf(node)
-        var tmpNode = node
-        while (tmpNode.nextSibling != null) {
-            siblings.add(tmpNode.nextSibling)
-            tmpNode = tmpNode.nextSibling
-        }
-        siblings.forEach {
-            parent.removeChild(it)
-        }
+        val siblings = gg(node)
         val document = parent.ownerDocument
         for (i in 0 until attr.parentDistance) {
             addDocumentChild(document, node, parent, ".@", i * 2)

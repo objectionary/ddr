@@ -26,9 +26,9 @@ package org.objectionary.ddr.transform
 
 import org.objectionary.ddr.graph.base
 import org.objectionary.ddr.graph.line
+import org.objectionary.ddr.graph.name
 import org.objectionary.ddr.graph.pos
 import org.objectionary.ddr.graph.ref
-import org.objectionary.ddr.graph.name
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode

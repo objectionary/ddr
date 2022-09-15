@@ -52,6 +52,5 @@ class ResolverTest : ResolverBase() {
     fun `test fibonacci`() = doTest()
 
     @Test
-    @Disabled
     fun `test condition`() = doTest()
 }

@@ -41,7 +41,6 @@ import org.w3c.dom.Node
 
 /**
  * Collects all decorators and inserts desired .@ applications
- * @todo #43:30min document better
  */
 class BasicDecoratorsResolver(
     private val graph: Graph,
@@ -71,10 +70,16 @@ class BasicDecoratorsResolver(
         }
     }
 
+    /**
+     * Finds the abstract object for each declaration
+     */
     private fun resolveRefs() =
         declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
 
-    @Suppress("AVOID_NULL_CHECKS")
+    /**
+     * Traverses objects and injects phi attributes for each.
+     * Plus, checks if phi attribute has to be inserted before the object
+     */
     private fun injectAttributes() {
         val objects = graph.initialObjects
         for (node in objects) {
@@ -82,14 +87,16 @@ class BasicDecoratorsResolver(
             val abstract = getIgAbstract(baseObject) ?: continue
             traverseDotChain(node, abstract)
             graph.igNodes.find { node.parentNode == it.body }?.let { parentNode ->
-                val dist = parentNode.attributes.find { it.name == name(baseObject) }?.parentDistance
-                if (dist != null) {
-                    insertBefore(node, parentNode.body, dist)
-                }
+                parentNode.attributes
+                    .find { it.name == name(baseObject) }?.parentDistance
+                    ?.let { insertBefore(node, parentNode.body, it) }
             }
         }
     }
 
+    /**
+     * Traverses dot chain and inserts phi attributes along the way
+     */
     private fun traverseDotChain(
         node: Node,
         abstract: IGraphNode
@@ -108,6 +115,9 @@ class BasicDecoratorsResolver(
         }
     }
 
+    /**
+     * Inserts phi before the object like this: @.foo
+     */
     private fun insertBefore(
         node: Node,
         parent: Node,
@@ -141,6 +151,9 @@ class BasicDecoratorsResolver(
         siblings.forEach { parent.appendChild(it) }
     }
 
+    /**
+     * Inserts phi attributes in between applications like this: foo.@.bar
+     */
     private fun insert(node: Node, attr: IGraphAttr) {
         val parent = node.parentNode
         val siblings = removeSiblings(node)
@@ -151,6 +164,9 @@ class BasicDecoratorsResolver(
         siblings.forEach { parent.appendChild(it) }
     }
 
+    /**
+     * Constructs phi attribute node to be inserted
+     */
     private fun addDocumentChild(
         document: Document,
         node: Node,
@@ -168,12 +184,18 @@ class BasicDecoratorsResolver(
         parent.appendChild(newChild)
     }
 
+    /**
+     * Gets abstract object for the given [node]
+     */
     private fun getIgAbstract(node: Node?): IGraphNode? {
         abstract(node)?.let { return graph.igNodes.find { it.body == node } }
         val abstract = declarations[node] ?: return null
         return graph.igNodes.find { it.body == abstract }
     }
 
+    /**
+     * Finds the first object the node references at
+     */
     private fun firstRef(
         node: Node,
         objects: MutableSet<Node>
@@ -196,6 +218,9 @@ class BasicDecoratorsResolver(
         return attrs?.find { it.name == base(node) }?.body
     }
 
+    /**
+     * Looks for the abstract object in other documents with the corresponding package names
+     */
     private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')

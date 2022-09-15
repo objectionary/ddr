@@ -33,12 +33,12 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.io.FileOutputStream
 
-// todo the code here is quite ugly now, needs refactoring
+/** @todo #41:30min the code here needs refactoring and documentation */
 class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-    // todo remove extra "> @"
+    /** @todo #40:30min remove extra "> @" and add one to .if */
     fun resolveCondNodes() {
         processObjects()
         documents.forEach { doc ->
@@ -63,7 +63,7 @@ class CondNodesResolver(
         }
     }
 
-    // todo use
+    /** @todo #39:30min this method should be used */
     private fun traverseDotChain(
         node: Node,
         abstract: IGraphNode
@@ -93,7 +93,7 @@ class CondNodesResolver(
 
     private fun insert(node: Node, igNode: IGraphCondNode) {
         val expr = collectDotChain(node)
-        //  todo remove duplicates
+        /**  @todo #45:30min remove duplicated code */
         val parent = node.parentNode
         val siblings = mutableSetOf(node)
         var tmpNode = node
@@ -120,10 +120,10 @@ class CondNodesResolver(
     ): Element {
         val ifChild: Element = document.createElement("o")
         ifChild.setAttribute("base", ".if")
-        ifChild.setAttribute("line", line(node)) // todo incorrect line (discuss w yegor)
+        ifChild.setAttribute("line", line(node)) /** @todo #42:30min add method="" attribute*/
         ifChild.setAttribute("pos", pos(node))
         igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
-        val ref1 = document.createAttribute("ref") // todo duplicates
+        val ref1 = document.createAttribute("ref") /** @todo #46:30min remove duplicates from code */
         ref1.value = ref(igNode.fstOption[0])
         val fstNode = node.cloneNode(true)
         fstNode.attributes.setNamedItem(ref1)

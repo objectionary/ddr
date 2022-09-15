@@ -43,7 +43,7 @@ import java.io.FileOutputStream
 
 /**
  * Collects all decorators and inserts desired .@ applications
- * todo document better
+ * @todo #43:30min document better
  */
 class BasicDecoratorsResolver(
     private val graph: Graph,
@@ -99,10 +99,10 @@ class BasicDecoratorsResolver(
         node: Node,
         abstract: IGraphNode
     ) {
-        var sibling = node.nextSibling
-        sibling?.attributes?: run {
-            sibling = sibling?.nextSibling
-        }
+        var sibling = node.nextSibling?.nextSibling
+//        sibling?.attributes?: run {
+//            sibling = sibling?.nextSibling
+//        }
         while (base(sibling)?.startsWith(".") == true) {
             val base = base(sibling)
             val attr = abstract.attributes.find { it.name == base?.substring(1) }

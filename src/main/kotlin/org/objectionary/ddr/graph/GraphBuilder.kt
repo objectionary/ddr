@@ -90,7 +90,6 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             null
         }
 
-    // todo может быть там что-то импортится из пакета и несколько методов вызыватеся, тогда так отсекать последнюю точку плохо
     private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')

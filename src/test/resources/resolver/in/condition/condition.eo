@@ -17,4 +17,4 @@
     x.eq "cat"
     cat
     dog
-  milo.talk > @
+  milo.talk "hehe" > @

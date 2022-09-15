@@ -28,28 +28,28 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class ResolverTest : ResolverBase() {
-//    @Test
-//    fun `test basic`() = doTest()
-//
-//    @Test
-//    fun `test multiple aliases`() = doTest()
-//
-//    @Test
-//    fun `test local object`() = doTest()
-//
-//    @Test
-//    fun `test no dot notation`() = doTest()
-//
-//    @Test
-//    fun `test two levels insert before`() = doTest()
-//
-//    @Test
-//    fun `test alias chain`() = doTest()
-//
-//    @Test
-//    @Disabled
-//    // todo enable by processing @ as well
-//    fun `test fibonacci`() = doTest()
+    @Test
+    fun `test basic`() = doTest()
+
+    @Test
+    fun `test multiple aliases`() = doTest()
+
+    @Test
+    fun `test local object`() = doTest()
+
+    @Test
+    fun `test no dot notation`() = doTest()
+
+    @Test
+    fun `test two levels insert before`() = doTest()
+
+    @Test
+    fun `test alias chain`() = doTest()
+
+    @Test
+    @Disabled
+    /** @todo #47:30min enable by processing @ as well */
+    fun `test fibonacci`() = doTest()
 
     @Test
     fun `test condition`() = doTest()

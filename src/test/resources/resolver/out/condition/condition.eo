@@ -2,7 +2,8 @@
 
 [] > animal
   [t] > talk
-    stdout t > @
+    stdout > @
+      t
 
 [] > cat
   animal > @
@@ -10,11 +11,24 @@
 [] > dog
   animal > @
   [t] > talk
-    stdout "Woof" > @
+    stdout > @
+      "Woof"
 
 [x] > app
-  if. > milo
-    x.eq "cat"
+  x
+  .eq
+    "cat"
+  .if > milo
     cat
     dog
-  milo.talk > @
+  x
+  .eq
+    "cat"
+  .if > @
+    milo
+    .@
+    .talk
+      "hehe"
+    milo
+    .talk
+      "hehe"

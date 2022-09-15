@@ -30,7 +30,16 @@ import com.yegor256.xsline.TrClasspath
 import com.yegor256.xsline.Xsline
 import org.eolang.parser.ParsingTrain
 import org.slf4j.LoggerFactory
+import org.w3c.dom.Document
 import java.io.File
+import java.io.OutputStream
+import java.io.UnsupportedEncodingException
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.TransformerException
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
+import javax.xml.transform.stream.StreamSource
 
 /**
  * Transforms xml file using provided xsl
@@ -80,5 +89,22 @@ class XslTransformer {
             ).back()
         ).pass(xmir)
         File(outFilename).outputStream().write(after.toString().toByteArray())
+    }
+
+    /**
+     * Writes transformed [document] to [output]
+     *
+     * @param document transformed document
+     * @param output where to write the result
+     */
+    @Throws(TransformerException::class, UnsupportedEncodingException::class)
+    fun writeXml(output: OutputStream, document: Document) {
+        val prettyPrintXlst = this.javaClass.getResourceAsStream("pretty_print.xslt")
+        val transformer = TransformerFactory.newInstance().newTransformer(StreamSource(prettyPrintXlst))
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "no")
+        val source = DOMSource(document)
+        val result = StreamResult(output)
+        transformer.transform(source, result)
     }
 }

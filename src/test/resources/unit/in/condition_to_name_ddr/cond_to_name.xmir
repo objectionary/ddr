@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<program ms="227"
+          name="test-1"
+          time="2022-09-02T10:02:34.260263358Z"
+          version="1.0-SNAPSHOT">
+   <listing>+alias stdout org.eolang.io.stdout
+
+[] &gt; animal
+  [t] &gt; talk
+    stdout t &gt; @
+
+[] &gt; cat
+  animal &gt; @
+
+[] &gt; dog
+  animal &gt; @
+  [t] &gt; talk
+    stdout "Woof" &gt; @
+
+[x] &gt; app
+  if. &gt; milo
+    x.eq "cat"
+    cat
+    dog
+  milo.talk "gg" &gt; @
+</listing>
+   <errors/>
+   <sheets>
+      <sheet>add-refs</sheet>
+      <sheet>expand-aliases</sheet>
+      <sheet>resolve-aliases</sheet>
+   </sheets>
+   <metas>
+      <meta line="1">
+         <head>alias</head>
+         <tail>stdout org.eolang.io.stdout</tail>
+         <part>stdout</part>
+         <part>org.eolang.io.stdout</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="animal" pos="0">
+         <o abstract="" line="4" name="talk" pos="2">
+            <o line="4" name="t" pos="3"/>
+            <o base="org.eolang.io.stdout" line="5" name="@" pos="4">
+               <o base="t" line="5" pos="11" ref="4"/>
+            </o>
+         </o>
+      </o>
+      <o abstract="" line="7" name="cat" pos="0">
+         <o base="animal" line="8" name="@" pos="2" ref="3"/>
+      </o>
+      <o abstract="" line="10" name="dog" pos="0">
+         <o base="animal" line="11" name="@" pos="2" ref="3"/>
+         <o abstract="" line="12" name="talk" pos="2">
+            <o line="12" name="t" pos="3"/>
+            <o base="org.eolang.io.stdout" line="13" name="@" pos="4">
+               <o base="string" data="string" line="13" pos="11">Woof</o>
+            </o>
+         </o>
+      </o>
+      <o abstract="" line="15" name="app" pos="0">
+         <o line="15" name="x" pos="1"/>
+         <o base=".if" line="16" name="milo" pos="2">
+            <o base="x" line="17" pos="4" ref="15"/>
+            <o base=".eq" line="17" method="" pos="5">
+               <o base="string" data="string" line="17" pos="9">cat</o>
+            </o>
+            <o base="cat" line="18" pos="4" ref="7"/>
+            <o base="dog" line="19" pos="4" ref="10"/>
+         </o>
+         <o base=".if" line="20" pos="2">
+            <o base="x" line="17" pos="4" ref="15"/>
+            <o base=".eq" line="17" method="" pos="5">
+               <o base="string" data="string" line="17" pos="9">cat</o>
+            </o>
+            <o base="milo" line="20" pos="2" ref="7"/>
+            <o base=".@" line="20" pos="11"/>
+            <o base=".talk" line="20" method="" name="@" pos="6">
+               <o base="string" data="string" line="20" pos="12">gg</o>
+            </o>
+            <o base="milo" line="20" pos="2" ref="10"/>
+            <o base=".talk" line="20" method="" name="@" pos="6">
+               <o base="string" data="string" line="20" pos="12">gg</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

@@ -1,0 +1,34 @@
++alias stdout org.eolang.io.stdout
+
+[] > animal
+  [t] > talk
+    stdout > @
+      t
+
+[] > cat
+  animal > @
+
+[] > dog
+  animal > @
+  [t] > talk
+    stdout > @
+      "Woof"
+
+[x] > app
+  x
+  .eq
+    "cat"
+  .if > milo
+    cat
+    dog
+  x
+  .eq
+    "cat"
+  .if > @
+    milo
+    .@
+    .talk
+      "hehe"
+    milo
+    .talk
+      "hehe"

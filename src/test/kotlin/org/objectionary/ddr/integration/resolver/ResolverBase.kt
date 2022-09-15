@@ -25,11 +25,13 @@
 package org.objectionary.ddr.integration.resolver
 
 import org.objectionary.ddr.TestBase
+import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.launch.processAttributes
 import org.objectionary.ddr.transform.BasicDecoratorsResolver
+import org.objectionary.ddr.transform.CondNodesResolver
 import org.objectionary.ddr.transform.XslTransformer
 import com.jcabi.xml.ClasspathSources
 import com.jcabi.xml.XML
@@ -60,9 +62,11 @@ open class ResolverBase : TestBase {
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)
         val graph = buildGraph(constructInPath(path), true)
+        CondAttributesSetter(graph).processConditions()
         processAttributes(graph)
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()
+        CondNodesResolver(graph, documents).resolveCondNodes()
         BasicDecoratorsResolver(graph, documents).resolveDecorators()
         val cmpPath = constructCmpPath(path)
         Files.walk(Paths.get(cmpPath))

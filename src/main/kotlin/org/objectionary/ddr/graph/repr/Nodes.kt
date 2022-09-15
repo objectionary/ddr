@@ -36,7 +36,7 @@ open class IGraphNode(
 }
 
 /**
- * Conditional graph attribute representation
+ * Conditional graph node representation
  *
  * @property body represents the corresponding xml file node
  * @property packageName name of the package in which the described EO object is located

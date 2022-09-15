@@ -38,7 +38,7 @@ class Graph {
     /**
      * Collection of initial xml objects
      */
-    val initialObjects: MutableList<Node> = mutableListOf()
+    val initialObjects: MutableSet<Node> = mutableSetOf()
 
     /**
      * "Root nodes" of the graph, it is guaranteed that the whole graph can be traversed starting from these nodes

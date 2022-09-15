@@ -35,7 +35,6 @@ import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import java.io.FileOutputStream
 
 /**
  * Conditional nodes resolver
@@ -44,7 +43,7 @@ import java.io.FileOutputStream
 class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
-): Resolver(documents) {
+) : Resolver(documents) {
     /**
      * Aggregate process of conditional nodes resolving
      */
@@ -100,7 +99,7 @@ class CondNodesResolver(
     private fun insert(node: Node, igNode: IGraphCondNode) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
-        val siblings = gg(node)
+        val siblings = removeSiblings(node)
         val document = parent.ownerDocument
         val child = addDocumentChild(document, igNode, node, expr)
         parent.appendChild(child)

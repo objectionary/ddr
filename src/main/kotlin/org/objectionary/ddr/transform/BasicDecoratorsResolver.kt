@@ -38,7 +38,6 @@ import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import java.io.FileOutputStream
 
 /**
  * Collects all decorators and inserts desired .@ applications
@@ -47,7 +46,7 @@ import java.io.FileOutputStream
 class BasicDecoratorsResolver(
     private val graph: Graph,
     documents: MutableMap<Document, String>
-): Resolver(documents) {
+) : Resolver(documents) {
     private val declarations: MutableMap<Node, Node?> = mutableMapOf()
 
     /**
@@ -144,7 +143,7 @@ class BasicDecoratorsResolver(
 
     private fun insert(node: Node, attr: IGraphAttr) {
         val parent = node.parentNode
-        val siblings = gg(node)
+        val siblings = removeSiblings(node)
         val document = parent.ownerDocument
         for (i in 0 until attr.parentDistance) {
             addDocumentChild(document, node, parent, ".@", i * 2)

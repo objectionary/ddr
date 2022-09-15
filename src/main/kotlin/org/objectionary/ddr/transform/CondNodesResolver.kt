@@ -38,7 +38,6 @@ import org.w3c.dom.Node
 
 /**
  * Conditional nodes resolver
- * @todo #41:30min the code here needs refactoring and documentation
  */
 class CondNodesResolver(
     private val graph: Graph,
@@ -60,6 +59,9 @@ class CondNodesResolver(
         transformDocuments()
     }
 
+    /**
+     * Processes only the usages of cond nodes
+     */
     private fun processObjects() {
         val objects = graph.initialObjects
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
@@ -84,6 +86,9 @@ class CondNodesResolver(
         }
     }
 
+    /**
+     * Collects the whole expression on which the cond node participates
+     */
     private fun collectDotChain(
         node: Node
     ): MutableList<Node?> {
@@ -96,6 +101,9 @@ class CondNodesResolver(
         return res
     }
 
+    /**
+     * Inserts an if block
+     */
     private fun insert(node: Node, igNode: IGraphCondNode) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
@@ -108,6 +116,13 @@ class CondNodesResolver(
         expr.forEach { parent.removeChild(it) }
     }
 
+    /**
+     * Creates in if block
+     *
+     * @param igNode is a node that corresponds to conditional node
+     * where the node object was created
+     * @param expr is the whole dot chain that follows processed node
+     */
     private fun addDocumentChild(
         document: Document,
         igNode: IGraphCondNode,
@@ -129,6 +144,9 @@ class CondNodesResolver(
         return ifChild
     }
 
+    /**
+     * Appends the whole dot chain to [ifChild]
+     */
     private fun appendExpr(
         document: Document,
         node: Node,

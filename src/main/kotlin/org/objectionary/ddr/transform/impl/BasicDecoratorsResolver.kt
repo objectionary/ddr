@@ -46,9 +46,7 @@ import org.w3c.dom.Node
 class BasicDecoratorsResolver(
     private val graph: Graph,
     documents: MutableMap<Document, String>
-) : Resolver(documents) {
-    private val declarations: MutableMap<Node, Node?> = mutableMapOf()
-
+) : Resolver(graph, documents) {
     /**
      * Aggregates process of resolving all decorators:
      * collects declarations, finds references of the decorators
@@ -60,22 +58,6 @@ class BasicDecoratorsResolver(
         injectAttributes()
         transformDocuments()
     }
-
-    private fun collectDeclarations() {
-        val objects = graph.initialObjects
-        for (node in objects) {
-            val base = base(node) ?: continue
-            if (abstract(node) == null && !base.startsWith('.')) {
-                declarations[node] = null
-            }
-        }
-    }
-
-    /**
-     * Finds the abstract object for each declaration
-     */
-    private fun resolveRefs() =
-        declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
 
     /**
      * Traverses objects and injects phi attributes for each.
@@ -183,48 +165,5 @@ class BasicDecoratorsResolver(
         }
         newChild.setAttribute("pos", "${base(node)?.length?.plus(pos(node)?.toInt()!!)?.plus(offset)}")
         parent.appendChild(newChild)
-    }
-
-    /**
-     * Gets abstract object for the given [node]
-     */
-    private fun getIgAbstract(node: Node?): IGraphNode? {
-        abstract(node)?.let { return graph.igNodes.find { it.body == node } }
-        val abstract = declarations[node] ?: return null
-        return graph.igNodes.find { it.body == abstract }
-    }
-
-    /**
-     * Finds the first object the node references at
-     */
-    private fun firstRef(
-        node: Node,
-        objects: MutableSet<Node>
-    ): Node? {
-        ref(node)?.let { ref ->
-            objects.forEach {
-                if (line(it) == ref && packageName(node) == packageName(it)) {
-                    return it
-                }
-            }
-        }
-        if (base(node) == "^") {
-            return node.parentNode.parentNode
-        }
-        if (base(node) == "$") {
-            return node.parentNode
-        }
-        getAbstractViaPackage(base(node))?.body?.let { return it }
-        val attrs = graph.igNodes.find { it.body == node.parentNode }?.attributes
-        return attrs?.find { it.name == base(node) }?.body
-    }
-
-    /**
-     * Looks for the abstract object in other documents with the corresponding package names
-     */
-    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
-        val packageName = baseNodeName?.substringBeforeLast('.')
-        val nodeName = baseNodeName?.substringAfterLast('.')
-        return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
     }
 }

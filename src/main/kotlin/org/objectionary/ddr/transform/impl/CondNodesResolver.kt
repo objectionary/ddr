@@ -43,12 +43,15 @@ import org.w3c.dom.Node
 class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
-) : Resolver(documents) {
+) : Resolver(graph, documents) {
     /**
      * Aggregate process of conditional nodes resolving
      */
     override fun resolve() {
+        collectDeclarations()
+        resolveRefs()
         processObjects()
+        injectAttributes()
         documents.forEach {
             val objects: MutableList<Node> = mutableListOf()
             val docObjects = it.key.getElementsByTagName("o")
@@ -71,6 +74,15 @@ class CondNodesResolver(
         }
     }
 
+    private fun injectAttributes() {
+        val objects = graph.initialObjects
+        for (node in objects) {
+            val baseObject = firstRef(node, objects)
+            val abstract = getIgAbstract(baseObject) ?: continue
+            traverseDotChain(node, abstract)
+        }
+    }
+
     // @todo #39:30min this method should be used
     private fun traverseDotChain(
         node: Node,
@@ -81,7 +93,9 @@ class CondNodesResolver(
             val base = base(sibling)
             val attr = abstract.attributes.find { it.name == base?.substring(1) }
             if (attr != null && sibling != null) {
-                // insert(sibling, attr)
+                val noddd = graph.igNodes.find {attr.name == it.name}
+                if (noddd is IGraphCondNode)
+                    insert(sibling, noddd)
             }
             sibling = sibling?.nextSibling
         }

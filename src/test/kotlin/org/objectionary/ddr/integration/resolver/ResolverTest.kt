@@ -53,4 +53,7 @@ class ResolverTest : ResolverBase() {
 
     @Test
     fun `test condition`() = doTest()
+
+    @Test
+    fun `test condition chain`() = doTest()
 }

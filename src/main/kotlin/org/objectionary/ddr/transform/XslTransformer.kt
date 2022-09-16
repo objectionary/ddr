@@ -64,6 +64,7 @@ class XslTransformer {
                 "/org/eolang/parser/add-refs.xsl",
                 "/org/eolang/parser/expand-aliases.xsl",
                 "/org/eolang/parser/resolve-aliases.xsl"
+                // "/org/eolang/parser/wrap-method-calls.xsl"
             ).back()
         ).pass(xmir)
         File(outFilename).outputStream().write(after.toString().toByteArray())

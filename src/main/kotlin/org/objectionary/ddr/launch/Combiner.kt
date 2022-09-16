@@ -29,9 +29,9 @@ import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
-import org.objectionary.ddr.transform.XslTransformer
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import java.io.File

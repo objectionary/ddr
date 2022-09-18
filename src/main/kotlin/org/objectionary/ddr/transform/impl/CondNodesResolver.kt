@@ -44,6 +44,7 @@ class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) : Resolver(graph, documents) {
+
     /**
      * Aggregate process of conditional nodes resolving
      */
@@ -52,14 +53,7 @@ class CondNodesResolver(
         resolveRefs()
         processObjects()
         injectAttributes()
-        documents.forEach {
-            val objects: MutableList<Node> = mutableListOf()
-            val docObjects = it.key.getElementsByTagName("o")
-            for (i in 0 until docObjects.length) {
-                objects.add(docObjects.item(i))
-            }
-            graph.initialObjects.addAll(objects)
-        }
+        updateState()
         transformDocuments()
     }
 
@@ -75,15 +69,34 @@ class CondNodesResolver(
     }
 
     private fun injectAttributes() {
+        traverse()
+    }
+
+    private fun traverse() {
         val objects = graph.initialObjects
-        for (node in objects) {
-            val baseObject = firstRef(node, objects)
-            val abstract = getIgAbstract(baseObject) ?: continue
-            traverseDotChain(node, abstract)
+        try {
+            for (node in objects) {
+                val baseObject = firstRef(node, objects)
+                val abstract = getIgAbstract(baseObject) ?: continue
+                traverseDotChain(node, abstract)
+            }
+        } catch (e: ConcurrentModificationException) {
+            traverse()
         }
     }
 
-    // @todo #39:30min this method should be used
+    private fun updateState() {
+        graph.initialObjects.clear()
+        documents.forEach {
+            val objects: MutableList<Node> = mutableListOf()
+            val docObjects = it.key.getElementsByTagName("o")
+            for (i in 0 until docObjects.length) {
+                objects.add(docObjects.item(i))
+            }
+            graph.initialObjects.addAll(objects)
+        }
+    }
+
     private fun traverseDotChain(
         node: Node,
         abstract: IGraphNode
@@ -93,9 +106,9 @@ class CondNodesResolver(
             val base = base(sibling)
             val attr = abstract.attributes.find { it.name == base?.substring(1) }
             if (attr != null && sibling != null) {
-                val noddd = graph.igNodes.find {attr.name == it.name}
-                if (noddd is IGraphCondNode)
-                    insert(sibling, noddd)
+                val condAttr = graph.igNodes.find { attr.name == it.name }
+                if (condAttr is IGraphCondNode)
+                    insert(node, condAttr)
             }
             sibling = sibling?.nextSibling
         }
@@ -112,6 +125,7 @@ class CondNodesResolver(
         while (base(sibling)?.startsWith(".") == true) {
             res.add(sibling)
             sibling = sibling?.nextSibling
+            if (sibling?.attributes == null) sibling = sibling?.nextSibling
         }
         return res
     }
@@ -129,6 +143,7 @@ class CondNodesResolver(
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
         expr.forEach { parent.removeChild(it) }
+        updateState()
     }
 
     /**

@@ -23,4 +23,16 @@
     dog
 
 [x] > app
-  container.milo.talk "hehe" > @
+  "smth"
+  .eq
+    "cat"
+  .if > @
+    container
+    .milo
+    .@
+    .talk
+      "hehe"
+    container
+    .milo
+    .talk
+      "hehe"

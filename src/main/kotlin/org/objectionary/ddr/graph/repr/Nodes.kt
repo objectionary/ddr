@@ -17,7 +17,7 @@ open class IGraphNode(
     /**
      * Name of the node
      */
-    val name: String? = name(body)
+    val name: String? by lazy { name(body) }
 
     /**
      * Children of this node

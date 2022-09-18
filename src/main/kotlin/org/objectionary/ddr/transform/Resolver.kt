@@ -24,7 +24,12 @@
 
 package org.objectionary.ddr.transform
 
-import org.objectionary.ddr.graph.*
+import org.objectionary.ddr.graph.abstract
+import org.objectionary.ddr.graph.base
+import org.objectionary.ddr.graph.findRef
+import org.objectionary.ddr.graph.line
+import org.objectionary.ddr.graph.packageName
+import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
@@ -37,7 +42,7 @@ import java.io.FileOutputStream
 abstract class Resolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
-    ) {
+) {
 
     protected val declarations: MutableMap<Node, Node?> = mutableMapOf()
 

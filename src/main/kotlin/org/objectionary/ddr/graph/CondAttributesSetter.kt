@@ -33,7 +33,6 @@ class CondAttributesSetter(
         }
     }
 
-    // @todo #52:30min remove code duplication
     private fun processApplications() {
         conditions.forEach { node ->
             var tmpNode = node.firstChild.nextSibling

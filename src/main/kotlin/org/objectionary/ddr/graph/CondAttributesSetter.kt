@@ -20,7 +20,7 @@ class CondAttributesSetter(
      */
     fun processConditions() {
         collectConditions()
-        processApplicationsToNames()
+        processApplications()
     }
 
     private fun collectConditions() {
@@ -33,7 +33,8 @@ class CondAttributesSetter(
         }
     }
 
-    private fun processApplicationsToNames() {
+    // @todo #52:30min remove code duplication
+    private fun processApplications() {
         conditions.forEach { node ->
             var tmpNode = node.firstChild.nextSibling
             var line = line(tmpNode)
@@ -59,6 +60,8 @@ class CondAttributesSetter(
             }
             if (name(node) != "@") {
                 graph.igNodes.add(IGraphCondNode(node, packageName(node), cond, fstOption, sndOption))
+                val parent = graph.igNodes.find { it.body == node.parentNode }
+                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, cond, fstOption, sndOption))
             } else {
                 val parent = graph.igNodes.find { it.body == node.parentNode }
                 parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, cond, fstOption, sndOption))

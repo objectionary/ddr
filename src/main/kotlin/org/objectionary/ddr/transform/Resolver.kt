@@ -24,6 +24,14 @@
 
 package org.objectionary.ddr.transform
 
+import org.objectionary.ddr.graph.abstract
+import org.objectionary.ddr.graph.base
+import org.objectionary.ddr.graph.findRef
+import org.objectionary.ddr.graph.line
+import org.objectionary.ddr.graph.packageName
+import org.objectionary.ddr.graph.ref
+import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import java.io.FileOutputStream
@@ -31,11 +39,36 @@ import java.io.FileOutputStream
 /**
  * Abstract class for all resolvers
  */
-abstract class Resolver(private val documents: MutableMap<Document, String>) {
+abstract class Resolver(
+    private val graph: Graph,
+    private val documents: MutableMap<Document, String>
+) {
+    private val declarations: MutableMap<Node, Node?> = mutableMapOf()
+
     /**
      * Performs the resolution
      */
     abstract fun resolve()
+
+    /**
+     * Finds all objects that are declarations and puts them into a container
+     */
+    protected fun collectDeclarations() {
+        val objects = graph.initialObjects
+        for (node in objects) {
+            val base = base(node) ?: continue
+            if (abstract(node) == null && !base.startsWith('.')) {
+                declarations[node] = null
+            }
+        }
+    }
+
+    /**
+     * Finds the abstract object for each declaration
+     */
+    protected fun resolveRefs() {
+        declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
+    }
 
     /**
      * Applies transformer to each document in [documents]
@@ -66,5 +99,55 @@ abstract class Resolver(private val documents: MutableMap<Document, String>) {
             parent.removeChild(it)
         }
         return siblings
+    }
+
+    /**
+     * Gets abstract object for the given [node]
+     *
+     * @param node to find abstract for
+     * @return found abstract or null if such abstract was not found
+     */
+    protected fun getIgAbstract(node: Node?): IGraphNode? {
+        abstract(node)?.let { return graph.igNodes.find { it.body == node } }
+        val abstract = declarations[node] ?: return null
+        return graph.igNodes.find { it.body == abstract }
+    }
+
+    /**
+     * Finds the first object the node references at
+     *
+     * @param node node to find ref for
+     * @param objects set of potential references
+     * @return found reference or null if such reference was not found
+     */
+    protected fun firstRef(
+        node: Node,
+        objects: MutableSet<Node>
+    ): Node? {
+        ref(node)?.let { ref ->
+            objects.forEach {
+                if (line(it) == ref && packageName(node) == packageName(it)) {
+                    return it
+                }
+            }
+        }
+        if (base(node) == "^") {
+            return node.parentNode.parentNode
+        }
+        if (base(node) == "$") {
+            return node.parentNode
+        }
+        getAbstractViaPackage(base(node))?.body?.let { return it }
+        val attrs = graph.igNodes.find { it.body == node.parentNode }?.attributes
+        return attrs?.find { it.name == base(node) }?.body
+    }
+
+    /**
+     * Looks for the abstract object in other documents with the corresponding package names
+     */
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
+        val packageName = baseNodeName?.substringBeforeLast('.')
+        val nodeName = baseNodeName?.substringAfterLast('.')
+        return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
     }
 }

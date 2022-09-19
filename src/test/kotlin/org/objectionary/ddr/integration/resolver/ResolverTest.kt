@@ -24,7 +24,6 @@
 
 package org.objectionary.ddr.integration.resolver
 
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class ResolverTest : ResolverBase() {
@@ -47,10 +46,11 @@ class ResolverTest : ResolverBase() {
     fun `test alias chain`() = doTest()
 
     @Test
-    @Disabled
-    // @todo #47:30min enable by processing @ as well. Plus, enable the condition test
     fun `test fibonacci`() = doTest()
 
     @Test
     fun `test condition`() = doTest()
+
+    @Test
+    fun `test condition chain`() = doTest()
 }

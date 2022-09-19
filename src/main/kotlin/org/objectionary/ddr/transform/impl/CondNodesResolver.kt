@@ -44,7 +44,6 @@ class CondNodesResolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) : Resolver(graph, documents) {
-
     /**
      * Aggregate process of conditional nodes resolving
      */
@@ -107,8 +106,9 @@ class CondNodesResolver(
             val attr = abstract.attributes.find { it.name == base?.substring(1) }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
-                if (condAttr is IGraphCondNode)
+                if (condAttr is IGraphCondNode) {
                     insert(node, condAttr)
+                }
             }
             sibling = sibling?.nextSibling
         }
@@ -125,7 +125,7 @@ class CondNodesResolver(
         while (base(sibling)?.startsWith(".") == true) {
             res.add(sibling)
             sibling = sibling?.nextSibling
-            if (sibling?.attributes == null) sibling = sibling?.nextSibling
+            sibling?.attributes ?: run { sibling = sibling?.nextSibling }
         }
         return res
     }

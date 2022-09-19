@@ -26,7 +26,6 @@ package org.objectionary.ddr.graph
 
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphAttr
-import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Node
 
@@ -43,7 +42,7 @@ class AttributesSetter(private val graph: Graph) {
             for (j in 0 until attributes.length) {
                 val attr: Node = attributes.item(j)
                 abstract(attr)?.let {
-                    if (name(attr) != null) {
+                    name(attr)?.let {
                         node.attributes.add(IGraphAttr(name(attr)!!, 0, attr))
                     }
                 }

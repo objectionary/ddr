@@ -43,14 +43,16 @@ abstract class Resolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-
-    protected val declarations: MutableMap<Node, Node?> = mutableMapOf()
+    private val declarations: MutableMap<Node, Node?> = mutableMapOf()
 
     /**
      * Performs the resolution
      */
     abstract fun resolve()
 
+    /**
+     * Finds all objects that are declarations and puts them into a container
+     */
     protected fun collectDeclarations() {
         val objects = graph.initialObjects
         for (node in objects) {
@@ -64,8 +66,9 @@ abstract class Resolver(
     /**
      * Finds the abstract object for each declaration
      */
-    protected fun resolveRefs() =
+    protected fun resolveRefs() {
         declarations.keys.forEach { declarations[it] = findRef(it, graph.initialObjects, graph) }
+    }
 
     /**
      * Applies transformer to each document in [documents]
@@ -100,6 +103,9 @@ abstract class Resolver(
 
     /**
      * Gets abstract object for the given [node]
+     *
+     * @param node to find abstract for
+     * @return found abstract or null if such abstract was not found
      */
     protected fun getIgAbstract(node: Node?): IGraphNode? {
         abstract(node)?.let { return graph.igNodes.find { it.body == node } }
@@ -109,6 +115,10 @@ abstract class Resolver(
 
     /**
      * Finds the first object the node references at
+     *
+     * @param node node to find ref for
+     * @param objects set of potential references
+     * @return found reference or null if such reference was not found
      */
     protected fun firstRef(
         node: Node,
@@ -135,7 +145,7 @@ abstract class Resolver(
     /**
      * Looks for the abstract object in other documents with the corresponding package names
      */
-    protected fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
+    private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')
         return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }

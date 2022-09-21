@@ -57,5 +57,6 @@ class ResolverTest : ResolverBase() {
 
     @Test
     @Disabled
+    // @todo #61 enable this test
     fun `test conditional attribute`() = doTest()
 }

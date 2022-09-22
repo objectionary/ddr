@@ -102,7 +102,7 @@ fun packageName(node: Node?): String {
  * @return node found through refs
  */
 fun findRef(
-    node: Node,
+    node: Node?,
     objects: MutableSet<Node>,
     graph: Graph
 ): Node? {

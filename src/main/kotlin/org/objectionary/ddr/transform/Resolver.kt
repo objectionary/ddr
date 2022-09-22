@@ -28,6 +28,7 @@ import org.objectionary.ddr.graph.abstract
 import org.objectionary.ddr.graph.base
 import org.objectionary.ddr.graph.findRef
 import org.objectionary.ddr.graph.line
+import org.objectionary.ddr.graph.name
 import org.objectionary.ddr.graph.packageName
 import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
@@ -57,7 +58,7 @@ abstract class Resolver(
         val objects = graph.initialObjects
         for (node in objects) {
             val base = base(node) ?: continue
-            if (abstract(node) == null && !base.startsWith('.')) {
+            if (abstract(node) == null && (!base.startsWith('.') || name(node) != null)) {
                 declarations[node] = null
             }
         }
@@ -109,8 +110,11 @@ abstract class Resolver(
      */
     protected fun getIgAbstract(node: Node?): IGraphNode? {
         abstract(node)?.let { return graph.igNodes.find { it.body == node } }
-        val abstract = declarations[node] ?: return null
-        return graph.igNodes.find { it.body == abstract }
+        val abstract = declarations[node]
+        val igAbstract = graph.igNodes.find { it.body == abstract }
+        if (igAbstract != null) return igAbstract
+        val cand = findRef(node, graph.initialObjects, graph)
+        return graph.igNodes.find {it.body == cand }
     }
 
     /**
@@ -127,7 +131,7 @@ abstract class Resolver(
         ref(node)?.let { ref ->
             objects.forEach {
                 if (line(it) == ref && packageName(node) == packageName(it)) {
-                    return it
+                    return lastInvocation(it)
                 }
             }
         }
@@ -140,6 +144,19 @@ abstract class Resolver(
         getAbstractViaPackage(base(node))?.body?.let { return it }
         val attrs = graph.igNodes.find { it.body == node.parentNode }?.attributes
         return attrs?.find { it.name == base(node) }?.body
+    }
+
+    protected fun lastInvocation(
+        node: Node
+    ): Node? {
+        var res: Node? = node
+        var sibling = node.nextSibling?.nextSibling
+        while (base(sibling)?.startsWith(".") == true) {
+            res = sibling
+            sibling = sibling?.nextSibling
+            sibling?.attributes ?: run { sibling = sibling?.nextSibling }
+        }
+        return res
     }
 
     /**

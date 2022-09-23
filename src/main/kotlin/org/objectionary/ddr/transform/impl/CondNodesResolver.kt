@@ -102,16 +102,16 @@ class CondNodesResolver(
         abstract: IGraphNode
     ) {
         var sibling = node.nextSibling?.nextSibling
-        while (base(sibling)?.startsWith(".") == true) {
+        var fst = true
+        while (base(sibling)?.startsWith(".") == true && (name(sibling) == null || fst)) {
             val base = base(sibling)!!
+            fst = false
             val attr = abstract.attributes.find { it.name == base.substring(1) }
-//            // guarantee that this attribute is conditional???? NO
-//            if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
-//                val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0] // todo
-////                val igAttr = IGraphCondNode(attrNode.body, fstBase.packageName, fstBase.cond, attrNode.fstOption, attrNode.sndOption)
-//                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
-//                println()
-//            }
+            if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
+                val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0] // todo
+                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
+                println()
+            }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
                 if (condAttr is IGraphCondNode) {
@@ -156,7 +156,7 @@ class CondNodesResolver(
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
         expr.forEach { parent.removeChild(it) }
-        updateState()
+//        updateState()
     }
 
     /**

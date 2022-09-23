@@ -130,6 +130,13 @@ abstract class Resolver(
     ): Node? {
         ref(node)?.let { ref ->
             objects.forEach {
+                if (line(it) == ref && packageName(node) == packageName(it) && name(it) == base(node)) {
+                    return lastInvocation(it)
+                }
+            }
+        }
+        ref(node)?.let { ref ->
+            objects.forEach {
                 if (line(it) == ref && packageName(node) == packageName(it)) {
                     return lastInvocation(it)
                 }

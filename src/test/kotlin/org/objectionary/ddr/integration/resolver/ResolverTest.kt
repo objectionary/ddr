@@ -24,7 +24,6 @@
 
 package org.objectionary.ddr.integration.resolver
 
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class ResolverTest : ResolverBase() {
@@ -56,6 +55,5 @@ class ResolverTest : ResolverBase() {
     fun `test condition chain`() = doTest()
 
     @Test
-    // @todo #61 enable this test
     fun `test conditional attribute`() = doTest()
 }

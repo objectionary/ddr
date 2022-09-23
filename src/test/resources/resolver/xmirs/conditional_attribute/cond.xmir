@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="249"
+          name="transformer"
+          time="2022-09-23T12:45:32.132766163Z"
+          version="0.28.5">
+   <listing>[] &gt; base
+  [] &gt; y
+    QQ.io.stdout "base" &gt; @
+  [] &gt; x
+    QQ.io.stdout "hehe" &gt; @
+
+[] &gt; derived
+  base &gt; @
+  [] &gt; y
+    QQ.io.stdout "derived" &gt; @
+
+[] &gt; condition
+  [i] &gt; check
+    if. &gt; @
+      i.eq "cat"
+      base
+      derived
+    [] &gt; attr
+      QQ.io.stdout "hehe" &gt; @
+
+[cond] &gt; app
+  condition.check 20 &gt; instance1
+  condition.check cond &gt; instance2
+  instance2.x &gt; @
+</listing>
+   <errors/>
+   <sheets/>
+   <objects>
+      <o abstract="" line="1" name="base" pos="0">
+         <o abstract="" line="2" name="y" pos="2">
+            <o base="QQ" line="3" pos="4"/>
+            <o base=".io" line="3" method="" pos="6"/>
+            <o base=".stdout" line="3" method="" name="@" pos="9">
+               <o base="string" data="string" line="3" pos="17">base</o>
+            </o>
+         </o>
+         <o abstract="" line="4" name="x" pos="2">
+            <o base="QQ" line="5" pos="4"/>
+            <o base=".io" line="5" method="" pos="6"/>
+            <o base=".stdout" line="5" method="" name="@" pos="9">
+               <o base="string" data="string" line="5" pos="17">hehe</o>
+            </o>
+         </o>
+      </o>
+      <o abstract="" line="7" name="derived" pos="0">
+         <o base="base" line="8" name="@" pos="2"/>
+         <o abstract="" line="9" name="y" pos="2">
+            <o base="QQ" line="10" pos="4"/>
+            <o base=".io" line="10" method="" pos="6"/>
+            <o base=".stdout" line="10" method="" name="@" pos="9">
+               <o base="string" data="string" line="10" pos="17">derived</o>
+            </o>
+         </o>
+      </o>
+      <o abstract="" line="12" name="condition" pos="0">
+         <o abstract="" line="13" name="check" pos="2">
+            <o line="13" name="i" pos="3"/>
+            <o base=".if" line="14" name="@" pos="4">
+               <o base="i" line="15" pos="6"/>
+               <o base=".eq" line="15" method="" pos="7">
+                  <o base="string" data="string" line="15" pos="11">cat</o>
+               </o>
+               <o base="base" line="16" pos="6"/>
+               <o base="derived" line="17" pos="6"/>
+            </o>
+            <o abstract="" line="18" name="attr" pos="4">
+               <o base="QQ" line="19" pos="6"/>
+               <o base=".io" line="19" method="" pos="8"/>
+               <o base=".stdout" line="19" method="" name="@" pos="11">
+                  <o base="string" data="string" line="19" pos="19">hehe</o>
+               </o>
+            </o>
+         </o>
+      </o>
+      <o abstract="" line="21" name="app" pos="0">
+         <o line="21" name="cond" pos="1"/>
+         <o base="condition" line="22" pos="2"/>
+         <o base=".check" line="22" method="" name="instance1" pos="11">
+            <o base="int" data="bytes" line="22" pos="18">00 00 00 00 00 00 00 14</o>
+         </o>
+         <o base="condition" line="23" pos="2"/>
+         <o base=".check" line="23" method="" name="instance2" pos="11">
+            <o base="cond" line="23" pos="18"/>
+         </o>
+         <o base="instance2" line="24" pos="2"/>
+         <o base=".x" line="24" method="" name="@" pos="11"/>
+      </o>
+   </objects>
+</program>

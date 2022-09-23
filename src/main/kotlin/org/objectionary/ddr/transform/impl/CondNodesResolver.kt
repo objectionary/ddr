@@ -102,15 +102,13 @@ class CondNodesResolver(
         abstract: IGraphNode
     ) {
         var sibling = node.nextSibling?.nextSibling
-        var fst = true
-        while (base(sibling)?.startsWith(".") == true && (name(sibling) == null || fst)) {
+        if (base(node)?.startsWith(".") == true) return
+        while (base(sibling)?.startsWith(".") == true) {
             val base = base(sibling)!!
-            fst = false
             val attr = abstract.attributes.find { it.name == base.substring(1) }
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0] // todo
                 insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
-                println()
             }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
@@ -119,6 +117,7 @@ class CondNodesResolver(
                 }
             }
             sibling = sibling?.nextSibling
+            if (name(sibling) != null) break
         }
     }
 
@@ -156,7 +155,7 @@ class CondNodesResolver(
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
         expr.forEach { parent.removeChild(it) }
-//        updateState()
+        updateState()
     }
 
     /**

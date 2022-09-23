@@ -1,24 +1,50 @@
 [] > base
   [] > y
-    QQ.io.stdout "base" > @
+    QQ
+    .io
+    .stdout > @
+      "base"
   [] > x
-    QQ.io.stdout "hehe" > @
+    QQ
+    .io
+    .stdout > @
+      "hehe"
 
 [] > derived
   base > @
   [] > y
-    QQ.io.stdout "derived" > @
+    QQ
+    .io
+    .stdout > @
+      "derived"
 
 [] > condition
   [i] > check
-    if. > @
-      i.eq "cat"
+    i
+    .eq
+      "cat"
+    .if > @
       base
       derived
     [] > attr
-      QQ.io.stdout "hehe" > @
+      QQ
+      .io
+      .stdout > @
+        "hehe"
 
 [cond] > app
-  condition.check 20 > instance1
-  condition.check cond > instance2
-  instance2.x > @
+  condition
+  .check > instance1
+    20
+  condition
+  .check > instance2
+    cond
+  i
+  .eq
+    "cat"
+  .if > @
+    instance2
+    .x
+    instance2
+    .@
+    .x

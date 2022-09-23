@@ -30,6 +30,7 @@ import org.objectionary.ddr.graph.name
 import org.objectionary.ddr.graph.pos
 import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.transform.Resolver
@@ -39,6 +40,10 @@ import org.w3c.dom.Node
 
 /**
  * Inserts if blocks instead of conditional nodes and attributes application
+ *
+ * @todo #64:30min right now conditions are set absolutely equivalent to how they looked initially,
+ * but their initial parameters need to be replaced by the parameters they were initialized with,
+ * see conditional attribute test expected output, it's incorrect now
  */
 class CondNodesResolver(
     private val graph: Graph,
@@ -63,7 +68,7 @@ class CondNodesResolver(
         val objects = graph.initialObjects
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
-            objects.filter { ref(it) == line(node.body) }.forEach { insert(it, node) }
+            objects.filter { ref(it) == line(node.body) }.forEach { insert(it, node.cond, node.fstOption, node.sndOption) }
         }
     }
 
@@ -101,16 +106,27 @@ class CondNodesResolver(
         abstract: IGraphNode
     ) {
         var sibling = node.nextSibling?.nextSibling
+        if (base(node)?.startsWith(".") == true) {
+            return
+        }
         while (base(sibling)?.startsWith(".") == true) {
-            val base = base(sibling)
-            val attr = abstract.attributes.find { it.name == base?.substring(1) }
+            val base = base(sibling)!!
+            val attr = abstract.attributes.find { it.name == base.substring(1) }
+            if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
+                // @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
+                val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
+                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
+            }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
                 if (condAttr is IGraphCondNode) {
-                    insert(node, condAttr)
+                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption)
                 }
             }
             sibling = sibling?.nextSibling
+            if (name(sibling)?.isNotEmpty() == true) {
+                break
+            }
         }
     }
 
@@ -133,12 +149,17 @@ class CondNodesResolver(
     /**
      * Inserts an if block
      */
-    private fun insert(node: Node, igNode: IGraphCondNode) {
+    private fun insert(
+        node: Node,
+        cond: MutableList<Node>,
+        fstOption: MutableList<Node>,
+        sndOption: MutableList<Node>
+    ) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
         val siblings = removeSiblings(node)
         val document = parent.ownerDocument
-        val child = addDocumentChild(document, igNode, node, expr)
+        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr)
         parent.appendChild(child)
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
@@ -153,9 +174,12 @@ class CondNodesResolver(
      * where the node object was created
      * @param expr is the whole dot chain that follows processed node
      */
+    @Suppress("TOO_MANY_PARAMETERS")
     private fun addDocumentChild(
         document: Document,
-        igNode: IGraphCondNode,
+        cond: MutableList<Node>,
+        fstOption: MutableList<Node>,
+        sndOption: MutableList<Node>,
         node: Node,
         expr: MutableList<Node?>
     ): Element {
@@ -168,9 +192,9 @@ class CondNodesResolver(
             ifChild.setAttribute("name", "@")
             expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
         }
-        igNode.cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
-        appendExpr(document, node, expr, ifChild, igNode.fstOption[0])
-        appendExpr(document, node, expr, ifChild, igNode.sndOption[0])
+        cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
+        appendExpr(document, node, expr, ifChild, fstOption[0])
+        appendExpr(document, node, expr, ifChild, sndOption[0])
         return ifChild
     }
 

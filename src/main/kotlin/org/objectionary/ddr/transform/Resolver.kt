@@ -111,10 +111,9 @@ abstract class Resolver(
     protected fun getIgAbstract(node: Node?): IGraphNode? {
         abstract(node)?.let { return graph.igNodes.find { it.body == node } }
         val abstract = declarations[node]
-        val igAbstract = graph.igNodes.find { it.body == abstract }
-        if (igAbstract != null) return igAbstract
+        graph.igNodes.find { it.body == abstract }?.let { return it }
         val cand = findRef(node, graph.initialObjects, graph)
-        return graph.igNodes.find {it.body == cand }
+        return graph.igNodes.find { it.body == cand }
     }
 
     /**
@@ -153,7 +152,7 @@ abstract class Resolver(
         return attrs?.find { it.name == base(node) }?.body
     }
 
-    protected fun lastInvocation(
+    private fun lastInvocation(
         node: Node
     ): Node? {
         var res: Node? = node

@@ -102,7 +102,9 @@ class CondNodesResolver(
         abstract: IGraphNode
     ) {
         var sibling = node.nextSibling?.nextSibling
-        if (base(node)?.startsWith(".") == true) return
+        if (base(node)?.startsWith(".") == true) {
+            return
+        }
         while (base(sibling)?.startsWith(".") == true) {
             val base = base(sibling)!!
             val attr = abstract.attributes.find { it.name == base.substring(1) }
@@ -117,7 +119,9 @@ class CondNodesResolver(
                 }
             }
             sibling = sibling?.nextSibling
-            if (name(sibling) != null) break
+            if (name(sibling)?.isNotEmpty() == true) {
+                break
+            }
         }
     }
 
@@ -165,6 +169,7 @@ class CondNodesResolver(
      * where the node object was created
      * @param expr is the whole dot chain that follows processed node
      */
+    @Suppress("TOO_MANY_PARAMETERS")
     private fun addDocumentChild(
         document: Document,
         cond: MutableList<Node>,

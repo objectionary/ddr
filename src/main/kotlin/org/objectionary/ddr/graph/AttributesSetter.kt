@@ -33,10 +33,20 @@ import org.w3c.dom.Node
  * Sets all default attributes of nodes and propagates attributes through the [graph]
  */
 class AttributesSetter(private val graph: Graph) {
+
+    /**
+     * Aggregate the process of attributes pushing
+     */
+    fun setAttributes() {
+        setDefaultAttributes()
+        pushAttributes()
+        processFreeVars()
+    }
+
     /**
      * Add all already existent attributes to attributes list of the node
      */
-    fun setDefaultAttributes() {
+    private fun setDefaultAttributes() {
         graph.igNodes.forEach { node ->
             val attributes = node.body.childNodes
             for (j in 0 until attributes.length) {
@@ -53,7 +63,7 @@ class AttributesSetter(private val graph: Graph) {
     /**
      * Push attributes from parents to children
      */
-    fun pushAttributes(): Unit = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
+    private fun pushAttributes(): Unit = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
 
     private fun dfsPush(
         node: IGraphNode,
@@ -74,5 +84,23 @@ class AttributesSetter(private val graph: Graph) {
             node.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
         }
         node.children.forEach { dfsPush(it, node, visited) }
+    }
+
+    private fun processFreeVars() {
+        graph.igNodes.forEach { node ->
+            node.attributes.forEach { attr ->
+                traverseParents(attr.body, attr.freeVars)
+            }
+        }
+    }
+
+    private fun traverseParents(node: Node, freeVars: MutableSet<String>) {
+        if (abstract(node) == null) return
+        var sibling = node.firstChild?.nextSibling
+        while (base(sibling) == null && abstract(sibling) == null && sibling != null) {
+            name(sibling)?.let { freeVars.add(it) }
+            sibling = sibling?.nextSibling
+        }
+        traverseParents(node.parentNode, freeVars)
     }
 }

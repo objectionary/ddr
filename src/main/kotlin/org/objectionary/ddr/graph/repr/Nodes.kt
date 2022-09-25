@@ -33,6 +33,12 @@ open class IGraphNode(
      * List of attributes of this node (inner objects and propagated attributes)
      */
     val attributes: MutableList<IGraphAttr> = mutableListOf()
+
+
+    /**
+     * List of attributes of this node (inner objects and propagated attributes)
+     */
+    val freeVars: MutableSet<String> = mutableSetOf()
 }
 
 /**

@@ -40,10 +40,6 @@ import org.w3c.dom.Node
 
 /**
  * Inserts if blocks instead of conditional nodes and attributes application
- *
- * @todo #64:30min right now conditions are set absolutely equivalent to how they looked initially,
- * but their initial parameters need to be replaced by the parameters they were initialized with,
- * see conditional attribute test expected output, it's incorrect now
  */
 class CondNodesResolver(
     private val graph: Graph,
@@ -68,7 +64,15 @@ class CondNodesResolver(
         val objects = graph.initialObjects
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
-            objects.filter { ref(it) == line(node.body) }.forEach { insert(it, node.cond, node.fstOption, node.sndOption) }
+            objects.filter { ref(it) == line(node.body) }.forEach {
+                insert(
+                    it,
+                    node.cond,
+                    node.fstOption,
+                    node.sndOption,
+                    node.freeVars
+                )
+            }
         }
     }
 
@@ -115,12 +119,12 @@ class CondNodesResolver(
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
                 // @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
-                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
+                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption, igAttr.freeVars)
             }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
                 if (condAttr is IGraphCondNode) {
-                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption)
+                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption, condAttr.freeVars)
                 }
             }
             sibling = sibling?.nextSibling
@@ -153,13 +157,14 @@ class CondNodesResolver(
         node: Node,
         cond: MutableList<Node>,
         fstOption: MutableList<Node>,
-        sndOption: MutableList<Node>
+        sndOption: MutableList<Node>,
+        freeVars: MutableSet<String>
     ) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
         val siblings = removeSiblings(node)
         val document = parent.ownerDocument
-        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr)
+        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr, freeVars)
         parent.appendChild(child)
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
@@ -181,7 +186,8 @@ class CondNodesResolver(
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
         node: Node,
-        expr: MutableList<Node?>
+        expr: MutableList<Node?>,
+        freeVars: MutableSet<String>
     ): Element {
         val ifChild: Element = document.createElement("o")
         val phi = expr.any { name(it) == "@" }
@@ -192,7 +198,17 @@ class CondNodesResolver(
             ifChild.setAttribute("name", "@")
             expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
         }
-        cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
+        cond.forEach {n ->
+            val elem = n.cloneNode(true)
+            freeVars.forEach {
+                if (base(elem) == it) {
+                    elem.attributes.removeNamedItem("base")
+                    val base = document.createAttribute("base").apply { value = "HEHEHE" }
+                    elem.attributes.setNamedItem(base)
+                }
+            }
+            ifChild.appendChild(elem.cloneNode(true))
+        }
         appendExpr(document, node, expr, ifChild, fstOption[0])
         appendExpr(document, node, expr, ifChild, sndOption[0])
         return ifChild

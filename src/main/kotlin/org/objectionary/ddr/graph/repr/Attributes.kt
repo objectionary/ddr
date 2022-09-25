@@ -14,7 +14,9 @@ open class IGraphAttr(
     open val name: String,
     open val parentDistance: Int,
     open val body: Node
-)
+) {
+  val freeVars: MutableSet<String> = mutableSetOf()
+}
 
 /**
  * Conditional graph attribute representation

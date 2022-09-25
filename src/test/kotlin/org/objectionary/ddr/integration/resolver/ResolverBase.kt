@@ -29,7 +29,6 @@ import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
-import org.objectionary.ddr.launch.processAttributes
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
@@ -42,6 +41,7 @@ import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
+import org.objectionary.ddr.graph.AttributesSetter
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
@@ -63,7 +63,8 @@ open class ResolverBase : TestBase {
         constructInPath(path)
         val graph = buildGraph(constructInPath(path), true)
         CondAttributesSetter(graph).processConditions()
-        processAttributes(graph)
+        val attributesSetter = AttributesSetter(graph)
+        attributesSetter.setAttributes()
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()
         CondNodesResolver(graph, documents).resolve()
@@ -98,15 +99,15 @@ open class ResolverBase : TestBase {
                 val expected = expectedBr.use { it.readText() }
                 checkOutput(expected, actual)
             }
-        try {
-            val tmpDir =
-                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
-            FileUtils.deleteDirectory(File(tmpDir))
-            FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
-            FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
-        } catch (e: Exception) {
-            logger.error(e.printStackTrace().toString())
-        }
+//        try {
+//            val tmpDir =
+//                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+//            FileUtils.deleteDirectory(File(tmpDir))
+//            FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
+//            FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
+//        } catch (e: Exception) {
+//            logger.error(e.printStackTrace().toString())
+//        }
     }
 
     @Throws(Exception::class)

@@ -28,8 +28,8 @@ import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
-import org.objectionary.ddr.launch.processAttributes
 import org.apache.commons.io.FileUtils
+import org.objectionary.ddr.graph.AttributesSetter
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -46,7 +46,8 @@ open class AttrBase : TestBase {
         val path = getTestName()
         documents.clear()
         val graph = buildGraph(constructInPath(path))
-        processAttributes(graph)
+        val attributesSetter = AttributesSetter(graph)
+        attributesSetter.setAttributes()
         val out = ByteArrayOutputStream()
         printOut(out, graph.igNodes)
         val actual = String(out.toByteArray())

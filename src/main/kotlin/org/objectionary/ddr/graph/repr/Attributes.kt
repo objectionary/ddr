@@ -33,7 +33,7 @@ class IGraphCondAttr(
     name: String,
     parentDistance: Int,
     body: Node,
-    val cond: MutableList<Node>,
+    val cond: IgNodeCondition,
     val fstOption: MutableList<Node>,
     val sndOption: MutableList<Node>
 ) : IGraphAttr(

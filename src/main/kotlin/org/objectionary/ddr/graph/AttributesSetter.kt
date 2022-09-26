@@ -40,7 +40,7 @@ class AttributesSetter(private val graph: Graph) {
     fun setAttributes() {
         setDefaultAttributes()
         pushAttributes()
-        processFreeVars()
+//        processFreeVars()
     }
 
     /**
@@ -84,23 +84,5 @@ class AttributesSetter(private val graph: Graph) {
             node.attributes.add(IGraphAttr(it.name, it.parentDistance + 1, it.body))
         }
         node.children.forEach { dfsPush(it, node, visited) }
-    }
-
-    private fun processFreeVars() {
-        graph.igNodes.forEach { node ->
-            node.attributes.forEach { attr ->
-                traverseParents(attr.body, attr.freeVars)
-            }
-        }
-    }
-
-    private fun traverseParents(node: Node, freeVars: MutableSet<String>) {
-        if (abstract(node) == null) return
-        var sibling = node.firstChild?.nextSibling
-        while (base(sibling) == null && abstract(sibling) == null && sibling != null) {
-            name(sibling)?.let { freeVars.add(it) }
-            sibling = sibling?.nextSibling
-        }
-        traverseParents(node.parentNode, freeVars)
     }
 }

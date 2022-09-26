@@ -3,6 +3,7 @@ package org.objectionary.ddr.graph
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
+import org.objectionary.ddr.graph.repr.IgNodeCondition
 import org.w3c.dom.Node
 
 /**
@@ -57,14 +58,26 @@ class CondAttributesSetter(
                 tmpNode = tmpNode.nextSibling.nextSibling
                 line = line(tmpNode)
             }
+            val igCond = IgNodeCondition(cond)
+            traverseParents(node.parentNode, igCond.freeVars)
             if (name(node) != "@") {
-                graph.igNodes.add(IGraphCondNode(node, packageName(node), cond, fstOption, sndOption))
+                graph.igNodes.add(IGraphCondNode(node, packageName(node), igCond, fstOption, sndOption))
                 val parent = graph.igNodes.find { it.body == node.parentNode }
-                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, cond, fstOption, sndOption))
+                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, igCond, fstOption, sndOption))
             } else {
                 val parent = graph.igNodes.find { it.body == node.parentNode }
-                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, cond, fstOption, sndOption))
+                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, igCond, fstOption, sndOption))
             }
         }
+    }
+
+    private fun traverseParents(node: Node, freeVars: MutableSet<String>) {
+        if (abstract(node) == null) return
+        var sibling = node.firstChild?.nextSibling
+        while (base(sibling) == null && abstract(sibling) == null && sibling != null) {
+            name(sibling)?.let { freeVars.add(it) }
+            sibling = sibling?.nextSibling
+        }
+        traverseParents(node.parentNode, freeVars)
     }
 }

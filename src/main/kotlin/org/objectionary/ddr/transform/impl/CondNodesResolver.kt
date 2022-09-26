@@ -33,6 +33,7 @@ import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.graph.repr.IgNodeCondition
 import org.objectionary.ddr.transform.Resolver
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -155,7 +156,7 @@ class CondNodesResolver(
      */
     private fun insert(
         node: Node,
-        cond: MutableList<Node>,
+        cond: IgNodeCondition,
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
         freeVars: MutableSet<String>
@@ -182,7 +183,7 @@ class CondNodesResolver(
     @Suppress("TOO_MANY_PARAMETERS")
     private fun addDocumentChild(
         document: Document,
-        cond: MutableList<Node>,
+        cond: IgNodeCondition,
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
         node: Node,
@@ -198,9 +199,9 @@ class CondNodesResolver(
             ifChild.setAttribute("name", "@")
             expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
         }
-        cond.forEach {n ->
+        cond.cond.forEach {n ->
             val elem = n.cloneNode(true)
-            freeVars.forEach {
+            cond.freeVars.forEach {
                 if (base(elem) == it) {
                     elem.attributes.removeNamedItem("base")
                     val base = document.createAttribute("base").apply { value = "HEHEHE" }

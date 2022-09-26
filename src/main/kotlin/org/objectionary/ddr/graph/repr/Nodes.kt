@@ -54,7 +54,21 @@ open class IGraphNode(
 class IGraphCondNode(
     override val body: Node,
     override val packageName: String,
-    val cond: MutableList<Node>,
+    val cond: IgNodeCondition,
     val fstOption: MutableList<Node>,
     val sndOption: MutableList<Node>
 ) : IGraphNode(body, packageName)
+
+
+/**
+ * Conditional node's condition representation
+ *
+ * @property cond list of nodes representing the condition
+ */
+@Suppress("CLASS_NAME_INCORRECT")
+class IgNodeCondition(
+    val cond: MutableList<Node>
+) {
+    val freeVars: MutableSet<String> = mutableSetOf()
+}
+

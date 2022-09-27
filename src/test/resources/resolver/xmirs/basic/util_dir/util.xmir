@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="2"
+          name="transformer"
+          time="2022-09-27T10:48:11.740668454Z"
+          version="0.28.5">
+   <listing>+package org.ut
+
+[] &gt; util
+  [] &gt; doUtil
+    QQ.io.stdout &gt; @
+      "util"
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>org.ut</tail>
+         <part>org.ut</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="util" pos="0">
+         <o abstract="" line="4" name="doUtil" pos="2">
+            <o base="QQ" line="5" pos="4"/>
+            <o base=".io" line="5" method="" pos="6"/>
+            <o base=".stdout" line="5" method="" name="@" pos="9">
+               <o base="string" data="string" line="6" pos="6">util</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

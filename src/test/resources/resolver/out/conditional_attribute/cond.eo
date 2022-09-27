@@ -28,10 +28,15 @@
       derived
 
 [cond] > app
-  condition.check cond > instance2
-  TBD
+  condition
+  .check > instance2
+    cond
+  cond
   .eq
     "cat"
   .if > @
-    instance2.x
-    instance2.@.x
+    instance2
+    .x
+    instance2
+    .@
+    .x

@@ -49,6 +49,9 @@ open class IGraphNode(
  * @property cond list of nodes representing the condition
  * @property fstOption list of nodes representing the option on the true branch
  * @property sndOption list of nodes representing the option on the false branch
+ *
+ * @todo #64:30min gather cond, fstOption and sndOption into the existing
+ * IgNodeCondition structure and refactor its usages
  */
 @Suppress("CLASS_NAME_INCORRECT")
 class IGraphCondNode(
@@ -59,7 +62,6 @@ class IGraphCondNode(
     val sndOption: MutableList<Node>
 ) : IGraphNode(body, packageName)
 
-
 /**
  * Conditional node's condition representation
  *
@@ -69,6 +71,6 @@ class IGraphCondNode(
 class IgNodeCondition(
     val cond: MutableList<Node>
 ) {
-    val freeVars: MutableSet<String> = mutableSetOf()
+    val freeVars: MutableSet<String> = linkedSetOf()
 }
 

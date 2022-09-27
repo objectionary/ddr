@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="6"
+          name="transformer"
+          time="2022-09-27T10:35:21.897088476Z"
+          version="0.28.5">
+   <listing>+package org.eolang.examples
++alias org.eolang.examples.fibonacci
++alias org.eolang.io.stdout
++alias org.eolang.txt.sprintf
++architect yegor256@gmail.com
+
+[args...] &gt; app
+  at. &gt; n!
+    QQ.txt.sscanf
+      "%d"
+      args.at 0
+    0
+  at. &gt; e!
+    QQ.txt.sscanf
+      "%d"
+      args.at 1
+    0
+  and. &gt; @
+    stdout
+      sprintf
+        "%dth Fibonacci number is %d\n"
+        n
+        fibonacci n &gt; f
+    if.
+      not.
+        eq.
+          e
+          f
+      []
+        sprintf &gt; msg
+          "%d not equal to %d"
+          e
+          f
+      TRUE
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>org.eolang.examples</tail>
+         <part>org.eolang.examples</part>
+      </meta>
+      <meta line="2">
+         <head>alias</head>
+         <tail>org.eolang.examples.fibonacci</tail>
+         <part>org.eolang.examples.fibonacci</part>
+      </meta>
+      <meta line="3">
+         <head>alias</head>
+         <tail>org.eolang.io.stdout</tail>
+         <part>org.eolang.io.stdout</part>
+      </meta>
+      <meta line="4">
+         <head>alias</head>
+         <tail>org.eolang.txt.sprintf</tail>
+         <part>org.eolang.txt.sprintf</part>
+      </meta>
+      <meta line="5">
+         <head>architect</head>
+         <tail>yegor256@gmail.com</tail>
+         <part>yegor256@gmail.com</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="7" name="app" pos="0">
+         <o line="7" name="args" pos="1" vararg=""/>
+         <o base=".at" const="" line="8" name="n" pos="2">
+            <o base="QQ" line="9" pos="4"/>
+            <o base=".txt" line="9" method="" pos="6"/>
+            <o base=".sscanf" line="9" method="" pos="10">
+               <o base="string" data="string" line="10" pos="6">%d</o>
+               <o base="args" line="11" pos="6"/>
+               <o base=".at" line="11" method="" pos="10">
+                  <o base="int" data="bytes" line="11" pos="14">00 00 00 00 00 00 00 00</o>
+               </o>
+            </o>
+            <o base="int" data="bytes" line="12" pos="4">00 00 00 00 00 00 00 00</o>
+         </o>
+         <o base=".at" const="" line="13" name="e" pos="2">
+            <o base="QQ" line="14" pos="4"/>
+            <o base=".txt" line="14" method="" pos="6"/>
+            <o base=".sscanf" line="14" method="" pos="10">
+               <o base="string" data="string" line="15" pos="6">%d</o>
+               <o base="args" line="16" pos="6"/>
+               <o base=".at" line="16" method="" pos="10">
+                  <o base="int" data="bytes" line="16" pos="14">00 00 00 00 00 00 00 01</o>
+               </o>
+            </o>
+            <o base="int" data="bytes" line="17" pos="4">00 00 00 00 00 00 00 00</o>
+         </o>
+         <o base=".and" line="18" name="@" pos="2">
+            <o base="stdout" line="19" pos="4">
+               <o base="sprintf" line="20" pos="6">
+                  <o base="string" data="string" line="21" pos="8">%dth Fibonacci number is %d\n</o>
+                  <o base="n" line="22" pos="8"/>
+                  <o base="fibonacci" line="23" name="f" pos="8">
+                     <o base="n" line="23" pos="18"/>
+                  </o>
+               </o>
+            </o>
+            <o base=".if" line="24" pos="4">
+               <o base=".not" line="25" pos="6">
+                  <o base=".eq" line="26" pos="8">
+                     <o base="e" line="27" pos="10"/>
+                     <o base="f" line="28" pos="10"/>
+                  </o>
+               </o>
+               <o abstract="" line="29" pos="6">
+                  <o base="sprintf" line="30" name="msg" pos="8">
+                     <o base="string" data="string" line="31" pos="10">%d not equal to %d</o>
+                     <o base="e" line="32" pos="10"/>
+                     <o base="f" line="33" pos="10"/>
+                  </o>
+               </o>
+               <o base="bool" data="bytes" line="34" pos="6">01</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

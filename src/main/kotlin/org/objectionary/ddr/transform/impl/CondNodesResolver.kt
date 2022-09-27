@@ -66,22 +66,12 @@ class CondNodesResolver(
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
             objects.filter { ref(it) == line(node.body) }.forEach {
-                insert(
-                    it,
-                    node.cond,
-                    node.fstOption,
-                    node.sndOption,
-                    node.freeVars
-                )
+                insert(it, node.cond, node.fstOption, node.sndOption)
             }
         }
     }
 
     private fun injectAttributes() {
-        traverse()
-    }
-
-    private fun traverse() {
         val objects = graph.initialObjects
         try {
             for (node in objects) {
@@ -90,7 +80,7 @@ class CondNodesResolver(
                 traverseDotChain(node, abstract)
             }
         } catch (e: ConcurrentModificationException) {
-            traverse()
+            injectAttributes()
         }
     }
 
@@ -120,12 +110,12 @@ class CondNodesResolver(
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
                 // @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
-                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption, igAttr.freeVars)
+                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
             }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
                 if (condAttr is IGraphCondNode) {
-                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption, condAttr.freeVars)
+                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption)
                 }
             }
             sibling = sibling?.nextSibling
@@ -158,14 +148,13 @@ class CondNodesResolver(
         node: Node,
         cond: IgNodeCondition,
         fstOption: MutableList<Node>,
-        sndOption: MutableList<Node>,
-        freeVars: MutableSet<String>
+        sndOption: MutableList<Node>
     ) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
         val siblings = removeSiblings(node)
         val document = parent.ownerDocument
-        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr, freeVars)
+        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr)
         parent.appendChild(child)
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
@@ -187,8 +176,7 @@ class CondNodesResolver(
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
         node: Node,
-        expr: MutableList<Node?>,
-        freeVars: MutableSet<String>
+        expr: MutableList<Node?>
     ): Element {
         val ifChild: Element = document.createElement("o")
         val phi = expr.any { name(it) == "@" }
@@ -204,7 +192,8 @@ class CondNodesResolver(
             cond.freeVars.forEach {
                 if (base(elem) == it) {
                     elem.attributes.removeNamedItem("base")
-                    val base = document.createAttribute("base").apply { value = "HEHEHE" }
+                    val decl = declarations[node]
+                    val base = document.createAttribute("base").apply { value = "TBD" }
                     elem.attributes.setNamedItem(base)
                 }
             }

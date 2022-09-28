@@ -25,6 +25,7 @@
 package org.objectionary.ddr.integration.resolver
 
 import org.objectionary.ddr.TestBase
+import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.launch.buildGraph
@@ -41,7 +42,6 @@ import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
-import org.objectionary.ddr.graph.AttributesSetter
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File

@@ -187,10 +187,10 @@ class CondNodesResolver(
             ifChild.setAttribute("name", "@")
             expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
         }
-        cond.cond.forEach {n ->
-            val elem = n.cloneNode(true)
-            cond.freeVars.forEach {
-                if (base(elem) == it) {
+        cond.cond.forEach { cnd ->
+            val elem = cnd.cloneNode(true)
+            cond.freeVars.forEach { fv ->
+                if (base(elem) == fv) {
                     elem.attributes.removeNamedItem("base")
                     val decl = declarations[node]
                     val base = document.createAttribute("base").apply { value = "TBD" }

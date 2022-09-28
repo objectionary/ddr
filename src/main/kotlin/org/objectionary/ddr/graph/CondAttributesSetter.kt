@@ -72,7 +72,7 @@ class CondAttributesSetter(
     }
 
     private fun traverseParents(node: Node, freeVars: MutableSet<String>) {
-        if (abstract(node) == null) return
+        abstract(node) ?: return
         var sibling = node.firstChild?.nextSibling
         while (base(sibling) == null && abstract(sibling) == null && sibling != null) {
             name(sibling)?.let { freeVars.add(it) }

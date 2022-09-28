@@ -15,7 +15,10 @@ open class IGraphAttr(
     open val parentDistance: Int,
     open val body: Node
 ) {
-  val freeVars: MutableSet<String> = mutableSetOf()
+    /**
+     * Todo
+     */
+    val freeVars: MutableSet<String> = mutableSetOf()
 }
 
 /**

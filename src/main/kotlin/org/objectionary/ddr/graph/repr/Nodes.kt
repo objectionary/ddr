@@ -34,7 +34,6 @@ open class IGraphNode(
      */
     val attributes: MutableList<IGraphAttr> = mutableListOf()
 
-
     /**
      * List of attributes of this node (inner objects and propagated attributes)
      */
@@ -68,9 +67,11 @@ class IGraphCondNode(
  * @property cond list of nodes representing the condition
  */
 @Suppress("CLASS_NAME_INCORRECT")
-class IgNodeCondition(
+data class IgNodeCondition(
     val cond: MutableList<Node>
 ) {
+    /**
+     * Free variables of the object that is the direct parent of the condition
+     */
     val freeVars: MutableSet<String> = linkedSetOf()
 }
-

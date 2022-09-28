@@ -33,14 +33,13 @@ import org.w3c.dom.Node
  * Sets all default attributes of nodes and propagates attributes through the [graph]
  */
 class AttributesSetter(private val graph: Graph) {
-
     /**
      * Aggregate the process of attributes pushing
      */
     fun setAttributes() {
         setDefaultAttributes()
         pushAttributes()
-//        processFreeVars()
+        // processFreeVars()
     }
 
     /**

@@ -66,7 +66,7 @@ class CondNodesResolver(
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
             objects.filter { ref(it) == line(node.body) }.forEach {
-                insert(it, node.cond, node.fstOption, node.sndOption)
+                insert(it, node.cond, node.fstOption, node.sndOption, node.body)
             }
         }
     }
@@ -110,12 +110,12 @@ class CondNodesResolver(
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
                 // @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
-                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
+                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption, igAttr.body)
             }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
                 if (condAttr is IGraphCondNode) {
-                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption)
+                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption, condAttr.body)
                 }
             }
             sibling = sibling?.nextSibling
@@ -148,13 +148,14 @@ class CondNodesResolver(
         node: Node,
         cond: IgNodeCondition,
         fstOption: MutableList<Node>,
-        sndOption: MutableList<Node>
+        sndOption: MutableList<Node>,
+        body: Node
     ) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
         val siblings = removeSiblings(node)
         val document = parent.ownerDocument
-        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr)
+        val child = addDocumentChild(document, cond, fstOption, sndOption, body, node, expr)
         parent.appendChild(child)
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
@@ -175,6 +176,7 @@ class CondNodesResolver(
         cond: IgNodeCondition,
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
+        body: Node,
         node: Node,
         expr: MutableList<Node?>
     ): Element {
@@ -187,13 +189,18 @@ class CondNodesResolver(
             ifChild.setAttribute("name", "@")
             expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
         }
+        val abstract = declarations[node]
+        val abstractFreeVars = getFreeVars(abstract)
+        val decl = firstRef(node, graph.initialObjects)
+        val declFreeVars = getFreeVars(decl)
         cond.cond.forEach { cnd ->
             val elem = cnd.cloneNode(true)
             cond.freeVars.forEach { fv ->
                 if (base(elem) == fv) {
                     elem.attributes.removeNamedItem("base")
-                    val decl = declarations[node]
-                    val base = document.createAttribute("base").apply { value = "TBD" }
+                    val i = abstractFreeVars.indexOf(fv)
+                    val repl = declFreeVars[i] // todo check etc...
+                    val base = document.createAttribute("base").apply { value = repl }
                     elem.attributes.setNamedItem(base)
                 }
             }
@@ -202,6 +209,20 @@ class CondNodesResolver(
         appendExpr(document, node, expr, ifChild, fstOption[0])
         appendExpr(document, node, expr, ifChild, sndOption[0])
         return ifChild
+    }
+
+    private fun getFreeVars(decl: Node?): MutableList<String?> {
+        val res: MutableList<String?> = mutableListOf()
+        val children = decl?.childNodes ?: return res
+        for (i in 0..children.length) {
+            val ch = children.item(i)
+            if (name(ch) != null) {
+                res.add(name(ch))
+            } else if (base(ch) != null) {
+                res.add(base(ch))
+            }
+        }
+        return res
     }
 
     /**

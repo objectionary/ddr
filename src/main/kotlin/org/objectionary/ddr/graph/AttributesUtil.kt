@@ -113,11 +113,29 @@ fun findRef(
                 return it
             }
             if (abstract(it) == null && packageName(node) == packageName(it)) {
-                return findRef(it, objects, graph)
+                val traversed = walkDotChain(it)
+                return if (traversed == null) {
+                    findRef(it, objects, graph)
+                } else {
+                    findRef(traversed, objects, graph)
+                }
             }
         }
     }
     return null
+}
+
+private fun walkDotChain(
+    node: Node
+): Node? {
+    var sibling = node.nextSibling?.nextSibling
+    while (base(sibling)?.startsWith(".") == true) {
+        sibling = sibling?.nextSibling
+        sibling?.attributes ?: run { sibling = sibling?.nextSibling }
+    }
+    sibling = sibling?.previousSibling
+    sibling?.attributes ?: run { sibling = sibling?.previousSibling }
+    return sibling
 }
 
 private fun getAbstractViaPackage(baseNodeName: String?, graph: Graph): IGraphNode? {

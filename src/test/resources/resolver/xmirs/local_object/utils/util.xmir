@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="2"
+          name="transformer"
+          time="2022-09-29T14:08:47.897482588Z"
+          version="0.28.5">
+   <listing>+package utils
+
+[] &gt; util
+  [i] &gt; action
+    if. &gt; @
+      i.gt 5
+      7
+      8
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>utils</tail>
+         <part>utils</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="util" pos="0">
+         <o abstract="" line="4" name="action" pos="2">
+            <o line="4" name="i" pos="3"/>
+            <o base=".if" line="5" name="@" pos="4">
+               <o base="i" line="6" pos="6"/>
+               <o base=".gt" line="6" method="" pos="7">
+                  <o base="int" data="bytes" line="6" pos="11">00 00 00 00 00 00 00 05</o>
+               </o>
+               <o base="int" data="bytes" line="7" pos="6">00 00 00 00 00 00 00 07</o>
+               <o base="int" data="bytes" line="8" pos="6">00 00 00 00 00 00 00 08</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

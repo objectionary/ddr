@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="150"
+          name="transformer"
+          time="2022-09-29T14:08:45.620269092Z"
+          version="0.28.5">
+   <listing>+architect yegor256@gmail.com
++package org.eolang.examples
+
+[n] &gt; fibonacci
+  if. &gt; @
+    lt.
+      n
+      2
+    n
+    plus.
+      fibonacci
+        n.minus 1
+      fibonacci
+        n.minus 2
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>architect</head>
+         <tail>yegor256@gmail.com</tail>
+         <part>yegor256@gmail.com</part>
+      </meta>
+      <meta line="2">
+         <head>package</head>
+         <tail>org.eolang.examples</tail>
+         <part>org.eolang.examples</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="4" name="fibonacci" pos="0">
+         <o line="4" name="n" pos="1"/>
+         <o base=".if" line="5" name="@" pos="2">
+            <o base=".lt" line="6" pos="4">
+               <o base="n" line="7" pos="6"/>
+               <o base="int" data="bytes" line="8" pos="6">00 00 00 00 00 00 00 02</o>
+            </o>
+            <o base="n" line="9" pos="4"/>
+            <o base=".plus" line="10" pos="4">
+               <o base="fibonacci" line="11" pos="6">
+                  <o base="n" line="12" pos="8"/>
+                  <o base=".minus" line="12" method="" pos="9">
+                     <o base="int" data="bytes" line="12" pos="16">00 00 00 00 00 00 00 01</o>
+                  </o>
+               </o>
+               <o base="fibonacci" line="13" pos="6">
+                  <o base="n" line="14" pos="8"/>
+                  <o base=".minus" line="14" method="" pos="9">
+                     <o base="int" data="bytes" line="14" pos="16">00 00 00 00 00 00 00 02</o>
+                  </o>
+               </o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="4"
+<program ms="5"
           name="transformer"
-          time="2022-09-29T14:08:46.088449769Z"
+          time="2022-10-03T11:47:53.211893893Z"
           version="0.28.5">
    <listing>+package org.eolang.examples
 +alias org.eolang.examples.fibonacci

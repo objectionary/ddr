@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="1"
+<program ms="0"
           name="transformer"
-          time="2022-09-29T14:08:48.225771540Z"
+          time="2022-10-03T11:47:55.007687560Z"
           version="0.28.5">
    <listing>+package org.animals
 +alias org.eolang.io.stdout

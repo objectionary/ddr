@@ -66,7 +66,7 @@ class CondNodesResolver(
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
             objects.filter { ref(it) == line(node.body) }.forEach {
-                insert(it, node.cond, node.fstOption, node.sndOption, node.body)
+                insert(it, node.cond, node.fstOption, node.sndOption)
             }
         }
     }
@@ -110,12 +110,12 @@ class CondNodesResolver(
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
                 // @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
-                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption, igAttr.body)
+                insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
             }
             if (attr != null && sibling != null) {
                 val condAttr = graph.igNodes.find { attr.name == it.name }
                 if (condAttr is IGraphCondNode) {
-                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption, condAttr.body)
+                    insert(node, condAttr.cond, condAttr.fstOption, condAttr.sndOption)
                 }
             }
             sibling = sibling?.nextSibling
@@ -148,14 +148,13 @@ class CondNodesResolver(
         node: Node,
         cond: IgNodeCondition,
         fstOption: MutableList<Node>,
-        sndOption: MutableList<Node>,
-        body: Node
+        sndOption: MutableList<Node>
     ) {
         val expr = collectDotChain(node)
         val parent = node.parentNode
         val siblings = removeSiblings(node)
         val document = parent.ownerDocument
-        val child = addDocumentChild(document, cond, fstOption, sndOption, body, node, expr)
+        val child = addDocumentChild(document, cond, fstOption, sndOption, node, expr)
         parent.appendChild(child)
         siblings.forEach { parent.appendChild(it) }
         parent.removeChild(node)
@@ -176,7 +175,6 @@ class CondNodesResolver(
         cond: IgNodeCondition,
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
-        body: Node,
         node: Node,
         expr: MutableList<Node?>
     ): Element {
@@ -199,7 +197,12 @@ class CondNodesResolver(
                 if (base(elem) == fv) {
                     elem.attributes.removeNamedItem("base")
                     val i = abstractFreeVars.indexOf(fv)
-                    val repl = declFreeVars[i] // todo check etc...
+                    val repl : String? =
+                    if (i == -1) {
+                        fv
+                    } else {
+                        declFreeVars[i]
+                    }
                     val base = document.createAttribute("base").apply { value = repl }
                     elem.attributes.setNamedItem(base)
                 }

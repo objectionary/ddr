@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="3"
+<program ms="1"
           name="transformer"
-          time="2022-09-29T14:08:47.909582173Z"
+          time="2022-10-03T11:47:54.785582462Z"
           version="0.28.5">
    <listing>+alias utils.util
 +alias org.eolang.txt.sprintf

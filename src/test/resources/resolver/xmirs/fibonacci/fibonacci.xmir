@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="150"
+<program ms="118"
           name="transformer"
-          time="2022-09-29T14:08:45.620269092Z"
+          time="2022-10-03T11:47:52.810077040Z"
           version="0.28.5">
    <listing>+architect yegor256@gmail.com
 +package org.eolang.examples

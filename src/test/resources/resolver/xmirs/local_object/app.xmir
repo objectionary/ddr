@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="2"
+          name="transformer"
+          time="2022-10-03T12:05:23.492502370Z"
+          version="0.28.5">
+   <listing>+alias utils.util
++alias org.eolang.txt.sprintf
++alias org.eolang.io.stdout
+
+[] &gt; main
+  util &gt; @
+  $.action 20 &gt; xx
+  [] &gt; main_action
+    stdout &gt; @
+      sprintf
+        "hehe %d"
+        xx
+
+[] &gt; app
+  main.main_action &gt; @
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>alias</head>
+         <tail>utils.util</tail>
+         <part>utils.util</part>
+      </meta>
+      <meta line="2">
+         <head>alias</head>
+         <tail>org.eolang.txt.sprintf</tail>
+         <part>org.eolang.txt.sprintf</part>
+      </meta>
+      <meta line="3">
+         <head>alias</head>
+         <tail>org.eolang.io.stdout</tail>
+         <part>org.eolang.io.stdout</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="5" name="main" pos="0">
+         <o base="util" line="6" name="@" pos="2"/>
+         <o base="$" line="7" pos="2"/>
+         <o base=".action" line="7" method="" name="xx" pos="3">
+            <o base="int" data="bytes" line="7" pos="11">00 00 00 00 00 00 00 14</o>
+         </o>
+         <o abstract="" line="8" name="main_action" pos="2">
+            <o base="stdout" line="9" name="@" pos="4">
+               <o base="sprintf" line="10" pos="6">
+                  <o base="string" data="string" line="11" pos="8">hehe %d</o>
+                  <o base="xx" line="12" pos="8"/>
+               </o>
+            </o>
+         </o>
+      </o>
+      <o abstract="" line="14" name="app" pos="0">
+         <o base="main" line="15" pos="2"/>
+         <o base=".main_action" line="15" method="" name="@" pos="6"/>
+      </o>
+   </objects>
+</program>

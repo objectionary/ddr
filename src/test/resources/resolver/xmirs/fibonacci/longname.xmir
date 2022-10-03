@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="32"
+          name="transformer"
+          time="2022-10-03T12:05:23.214906606Z"
+          version="0.28.5">
+   <listing>+package org.eolang
+
+[] &gt; test
+  blah0 &gt; @
+  [] &gt; blah0
+    blah1 &gt; @
+    [] &gt; blah1
+      blah2 &gt; @
+      [] &gt; blah2
+        blah3 &gt; @
+        [] &gt; blah3
+          blah4 &gt; @
+          [] &gt; blah4
+            blah5 &gt; @
+            [] &gt; blah5
+              blah6 &gt; @
+              [] &gt; blah6
+                blah7 &gt; @
+                [] &gt; blah7
+                  blah8 &gt; @
+                  [] &gt; blah8
+                    blah9 &gt; @
+                    [] &gt; blah9
+                      blah10 &gt; @
+                      [] &gt; blah10
+                        blah11 &gt; @
+                        [] &gt; blah11
+                          blah12 &gt; @
+                          [] &gt; blah12
+                            blah13 &gt; @
+                            [] &gt; blah13
+                              blah14 &gt; @
+                              [] &gt; blah14
+                                blah15 &gt; @
+                                [] &gt; blah15
+                                  blah16 &gt; @
+                                  [] &gt; blah16
+                                    blah17 &gt; @
+                                    [] &gt; blah17
+                                      blah18 &gt; @
+                                      [] &gt; blah18
+                                        blah19 &gt; @
+                                        [] &gt; blah19
+                                          blah20 &gt; @
+                                          [] &gt; blah20
+                                            blah21 &gt; @
+                                            [] &gt; blah21
+                                              blah22 &gt; @
+                                              [] &gt; blah22
+                                                blah23 &gt; @
+                                                [] &gt; blah23
+                                                  blah24 &gt; @
+                                                  [] &gt; blah24
+                                                    blah25 &gt; @
+                                                    [] &gt; blah25
+                                                      blah26 &gt; @
+                                                      [] &gt; blah26
+                                                        blah27 &gt; @
+                                                        [] &gt; blah27
+                                                          blah28 &gt; @
+                                                          [] &gt; blah28
+                                                            blah29 &gt; @
+                                                            [] &gt; blah29
+                                                              blah30 &gt; @
+                                                              [] &gt; blah30
+                                                                blah31 &gt; @
+                                                                [] &gt; blah31
+                                                                  blah32 &gt; @
+                                                                  [] &gt; blah32
+                                                                    blah33 &gt; @
+                                                                    [] &gt; blah33
+                                                                      blah34 &gt; @
+                                                                      [] &gt; blah34
+                                                                        blah35 &gt; @
+                                                                        [] &gt; blah35
+                                                                          blah36 &gt; @
+                                                                          [] &gt; blah36
+                                                                            blah37 &gt; @
+                                                                            [] &gt; blah37
+                                                                              blah38 &gt; @
+                                                                              [] &gt; blah38
+                                                                                blah39 &gt; @
+                                                                                [] &gt; blah39
+                                                                                  TRUE &gt; @
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>org.eolang</tail>
+         <part>org.eolang</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="test" pos="0">
+         <o base="blah0" line="4" name="@" pos="2"/>
+         <o abstract="" line="5" name="blah0" pos="2">
+            <o base="blah1" line="6" name="@" pos="4"/>
+            <o abstract="" line="7" name="blah1" pos="4">
+               <o base="blah2" line="8" name="@" pos="6"/>
+               <o abstract="" line="9" name="blah2" pos="6">
+                  <o base="blah3" line="10" name="@" pos="8"/>
+                  <o abstract="" line="11" name="blah3" pos="8">
+                     <o base="blah4" line="12" name="@" pos="10"/>
+                     <o abstract="" line="13" name="blah4" pos="10">
+                        <o base="blah5" line="14" name="@" pos="12"/>
+                        <o abstract="" line="15" name="blah5" pos="12">
+                           <o base="blah6" line="16" name="@" pos="14"/>
+                           <o abstract="" line="17" name="blah6" pos="14">
+                              <o base="blah7" line="18" name="@" pos="16"/>
+                              <o abstract="" line="19" name="blah7" pos="16">
+                                 <o base="blah8" line="20" name="@" pos="18"/>
+                                 <o abstract="" line="21" name="blah8" pos="18">
+                                    <o base="blah9" line="22" name="@" pos="20"/>
+                                    <o abstract="" line="23" name="blah9" pos="20">
+                                       <o base="blah10" line="24" name="@" pos="22"/>
+                                       <o abstract="" line="25" name="blah10" pos="22">
+                                          <o base="blah11" line="26" name="@" pos="24"/>
+                                          <o abstract="" line="27" name="blah11" pos="24">
+                                             <o base="blah12" line="28" name="@" pos="26"/>
+                                             <o abstract="" line="29" name="blah12" pos="26">
+                                                <o base="blah13" line="30" name="@" pos="28"/>
+                                                <o abstract="" line="31" name="blah13" pos="28">
+                                                   <o base="blah14" line="32" name="@" pos="30"/>
+                                                   <o abstract="" line="33" name="blah14" pos="30">
+                                                      <o base="blah15" line="34" name="@" pos="32"/>
+                                                      <o abstract="" line="35" name="blah15" pos="32">
+                                                         <o base="blah16" line="36" name="@" pos="34"/>
+                                                         <o abstract="" line="37" name="blah16" pos="34">
+                                                            <o base="blah17" line="38" name="@" pos="36"/>
+                                                            <o abstract="" line="39" name="blah17" pos="36">
+                                                               <o base="blah18" line="40" name="@" pos="38"/>
+                                                               <o abstract="" line="41" name="blah18" pos="38">
+                                                                  <o base="blah19" line="42" name="@" pos="40"/>
+                                                                  <o abstract="" line="43" name="blah19" pos="40">
+                                                                     <o base="blah20" line="44" name="@" pos="42"/>
+                                                                     <o abstract="" line="45" name="blah20" pos="42">
+                                                                        <o base="blah21" line="46" name="@" pos="44"/>
+                                                                        <o abstract="" line="47" name="blah21" pos="44">
+                                                                           <o base="blah22" line="48" name="@" pos="46"/>
+                                                                           <o abstract="" line="49" name="blah22" pos="46">
+                                                                              <o base="blah23" line="50" name="@" pos="48"/>
+                                                                              <o abstract="" line="51" name="blah23" pos="48">
+                                                                                 <o base="blah24" line="52" name="@" pos="50"/>
+                                                                                 <o abstract="" line="53" name="blah24" pos="50">
+                                                                                    <o base="blah25" line="54" name="@" pos="52"/>
+                                                                                    <o abstract="" line="55" name="blah25" pos="52">
+                                                                                       <o base="blah26" line="56" name="@" pos="54"/>
+                                                                                       <o abstract="" line="57" name="blah26" pos="54">
+                                                                                          <o base="blah27" line="58" name="@" pos="56"/>
+                                                                                          <o abstract="" line="59" name="blah27" pos="56">
+                                                                                             <o base="blah28" line="60" name="@" pos="58"/>
+                                                                                             <o abstract="" line="61" name="blah28" pos="58">
+                                                                                                <o base="blah29" line="62" name="@" pos="60"/>
+                                                                                                <o abstract="" line="63" name="blah29" pos="60">
+                                                                                                   <o base="blah30" line="64" name="@" pos="62"/>
+                                                                                                   <o abstract="" line="65" name="blah30" pos="62">
+                                                                                                      <o base="blah31" line="66" name="@" pos="64"/>
+                                                                                                      <o abstract="" line="67" name="blah31" pos="64">
+                                                                                                         <o base="blah32" line="68" name="@" pos="66"/>
+                                                                                                         <o abstract="" line="69" name="blah32" pos="66">
+                                                                                                            <o base="blah33" line="70" name="@" pos="68"/>
+                                                                                                            <o abstract="" line="71" name="blah33" pos="68">
+                                                                                                               <o base="blah34" line="72" name="@" pos="70"/>
+                                                                                                               <o abstract="" line="73" name="blah34" pos="70">
+                                                                                                                  <o base="blah35" line="74" name="@" pos="72"/>
+                                                                                                                  <o abstract="" line="75" name="blah35" pos="72">
+                                                                                                                     <o base="blah36" line="76" name="@" pos="74"/>
+                                                                                                                     <o abstract="" line="77" name="blah36" pos="74">
+                                                                                                                        <o base="blah37" line="78" name="@" pos="76"/>
+                                                                                                                        <o abstract="" line="79" name="blah37" pos="76">
+                                                                                                                           <o base="blah38" line="80" name="@" pos="78"/>
+                                                                                                                           <o abstract="" line="81" name="blah38" pos="78">
+                                                                                                                              <o base="blah39" line="82" name="@" pos="80"/>
+                                                                                                                              <o abstract="" line="83" name="blah39" pos="80">
+                                                                                                                                 <o base="bool" data="bytes" line="84" name="@" pos="82">01</o>
+                                                                                                                              </o>
+                                                                                                                           </o>
+                                                                                                                        </o>
+                                                                                                                     </o>
+                                                                                                                  </o>
+                                                                                                               </o>
+                                                                                                            </o>
+                                                                                                         </o>
+                                                                                                      </o>
+                                                                                                   </o>
+                                                                                                </o>
+                                                                                             </o>
+                                                                                          </o>
+                                                                                       </o>
+                                                                                    </o>
+                                                                                 </o>
+                                                                              </o>
+                                                                           </o>
+                                                                        </o>
+                                                                     </o>
+                                                                  </o>
+                                                               </o>
+                                                            </o>
+                                                         </o>
+                                                      </o>
+                                                   </o>
+                                                </o>
+                                             </o>
+                                          </o>
+                                       </o>
+                                    </o>
+                                 </o>
+                              </o>
+                           </o>
+                        </o>
+                     </o>
+                  </o>
+               </o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

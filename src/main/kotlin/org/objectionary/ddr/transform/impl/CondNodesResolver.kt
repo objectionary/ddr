@@ -40,10 +40,6 @@ import org.w3c.dom.Node
 
 /**
  * Inserts if blocks instead of conditional nodes and attributes application
- *
- * @todo #64:30min right now conditions are set absolutely equivalent to how they looked initially,
- * but their initial parameters need to be replaced by the parameters they were initialized with,
- * see conditional attribute test expected output, it's incorrect now
  */
 class CondNodesResolver(
     private val graph: Graph,

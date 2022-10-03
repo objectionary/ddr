@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="1"
+          name="transformer"
+          time="2022-10-03T12:05:23.571777139Z"
+          version="0.28.5">
+   <listing>+alias util.utils
+
+[] &gt; user
+  utils.doUtil.attr &gt; @
+
+[] &gt; app
+  user.inner &gt; @
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>alias</head>
+         <tail>util.utils</tail>
+         <part>util.utils</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="user" pos="0">
+         <o base="utils" line="4" pos="2"/>
+         <o base=".doUtil" line="4" method="" pos="7"/>
+         <o base=".attr" line="4" method="" name="@" pos="14"/>
+      </o>
+      <o abstract="" line="6" name="app" pos="0">
+         <o base="user" line="7" pos="2"/>
+         <o base=".inner" line="7" method="" name="@" pos="6"/>
+      </o>
+   </objects>
+</program>

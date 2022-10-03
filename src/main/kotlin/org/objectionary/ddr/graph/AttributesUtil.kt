@@ -101,6 +101,7 @@ fun packageName(node: Node?): String {
  * @param graph graph
  * @return node found through refs
  */
+@Suppress("AVOID_NULL_CHECKS")
 fun findRef(
     node: Node?,
     objects: MutableSet<Node>,

@@ -197,12 +197,12 @@ class CondNodesResolver(
                 if (base(elem) == fv) {
                     elem.attributes.removeNamedItem("base")
                     val i = abstractFreeVars.indexOf(fv)
-                    val repl : String? =
-                    if (i == -1) {
-                        fv
-                    } else {
-                        declFreeVars[i]
-                    }
+                    val repl =
+                        if (i == -1) {
+                            fv
+                        } else {
+                            declFreeVars[i]
+                        }
                     val base = document.createAttribute("base").apply { value = repl }
                     elem.attributes.setNamedItem(base)
                 }
@@ -214,6 +214,7 @@ class CondNodesResolver(
         return ifChild
     }
 
+    @Suppress("AVOID_NULL_CHECKS")
     private fun getFreeVars(decl: Node?): MutableList<String?> {
         val res: MutableList<String?> = mutableListOf()
         val children = decl?.childNodes ?: return res
@@ -221,8 +222,8 @@ class CondNodesResolver(
             val ch = children.item(i)
             if (name(ch) != null) {
                 res.add(name(ch))
-            } else if (base(ch) != null) {
-                res.add(base(ch))
+            } else {
+                base(ch)?.let { res.add(base(ch)) }
             }
         }
         return res

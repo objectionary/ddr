@@ -33,6 +33,7 @@ import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.graph.repr.IgNodeCondition
 import org.objectionary.ddr.transform.Resolver
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -40,10 +41,6 @@ import org.w3c.dom.Node
 
 /**
  * Inserts if blocks instead of conditional nodes and attributes application
- *
- * @todo #64:30min right now conditions are set absolutely equivalent to how they looked initially,
- * but their initial parameters need to be replaced by the parameters they were initialized with,
- * see conditional attribute test expected output, it's incorrect now
  */
 class CondNodesResolver(
     private val graph: Graph,
@@ -68,15 +65,13 @@ class CondNodesResolver(
         val objects = graph.initialObjects
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
-            objects.filter { ref(it) == line(node.body) }.forEach { insert(it, node.cond, node.fstOption, node.sndOption) }
+            objects.filter { ref(it) == line(node.body) }.forEach {
+                insert(it, node.cond, node.fstOption, node.sndOption)
+            }
         }
     }
 
     private fun injectAttributes() {
-        traverse()
-    }
-
-    private fun traverse() {
         val objects = graph.initialObjects
         try {
             for (node in objects) {
@@ -85,7 +80,7 @@ class CondNodesResolver(
                 traverseDotChain(node, abstract)
             }
         } catch (e: ConcurrentModificationException) {
-            traverse()
+            injectAttributes()
         }
     }
 
@@ -151,7 +146,7 @@ class CondNodesResolver(
      */
     private fun insert(
         node: Node,
-        cond: MutableList<Node>,
+        cond: IgNodeCondition,
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>
     ) {
@@ -177,7 +172,7 @@ class CondNodesResolver(
     @Suppress("TOO_MANY_PARAMETERS")
     private fun addDocumentChild(
         document: Document,
-        cond: MutableList<Node>,
+        cond: IgNodeCondition,
         fstOption: MutableList<Node>,
         sndOption: MutableList<Node>,
         node: Node,
@@ -192,10 +187,46 @@ class CondNodesResolver(
             ifChild.setAttribute("name", "@")
             expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
         }
-        cond.forEach { ifChild.appendChild(it.cloneNode(true)) }
+        val abstract = declarations[node]
+        val abstractFreeVars = getFreeVars(abstract)
+        val decl = firstRef(node, graph.initialObjects)
+        val declFreeVars = getFreeVars(decl)
+        cond.cond.forEach { cnd ->
+            val elem = cnd.cloneNode(true)
+            cond.freeVars.forEach { fv ->
+                if (base(elem) == fv) {
+                    elem.attributes.removeNamedItem("base")
+                    val i = abstractFreeVars.indexOf(fv)
+                    val repl =
+                        if (i == -1) {
+                            fv
+                        } else {
+                            declFreeVars[i]
+                        }
+                    val base = document.createAttribute("base").apply { value = repl }
+                    elem.attributes.setNamedItem(base)
+                }
+            }
+            ifChild.appendChild(elem.cloneNode(true))
+        }
         appendExpr(document, node, expr, ifChild, fstOption[0])
         appendExpr(document, node, expr, ifChild, sndOption[0])
         return ifChild
+    }
+
+    @Suppress("AVOID_NULL_CHECKS")
+    private fun getFreeVars(decl: Node?): MutableList<String?> {
+        val res: MutableList<String?> = mutableListOf()
+        val children = decl?.childNodes ?: return res
+        for (i in 0..children.length) {
+            val ch = children.item(i)
+            if (name(ch) != null) {
+                res.add(name(ch))
+            } else {
+                base(ch)?.let { res.add(base(ch)) }
+            }
+        }
+        return res
     }
 
     /**

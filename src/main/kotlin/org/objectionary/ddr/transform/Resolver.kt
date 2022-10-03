@@ -44,7 +44,10 @@ abstract class Resolver(
     private val graph: Graph,
     private val documents: MutableMap<Document, String>
 ) {
-    private val declarations: MutableMap<Node, Node?> = mutableMapOf()
+    /**
+     * Map of objects and their declarations
+     */
+    protected val declarations: MutableMap<Node, Node?> = mutableMapOf()
 
     /**
      * Performs the resolution

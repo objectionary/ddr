@@ -14,7 +14,12 @@ open class IGraphAttr(
     open val name: String,
     open val parentDistance: Int,
     open val body: Node
-)
+) {
+    /**
+     * Todo
+     */
+    val freeVars: MutableSet<String> = mutableSetOf()
+}
 
 /**
  * Conditional graph attribute representation
@@ -31,7 +36,7 @@ class IGraphCondAttr(
     name: String,
     parentDistance: Int,
     body: Node,
-    val cond: MutableList<Node>,
+    val cond: IgNodeCondition,
     val fstOption: MutableList<Node>,
     val sndOption: MutableList<Node>
 ) : IGraphAttr(

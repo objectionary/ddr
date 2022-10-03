@@ -34,9 +34,18 @@ import org.w3c.dom.Node
  */
 class AttributesSetter(private val graph: Graph) {
     /**
+     * Aggregate the process of attributes pushing
+     */
+    fun setAttributes() {
+        setDefaultAttributes()
+        pushAttributes()
+        // processFreeVars()
+    }
+
+    /**
      * Add all already existent attributes to attributes list of the node
      */
-    fun setDefaultAttributes() {
+    private fun setDefaultAttributes() {
         graph.igNodes.forEach { node ->
             val attributes = node.body.childNodes
             for (j in 0 until attributes.length) {
@@ -53,7 +62,7 @@ class AttributesSetter(private val graph: Graph) {
     /**
      * Push attributes from parents to children
      */
-    fun pushAttributes(): Unit = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
+    private fun pushAttributes(): Unit = graph.heads.forEach { dfsPush(it, null, mutableMapOf()) }
 
     private fun dfsPush(
         node: IGraphNode,

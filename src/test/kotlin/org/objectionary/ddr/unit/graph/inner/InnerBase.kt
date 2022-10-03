@@ -25,11 +25,11 @@
 package org.objectionary.ddr.unit.graph.inner
 
 import org.objectionary.ddr.TestBase
+import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
-import org.objectionary.ddr.launch.processAttributes
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
@@ -47,7 +47,8 @@ open class InnerBase : TestBase {
         val path = getTestName()
         documents.clear()
         val graph = buildGraph(constructInPath(path))
-        processAttributes(graph)
+        val attributesSetter = AttributesSetter(graph)
+        attributesSetter.setAttributes()
         val innerPropagator = InnerPropagator(graph)
         innerPropagator.propagateInnerAttrs()
         val out = ByteArrayOutputStream()

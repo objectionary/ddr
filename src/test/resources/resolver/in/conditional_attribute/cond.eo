@@ -2,7 +2,7 @@
   [] > y
     QQ.io.stdout "base" > @
   [] > x
-    QQ.io.stdout "hehe" > @
+    QQ.io.stdout "x" > @
 
 [] > derived
   base > @
@@ -15,10 +15,7 @@
       i.eq "cat"
       base
       derived
-    [] > attr
-      QQ.io.stdout "hehe" > @
 
 [cond] > app
-  condition.check 20 > instance1
   condition.check cond > instance2
   instance2.x > @

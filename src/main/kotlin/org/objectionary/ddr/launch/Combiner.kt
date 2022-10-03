@@ -53,7 +53,8 @@ fun launch(path: String) {
     documents.clear()
     val graph = buildGraph(path, false)
     CondAttributesSetter(graph).processConditions()
-    processAttributes(graph)
+    val attributesSetter = AttributesSetter(graph)
+    attributesSetter.setAttributes()
     val innerPropagator = InnerPropagator(graph)
     innerPropagator.propagateInnerAttrs()
     CondNodesResolver(graph, documents).resolve()
@@ -79,17 +80,6 @@ fun buildGraph(path: String, gather: Boolean = true): Graph {
     val builder = GraphBuilder(documents)
     builder.createGraph()
     return builder.graph
-}
-
-/**
- * Aggregates attributes propagation
- *
- * @param graph graph, whose nodes' attributes will be processed
- */
-fun processAttributes(graph: Graph) {
-    val attributesSetter = AttributesSetter(graph)
-    attributesSetter.setDefaultAttributes()
-    attributesSetter.pushAttributes()
 }
 
 /**

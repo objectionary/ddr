@@ -8,7 +8,7 @@
     QQ
     .io
     .stdout > @
-      "hehe"
+      "x"
 
 [] > derived
   base > @
@@ -26,20 +26,12 @@
     .if > @
       base
       derived
-    [] > attr
-      QQ
-      .io
-      .stdout > @
-        "hehe"
 
 [cond] > app
   condition
-  .check > instance1
-    20
-  condition
   .check > instance2
     cond
-  i
+  cond
   .eq
     "cat"
   .if > @

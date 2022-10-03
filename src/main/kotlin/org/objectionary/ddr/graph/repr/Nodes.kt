@@ -33,6 +33,11 @@ open class IGraphNode(
      * List of attributes of this node (inner objects and propagated attributes)
      */
     val attributes: MutableList<IGraphAttr> = mutableListOf()
+
+    /**
+     * List of attributes of this node (inner objects and propagated attributes)
+     */
+    val freeVars: MutableSet<String> = mutableSetOf()
 }
 
 /**
@@ -43,12 +48,30 @@ open class IGraphNode(
  * @property cond list of nodes representing the condition
  * @property fstOption list of nodes representing the option on the true branch
  * @property sndOption list of nodes representing the option on the false branch
+ *
+ * @todo #64:30min gather cond, fstOption and sndOption into the existing
+ * IgNodeCondition structure and refactor its usages
  */
 @Suppress("CLASS_NAME_INCORRECT")
 class IGraphCondNode(
     override val body: Node,
     override val packageName: String,
-    val cond: MutableList<Node>,
+    val cond: IgNodeCondition,
     val fstOption: MutableList<Node>,
     val sndOption: MutableList<Node>
 ) : IGraphNode(body, packageName)
+
+/**
+ * Conditional node's condition representation
+ *
+ * @property cond list of nodes representing the condition
+ */
+@Suppress("CLASS_NAME_INCORRECT")
+data class IgNodeCondition(
+    val cond: MutableList<Node>
+) {
+    /**
+     * Free variables of the object that is the direct parent of the condition
+     */
+    val freeVars: MutableSet<String> = linkedSetOf()
+}

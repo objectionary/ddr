@@ -253,7 +253,7 @@ SOFTWARE.
     <dependency>
       <groupId>com.yegor256</groupId>
       <artifactId>xsline</artifactId>
-      <version>0.12.2</version>
+      <version>0.13.0</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -306,7 +306,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.28.7</version>
+      <version>0.28.9</version>
     </dependency>
     <dependency>
       <groupId>org.eolang</groupId>

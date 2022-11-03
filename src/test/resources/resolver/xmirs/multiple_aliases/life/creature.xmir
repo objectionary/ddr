@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="1"
+          name="transformer"
+          time="2022-11-03T11:28:27.176219400Z"
+          version="0.28.10">
+   <listing>+package org.life
+
+[] &gt; creature
+  [] &gt; live
+    QQ.io.stdout &gt; @
+      "ALIVE"
+</listing>
+   <errors/>
+   <sheets/>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>org.life</tail>
+         <part>org.life</part>
+      </meta>
+   </metas>
+   <objects>
+      <o abstract="" line="3" name="creature" pos="0">
+         <o abstract="" line="4" name="live" pos="2">
+            <o base="QQ" line="5" pos="4"/>
+            <o base=".io" line="5" method="" pos="6"/>
+            <o base=".stdout" line="5" method="" name="@" pos="9">
+               <o base="string" data="string" line="6" pos="6">ALIVE</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

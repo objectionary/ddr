@@ -50,7 +50,7 @@ open class IGraphNode(
  * @property sndOption list of nodes representing the option on the false branch
  *
  * @todo #64:30min gather cond, fstOption and sndOption into the existing
- * IgNodeCondition structure and refactor its usages
+ *  IgNodeCondition structure and refactor its usages
  */
 @Suppress("CLASS_NAME_INCORRECT")
 class IGraphCondNode(

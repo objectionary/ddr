@@ -48,10 +48,11 @@ val documents: MutableMap<Document, String> = mutableMapOf()
  * Aggregates all steps of analysis
  *
  * @param path path to the directory to be analysed
+ * @param dirName postfix of the resulting directory
  */
-fun launch(path: String) {
+fun launch(path: String, dirName: String = "ddr") {
     documents.clear()
-    val graph = buildGraph(path, false)
+    val graph = buildGraph(path, false, dirName)
     CondAttributesSetter(graph).processConditions()
     val attributesSetter = AttributesSetter(graph)
     attributesSetter.setAttributes()
@@ -66,14 +67,19 @@ fun launch(path: String) {
  *
  * @param path path to the directory with files
  * @param gather if outputs should be gathered
+ * @param dirName postfix of the resulting directory
  * @return graph that was built
  */
-fun buildGraph(path: String, gather: Boolean = true): Graph {
+fun buildGraph(
+    path: String,
+    gather: Boolean = true,
+    dirName: String = "ddr"
+): Graph {
     val transformer = XslTransformer()
     Files.walk(Paths.get(path))
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = createTempDirectories(path, it.toString(), gather)
+            val tmpPath = createTempDirectories(path, it.toString(), gather, dirName)
             transformer.transformXml(it.toString(), tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -99,13 +105,14 @@ fun getDocument(filename: String): Document? {
 private fun createTempDirectories(
     path: String,
     filename: String,
-    gather: Boolean = true
+    gather: Boolean = true,
+    dirName: String
 ): String {
     val tmpPath =
         if (gather) {
             "${path.substringBeforeLast(sep)}${sep}TMP$sep${path.substringAfterLast(sep)}_tmp${filename.substring(path.length)}"
         } else {
-            "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_ddr${filename.substring(path.length)}"
+            "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_$dirName${filename.substring(path.length)}"
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="3"
+<program ms="8"
           name="transformer"
-          time="2022-11-03T11:34:09.864244200Z"
+          time="2022-11-03T11:34:09.006279100Z"
           version="0.28.10">
    <listing>+alias utils.util
 +alias org.eolang.txt.sprintf
@@ -9,7 +9,7 @@
 
 [] &gt; main
   util &gt; @
-  $.action 20 &gt; xx
+  action 20 &gt; xx
   [] &gt; main_action
     stdout &gt; @
       sprintf
@@ -41,9 +41,8 @@
    <objects>
       <o abstract="" line="5" name="main" pos="0">
          <o base="util" line="6" name="@" pos="2"/>
-         <o base="$" line="7" pos="2"/>
-         <o base=".action" line="7" method="" name="xx" pos="3">
-            <o base="int" data="bytes" line="7" pos="11">00 00 00 00 00 00 00 14</o>
+         <o base="action" line="7" name="xx" pos="2">
+            <o base="int" data="bytes" line="7" pos="9">00 00 00 00 00 00 00 14</o>
          </o>
          <o abstract="" line="8" name="main_action" pos="2">
             <o base="stdout" line="9" name="@" pos="4">

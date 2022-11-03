@@ -66,7 +66,7 @@ class InnerPropagator(
         val repetitions = 5
 
         // @todo #44:30min this solution is naive, optimize it (see commented out lines)
-        // while (decorators.containsValue(false)) {
+        //  while (decorators.containsValue(false)) {
         for (i in 0..repetitions) {
             decorators.filter { !it.value }.forEach {
                 getBaseAbstract(it.key)

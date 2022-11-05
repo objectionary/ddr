@@ -145,7 +145,7 @@ abstract class Resolver(
             }
         }
         if (base(node) == "^") {
-            return node.parentNode.parentNode
+            return node.parentNode?.parentNode
         }
         if (base(node) == "$") {
             return node.parentNode

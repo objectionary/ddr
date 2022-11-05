@@ -60,13 +60,15 @@ class CondAttributesSetter(
             }
             val igCond = IgNodeCondition(cond)
             traverseParents(node.parentNode, igCond.freeVars)
-            if (name(node) != "@") {
-                graph.igNodes.add(IGraphCondNode(node, packageName(node), igCond, fstOption, sndOption))
-                val parent = graph.igNodes.find { it.body == node.parentNode }
-                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, igCond, fstOption, sndOption))
-            } else {
-                val parent = graph.igNodes.find { it.body == node.parentNode }
-                parent?.attributes?.add(IGraphCondAttr(name(node)!!, 0, node, igCond, fstOption, sndOption))
+            name(node)?.let {name ->
+                if (name != "@") {
+                    graph.igNodes.add(IGraphCondNode(node, packageName(node), igCond, fstOption, sndOption))
+                    val parent = graph.igNodes.find { it.body == node.parentNode }
+                    parent?.attributes?.add(IGraphCondAttr(name, 0, node, igCond, fstOption, sndOption))
+                } else {
+                    val parent = graph.igNodes.find { it.body == node.parentNode }
+                    parent?.attributes?.add(IGraphCondAttr(name, 0, node, igCond, fstOption, sndOption))
+                }
             }
         }
     }

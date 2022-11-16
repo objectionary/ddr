@@ -88,7 +88,7 @@ SOFTWARE.
     <kotlin.version>1.7.20</kotlin.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <diktat-check.version>1.2.3</diktat-check.version>
+    <diktat-check.version>1.2.4.2</diktat-check.version>
     <dokka.version>1.7.20</dokka.version>
   </properties>
   <repositories>

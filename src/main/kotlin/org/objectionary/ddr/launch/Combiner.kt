@@ -37,7 +37,6 @@ import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Files
-import java.nio.file.Paths
 import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -77,7 +76,7 @@ fun buildGraph(
     dirName: String = "ddr"
 ): Graph {
     val transformer = XslTransformer()
-    val filePath = Paths.get(path)
+    val filePath = Path.of(path)
     Files.walk(filePath)
         .filter(Files::isRegularFile)
         .forEach {
@@ -119,7 +118,7 @@ private fun createTempDirectories(
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)
-    val newFilePath = Paths.get(tmpPath)
+    val newFilePath = Path.of(tmpPath)
     try {
         Files.createFile(newFilePath)
     } catch (e: Exception) {

@@ -5,6 +5,7 @@ src/main/resources/sample_in
 src/main/resources/sample_out
 src/main/resources/tmp_out
 *_ddr
+*.iml
 tmp*
 *TMP
 *eo_outputs

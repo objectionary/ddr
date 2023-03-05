@@ -38,6 +38,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
 
 private val logger = LoggerFactory.getLogger("org.objectionary.ddr.launch.Combiner")
@@ -76,10 +77,11 @@ fun buildGraph(
     dirName: String = "ddr"
 ): Graph {
     val transformer = XslTransformer()
-    Files.walk(Paths.get(path))
+    val filePath = Paths.get(path)
+    Files.walk(filePath)
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = createTempDirectories(path, it.toString(), gather, dirName)
+            val tmpPath = createTempDirectories(filePath, it.toString(), gather, dirName)
             transformer.transformXml(it.toString(), tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -103,16 +105,17 @@ fun getDocument(filename: String): Document? {
 }
 
 private fun createTempDirectories(
-    path: String,
+    path: Path,
     filename: String,
     gather: Boolean = true,
     dirName: String
 ): String {
+    val strPath = path.toString()
     val tmpPath =
         if (gather) {
-            "${path.substringBeforeLast(sep)}${sep}TMP$sep${path.substringAfterLast(sep)}_tmp${filename.substring(path.length)}"
+            "${strPath.substringBeforeLast(sep)}${sep}TMP$sep${strPath.substringAfterLast(sep)}_tmp${filename.substring(strPath.length)}"
         } else {
-            "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_$dirName${filename.substring(path.length)}"
+            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$dirName${filename.substring(strPath.length)}"
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)

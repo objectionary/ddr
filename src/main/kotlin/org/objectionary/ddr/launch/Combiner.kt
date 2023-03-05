@@ -90,6 +90,8 @@ fun buildGraph(
 }
 
 /**
+ * Get Document from source xml file
+ *
  * @param filename source xml filename
  * @return generated Document
  */
@@ -103,18 +105,28 @@ fun getDocument(filename: String): Document? {
     return null
 }
 
+/**
+ * Creates a new temporary directory for transformed xmir files.
+ *
+ * @param path path to the directory with source xmir files or a single file.
+ * @param filename path to current xmir file in source directory.
+ * @param gather if true, the resulting files will be gathered in the TMP directory.
+ * Otherwise, a directory will be created ending with the [endSuffix]. True by default.
+ * @param endSuffix the suffix that will end the output directory.
+ * @return path to the modified [filename] file in temporary directory.
+ */
 private fun createTempDirectories(
     path: Path,
     filename: String,
     gather: Boolean = true,
-    dirName: String
+    endSuffix: String
 ): String {
     val strPath = path.toString()
     val tmpPath =
         if (gather) {
             "${strPath.substringBeforeLast(sep)}${sep}TMP$sep${strPath.substringAfterLast(sep)}_tmp${filename.substring(strPath.length)}"
         } else {
-            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$dirName${filename.substring(strPath.length)}"
+            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$endSuffix${filename.substring(strPath.length)}"
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)

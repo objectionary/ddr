@@ -1,8 +1,7 @@
-package org.objectionary.ddr.unit.files.temp_directory
+package org.objectionary.ddr.unit.files.tempdir
 
 import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.launch.buildGraph
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.assertTrue
@@ -10,12 +9,12 @@ import kotlin.test.assertTrue
 /**
  * Tests generation of temporary directory for modified xmir files
  */
-open class TempDirectoryBase: TestBase {
+open class TempDirectoryBase : TestBase {
     override fun doTest() {
         for (i in 0..2) {
             val path = constructInPath(getTestName()) + sep.toString().repeat(i)
-            val dirPostfix = "ddr"
             deleteTempDirIfExists(Path.of(path))
+            val dirPostfix = "ddr"
             buildGraph(path, false, dirPostfix)
             checkIfTempDirExists(Path.of(path))
             deleteTempDirIfExists(Path.of(path))
@@ -23,7 +22,7 @@ open class TempDirectoryBase: TestBase {
     }
 
     private fun deleteTempDirIfExists(pathToSource: Path, dirPostfix: String = "ddr") {
-        val strPathToTemp = pathToSource.toString() + "_" + dirPostfix
+        val strPathToTemp = "${pathToSource}_$dirPostfix"
         val tempDir = File(strPathToTemp)
         if (tempDir.exists() && tempDir.isDirectory) {
             tempDir.deleteRecursively()
@@ -31,10 +30,9 @@ open class TempDirectoryBase: TestBase {
     }
 
     private fun checkIfTempDirExists(pathToSource: Path, dirPostfix: String = "ddr") {
-        val strPathToTemp = pathToSource.toString() + "_" + dirPostfix
+        val strPathToTemp = "${pathToSource}_$dirPostfix"
         val tempDir = File(strPathToTemp)
         assertTrue { tempDir.exists() }
     }
     override fun constructOutPath(directoryName: String) = ""
-
 }

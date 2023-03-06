@@ -1,8 +1,8 @@
-package org.objectionary.ddr.unit.files.temp_directory
+package org.objectionary.ddr.unit.files.tempdir
 
 import org.junit.jupiter.api.Test
 
-class TempDirectoryTest: TempDirectoryBase() {
+class TempDirectoryTest : TempDirectoryBase() {
     @Test
     fun `test basic tree`() = doTest()
 

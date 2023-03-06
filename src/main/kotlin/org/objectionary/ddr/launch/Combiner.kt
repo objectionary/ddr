@@ -48,11 +48,11 @@ val documents: MutableMap<Document, String> = mutableMapOf()
  * Aggregates all steps of analysis
  *
  * @param path path to the directory to be analysed
- * @param dirName postfix of the resulting directory
+ * @param dirPostfix postfix of the resulting directory
  */
-fun launch(path: String, dirName: String = "ddr") {
+fun launch(path: String, dirPostfix: String = "ddr") {
     documents.clear()
-    val graph = buildGraph(path, false, dirName)
+    val graph = buildGraph(path, false, dirPostfix)
     CondAttributesSetter(graph).processConditions()
     val attributesSetter = AttributesSetter(graph)
     attributesSetter.setAttributes()
@@ -67,20 +67,20 @@ fun launch(path: String, dirName: String = "ddr") {
  *
  * @param path path to the directory with files
  * @param gather if outputs should be gathered
- * @param dirName postfix of the resulting directory
+ * @param dirPostfix postfix of the resulting directory
  * @return graph that was built
  */
 fun buildGraph(
     path: String,
     gather: Boolean = true,
-    dirName: String = "ddr"
+    dirPostfix: String = "ddr"
 ): Graph {
     val transformer = XslTransformer()
     val filePath = Path.of(path)
     Files.walk(filePath)
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = createTempDirectories(filePath, it.toString(), gather, dirName)
+            val tmpPath = createTempDirectories(filePath, it.toString(), gather, dirPostfix)
             transformer.transformXml(it.toString(), tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -106,27 +106,26 @@ fun getDocument(filename: String): Document? {
 }
 
 /**
- * Creates a new temporary directory for transformed xmir files.
+ * Creates a new temporary directory for transformed xmir files
  *
- * @param path path to the directory with source xmir files or a single file.
- * @param filename path to current xmir file in source directory.
- * @param gather if true, the resulting files will be gathered in the TMP directory.
- * Otherwise, a directory will be created ending with the [endSuffix]. True by default.
- * @param endSuffix the suffix that will end the output directory.
- * @return path to the modified [filename] file in temporary directory.
+ * @param path path to the directory with source xmir files or a single file
+ * @param filename path to current xmir file in source directory
+ * @param gather if outputs should be gathered
+ * @param dirPostfix postfix of the resulting directory
+ * @return path to the modified [filename] file in temporary directory
  */
 private fun createTempDirectories(
     path: Path,
     filename: String,
     gather: Boolean = true,
-    endSuffix: String
+    dirPostfix: String
 ): String {
     val strPath = path.toString()
     val tmpPath =
         if (gather) {
             "${strPath.substringBeforeLast(sep)}${sep}TMP$sep${strPath.substringAfterLast(sep)}_tmp${filename.substring(strPath.length)}"
         } else {
-            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$endSuffix${filename.substring(strPath.length)}"
+            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$dirPostfix${filename.substring(strPath.length)}"
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)

@@ -48,11 +48,11 @@ val documents: MutableMap<Document, String> = mutableMapOf()
  * Aggregates all steps of analysis
  *
  * @param path path to the directory to be analysed
- * @param dirPostfix postfix of the resulting directory
+ * @param postfix postfix of the resulting directory
  */
-fun launch(path: String, dirPostfix: String = "ddr") {
+fun launch(path: String, postfix: String = "ddr") {
     documents.clear()
-    val graph = buildGraph(path, false, dirPostfix)
+    val graph = buildGraph(path, false, postfix)
     CondAttributesSetter(graph).processConditions()
     val attributesSetter = AttributesSetter(graph)
     attributesSetter.setAttributes()
@@ -67,20 +67,20 @@ fun launch(path: String, dirPostfix: String = "ddr") {
  *
  * @param path path to the directory with files
  * @param gather if outputs should be gathered
- * @param dirPostfix postfix of the resulting directory
+ * @param postfix postfix of the resulting directory
  * @return graph that was built
  */
 fun buildGraph(
     path: String,
     gather: Boolean = true,
-    dirPostfix: String = "ddr"
+    postfix: String = "ddr"
 ): Graph {
     val transformer = XslTransformer()
     val filePath = Path.of(path)
     Files.walk(filePath)
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = createTempDirectories(filePath, it.toString(), gather, dirPostfix)
+            val tmpPath = createTempDirectories(filePath, it.toString(), gather, postfix)
             transformer.transformXml(it.toString(), tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -111,21 +111,21 @@ fun getDocument(filename: String): Document? {
  * @param path path to the directory with source xmir files or a single file
  * @param filename path to current xmir file in source directory
  * @param gather if outputs should be gathered
- * @param dirPostfix postfix of the resulting directory
+ * @param postfix postfix of the resulting directory
  * @return path to the modified [filename] file in temporary directory
  */
 private fun createTempDirectories(
     path: Path,
     filename: String,
     gather: Boolean = true,
-    dirPostfix: String
+    postfix: String
 ): String {
     val strPath = path.toString()
     val tmpPath =
         if (gather) {
             "${strPath.substringBeforeLast(sep)}${sep}TMP$sep${strPath.substringAfterLast(sep)}_tmp${filename.substring(strPath.length)}"
         } else {
-            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$dirPostfix${filename.substring(strPath.length)}"
+            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$postfix${filename.substring(strPath.length)}"
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)

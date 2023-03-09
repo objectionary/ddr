@@ -62,18 +62,19 @@ class InnerPropagator(
     }
 
     /**
-     * @todo #44:30min this solution is naive, optimize it (see commented out lines)
+     * @todo #44:30min this solution is naive, optimize it (see snippet below)
+     *   while (decorators.containsValue(false)) {
+     *       for(i in 0..repetitions) {...}
+     *   }
      */
     @Suppress("MAGIC_NUMBER")
     private fun processDecorators() {
         val repetitions = 5
-        // while (decorators.containsValue(false)) {
         for (i in 0..repetitions) {
             decorators.filter { !it.value }.forEach {
                 getBaseAbstract(it.key)
             }
         }
-        // }
     }
 
     /**

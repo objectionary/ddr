@@ -96,8 +96,8 @@ class CondNodesResolver(
         }
     }
 
-
     /**
+     *
      * @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
      */
     private fun traverseDotChain(

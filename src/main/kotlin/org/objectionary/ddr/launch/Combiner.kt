@@ -37,7 +37,7 @@ import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
 
 private val logger = LoggerFactory.getLogger("org.objectionary.ddr.launch.Combiner")
@@ -48,11 +48,11 @@ val documents: MutableMap<Document, String> = mutableMapOf()
  * Aggregates all steps of analysis
  *
  * @param path path to the directory to be analysed
- * @param dirName postfix of the resulting directory
+ * @param postfix postfix of the resulting directory
  */
-fun launch(path: String, dirName: String = "ddr") {
+fun launch(path: String, postfix: String = "ddr") {
     documents.clear()
-    val graph = buildGraph(path, false, dirName)
+    val graph = buildGraph(path, false, postfix)
     CondAttributesSetter(graph).processConditions()
     val attributesSetter = AttributesSetter(graph)
     attributesSetter.setAttributes()
@@ -67,19 +67,20 @@ fun launch(path: String, dirName: String = "ddr") {
  *
  * @param path path to the directory with files
  * @param gather if outputs should be gathered
- * @param dirName postfix of the resulting directory
+ * @param postfix postfix of the resulting directory
  * @return graph that was built
  */
 fun buildGraph(
     path: String,
     gather: Boolean = true,
-    dirName: String = "ddr"
+    postfix: String = "ddr"
 ): Graph {
     val transformer = XslTransformer()
-    Files.walk(Paths.get(path))
+    val filePath = Path.of(path)
+    Files.walk(filePath)
         .filter(Files::isRegularFile)
         .forEach {
-            val tmpPath = createTempDirectories(path, it.toString(), gather, dirName)
+            val tmpPath = createTempDirectories(filePath, it.toString(), gather, postfix)
             transformer.transformXml(it.toString(), tmpPath)
             documents[getDocument(tmpPath)!!] = tmpPath
         }
@@ -89,6 +90,8 @@ fun buildGraph(
 }
 
 /**
+ * Get Document from source xml file
+ *
  * @param filename source xml filename
  * @return generated Document
  */
@@ -102,21 +105,31 @@ fun getDocument(filename: String): Document? {
     return null
 }
 
+/**
+ * Creates a new temporary directory for transformed xmir files
+ *
+ * @param path path to the directory with source xmir files or a single file
+ * @param filename path to current xmir file in source directory
+ * @param gather if outputs should be gathered
+ * @param postfix postfix of the resulting directory
+ * @return path to the modified [filename] file in temporary directory
+ */
 private fun createTempDirectories(
-    path: String,
+    path: Path,
     filename: String,
     gather: Boolean = true,
-    dirName: String
+    postfix: String
 ): String {
+    val strPath = path.toString()
     val tmpPath =
         if (gather) {
-            "${path.substringBeforeLast(sep)}${sep}TMP$sep${path.substringAfterLast(sep)}_tmp${filename.substring(path.length)}"
+            "${strPath.substringBeforeLast(sep)}${sep}TMP$sep${strPath.substringAfterLast(sep)}_tmp${filename.substring(strPath.length)}"
         } else {
-            "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_$dirName${filename.substring(path.length)}"
+            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$postfix${filename.substring(strPath.length)}"
         }
     val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
     Files.createDirectories(forDirs)
-    val newFilePath = Paths.get(tmpPath)
+    val newFilePath = Path.of(tmpPath)
     try {
         Files.createFile(newFilePath)
     } catch (e: Exception) {

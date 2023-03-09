@@ -96,6 +96,10 @@ class CondNodesResolver(
         }
     }
 
+    /**
+     *
+     * @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
+     */
     private fun traverseDotChain(
         node: Node,
         abstract: IGraphNode
@@ -108,7 +112,6 @@ class CondNodesResolver(
             val base = base(sibling)!!
             val attr = abstract.attributes.find { it.name == base.substring(1) }
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
-                // @todo #63:30min [igAttr] is initialized incorrectly now, it's required to add checks
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
                 insert(node, igAttr.cond, igAttr.fstOption, igAttr.sndOption)
             }

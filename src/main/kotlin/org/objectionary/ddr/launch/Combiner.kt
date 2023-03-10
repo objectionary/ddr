@@ -29,6 +29,7 @@ import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.Graph
+import org.objectionary.ddr.sources.SourcesDDR
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
@@ -42,7 +43,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 private val logger = LoggerFactory.getLogger("org.objectionary.ddr.launch.Combiner")
 private val sep = File.separatorChar
-val documents: MutableMap<Document, String> = mutableMapOf()
+var documents: MutableMap<Document, String> = mutableMapOf()
 
 /**
  * Aggregates all steps of analysis
@@ -75,15 +76,9 @@ fun buildGraph(
     gather: Boolean = true,
     postfix: String = "ddr"
 ): Graph {
-    val transformer = XslTransformer()
-    val filePath = Path.of(path)
-    Files.walk(filePath)
-        .filter(Files::isRegularFile)
-        .forEach {
-            val tmpPath = createTempDirectories(filePath, it.toString(), gather, postfix)
-            transformer.transformXml(it.toString(), tmpPath)
-            documents[getDocument(tmpPath)!!] = tmpPath
-        }
+    val sources = SourcesDDR(path, postfix, gather)
+    sources.walkSources()
+    documents = sources.documents
     val builder = GraphBuilder(documents)
     builder.createGraph()
     return builder.graph

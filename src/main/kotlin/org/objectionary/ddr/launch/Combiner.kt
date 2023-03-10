@@ -32,16 +32,8 @@ import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.sources.SourcesDdr
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
-import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
-import java.io.File
-import java.io.FileInputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import javax.xml.parsers.DocumentBuilderFactory
 
-private val logger = LoggerFactory.getLogger("org.objectionary.ddr.launch.Combiner")
-private val sep = File.separatorChar
 var documents: MutableMap<Document, String> = mutableMapOf()
 
 /**

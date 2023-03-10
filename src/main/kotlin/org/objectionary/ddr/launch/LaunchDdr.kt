@@ -9,7 +9,7 @@ private val sep = File.separatorChar
 
 /**
  * Aggregates all steps of analysis
- * @todo #108:120min implement this class
+ * @todo #108:120min implement launcher class
  */
 @Suppress("USE_DATA_CLASS")
 class LaunchDdr(private val path: String, private val postfix: String = "ddr") {

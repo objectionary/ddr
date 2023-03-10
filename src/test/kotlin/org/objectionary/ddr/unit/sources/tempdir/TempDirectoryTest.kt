@@ -1,4 +1,4 @@
-package org.objectionary.ddr.unit.files.tempdir
+package org.objectionary.ddr.unit.sources.tempdir
 
 import org.junit.jupiter.api.Test
 

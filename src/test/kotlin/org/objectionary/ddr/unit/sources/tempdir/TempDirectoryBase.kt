@@ -1,7 +1,7 @@
-package org.objectionary.ddr.unit.files.tempdir
+package org.objectionary.ddr.unit.sources.tempdir
 
 import org.objectionary.ddr.TestBase
-import org.objectionary.ddr.launch.buildGraph
+import org.objectionary.ddr.sources.SourcesDdr
 import java.io.File
 import java.nio.file.Path
 import kotlin.test.assertTrue
@@ -12,12 +12,12 @@ import kotlin.test.assertTrue
 open class TempDirectoryBase : TestBase {
     override fun doTest() {
         for (i in 0..2) {
-            val path = constructInPath(getTestName()) + sep.toString().repeat(i)
-            deleteTempDirIfExists(Path.of(path))
-            val dirPostfix = "ddr"
-            buildGraph(path, false, dirPostfix)
-            checkIfTempDirExists(Path.of(path))
-            deleteTempDirIfExists(Path.of(path))
+            val strPath = constructInPath(getTestName()) + sep.toString().repeat(i)
+            deleteTempDirIfExists(Path.of(strPath))
+            val postfix = "ddr"
+            SourcesDdr(strPath, postfix, false).walkSources()
+            checkIfTempDirExists(Path.of(strPath))
+            deleteTempDirIfExists(Path.of(strPath))
         }
     }
 

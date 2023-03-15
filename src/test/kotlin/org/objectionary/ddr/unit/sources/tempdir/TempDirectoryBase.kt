@@ -13,12 +13,12 @@ import kotlin.test.assertTrue
 open class TempDirectoryBase : TestBase {
     override fun doTest() {
         for (i in 0..2) {
-            val strPath = constructInPath(getTestName()) + sep.toString().repeat(i)
-            deleteTempDirIfExists(Path.of(strPath))
+            val path = constructInPath(getTestName()) + sep.toString().repeat(i)
+            deleteTempDirIfExists(Path.of(path))
             val postfix = "ddr"
-            SourcesDdr(strPath, XslTransformer(), postfix, false).walkSources()
-            checkIfTempDirExists(Path.of(strPath))
-            deleteTempDirIfExists(Path.of(strPath))
+            SourcesDdr(path, XslTransformer(), postfix, false).walkSources()
+            checkIfTempDirExists(Path.of(path))
+            deleteTempDirIfExists(Path.of(path))
         }
     }
 

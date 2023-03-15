@@ -12,19 +12,15 @@ import javax.xml.parsers.DocumentBuilderFactory
 private val sep = File.separatorChar
 
 /**
- * Stores the source files in [Document] format and makes some changes to them
+ * Sources that can be traversed
  */
 interface Sources {
-    /** @property path path to directory with source files or single source file */
-    val path: Path
-
-    /** @property documents all documents */
-    val documents: MutableMap<Document, String>
-
     /**
-     * Walks through [path] and collect [documents]
+     * Walks through sources and collect documents in [MutableMap]
+     *
+     * @return [MutableMap] with collected documents as key and their filenames as value
      */
-    fun walkSources()
+    fun walkSources(): MutableMap<Document, String>
 }
 
 /**
@@ -42,15 +38,17 @@ class SourcesDdr(
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     /** @property path path to directory with source files or single source file */
-    override val path: Path = Path.of(strPath)
+    val path: Path = Path.of(strPath)
 
     /** @property documents all documents */
-    override val documents: MutableMap<Document, String> = mutableMapOf()
+    val documents: MutableMap<Document, String> = mutableMapOf()
 
     /**
      * Walks through [path], make some xml transformation on xmir files and collect [documents]
+     *
+     * @return [MutableMap] with collected [documents] as key and their filenames as value
      */
-    override fun walkSources() {
+    override fun walkSources(): MutableMap<Document, String> {
         val transformer = XslTransformer()
         Files.walk(path)
             .filter(Files::isRegularFile)
@@ -59,6 +57,7 @@ class SourcesDdr(
                 transformer.transformXml(it.toString(), tmpPath)
                 documents[getDocument(tmpPath)!!] = tmpPath
             }
+        return documents.toMutableMap()
     }
 
     /**

@@ -24,14 +24,16 @@ interface Sources {
 }
 
 /**
- * Stores the source xmir files in [Document] format and makes some changes to them
+ * Source xmir files that are stored in [Document] format
  *
  * @param strPath string path to directory with source files or single source file
+ * @param transformer the object with which xsl transformations on xmir files will be performed
  * @param postfix postfix of the resulting directory
  * @param gather if outputs should be gathered
  */
 class SourcesDdr(
     strPath: String,
+    private val transformer: XslTransformer,
     private val postfix: String = "ddr",
     private val gather: Boolean = true
 ) : Sources {
@@ -44,12 +46,11 @@ class SourcesDdr(
     val documents: MutableMap<Document, String> = mutableMapOf()
 
     /**
-     * Walks through [path], make some xml transformation on xmir files and collect [documents]
+     * Walks through [path], make some xsl transformation on xmir files using [transformer] and collect [documents]
      *
      * @return [MutableMap] with collected [documents] as key and their filenames as value
      */
     override fun walkSources(): MutableMap<Document, String> {
-        val transformer = XslTransformer()
         Files.walk(path)
             .filter(Files::isRegularFile)
             .forEach {

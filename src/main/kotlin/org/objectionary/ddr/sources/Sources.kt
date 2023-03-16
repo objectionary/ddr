@@ -20,7 +20,7 @@ interface Sources {
      *
      * @return [MutableMap] with collected documents as key and their filenames as value
      */
-    fun walkSources(): MutableMap<Document, String>
+    fun walk(): MutableMap<Document, String>
 }
 
 /**
@@ -31,7 +31,7 @@ interface Sources {
  * @param postfix postfix of the resulting directory
  * @param gather if outputs should be gathered
  */
-class SourcesDdr(
+class SrsTransformed(
     strPath: String,
     private val transformer: XslTransformer,
     private val postfix: String = "ddr",
@@ -50,7 +50,7 @@ class SourcesDdr(
      *
      * @return [MutableMap] with collected [documents] as key and their filenames as value
      */
-    override fun walkSources(): MutableMap<Document, String> {
+    override fun walk(): MutableMap<Document, String> {
         Files.walk(path)
             .filter(Files::isRegularFile)
             .forEach {

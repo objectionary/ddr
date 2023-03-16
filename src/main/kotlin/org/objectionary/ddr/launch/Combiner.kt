@@ -29,7 +29,7 @@ import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.Graph
-import org.objectionary.ddr.sources.SourcesDdr
+import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
@@ -68,8 +68,8 @@ fun buildGraph(
     gather: Boolean = true,
     postfix: String = "ddr"
 ): Graph {
-    val sources = SourcesDdr(path, XslTransformer(), postfix, gather)
-    sources.walkSources()
+    val sources = SrsTransformed(path, XslTransformer(), postfix, gather)
+    sources.walk()
     documents = sources.documents
     val builder = GraphBuilder(documents)
     builder.createGraph()

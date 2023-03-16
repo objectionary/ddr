@@ -1,7 +1,7 @@
 package org.objectionary.ddr.unit.sources.tempdir
 
 import org.objectionary.ddr.TestBase
-import org.objectionary.ddr.sources.SourcesDdr
+import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import java.io.File
 import java.nio.file.Path
@@ -16,7 +16,7 @@ open class TempDirectoryBase : TestBase {
             val path = constructInPath(getTestName()) + sep.toString().repeat(i)
             deleteTempDirIfExists(Path.of(path))
             val postfix = "ddr"
-            SourcesDdr(path, XslTransformer(), postfix, false).walkSources()
+            SrsTransformed(path, XslTransformer(), postfix, false).walk()
             checkIfTempDirExists(Path.of(path))
             deleteTempDirIfExists(Path.of(path))
         }

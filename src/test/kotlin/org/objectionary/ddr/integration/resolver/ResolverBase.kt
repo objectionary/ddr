@@ -28,7 +28,6 @@ import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.InnerPropagator
-import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
@@ -42,6 +41,8 @@ import org.cactoos.io.OutputTo
 import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
+import org.objectionary.ddr.graph.GraphBuilder
+import org.objectionary.ddr.sources.SrsTransformed
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
@@ -61,7 +62,8 @@ open class ResolverBase : TestBase {
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)
-        val graph = buildGraph(constructInPath(path), true)
+        documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
+        val graph = GraphBuilder(documents).createGraph()
         CondAttributesSetter(graph).processConditions()
         val attributesSetter = AttributesSetter(graph)
         attributesSetter.setAttributes()

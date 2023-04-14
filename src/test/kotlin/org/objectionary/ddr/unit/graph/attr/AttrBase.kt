@@ -27,9 +27,11 @@ package org.objectionary.ddr.unit.graph.attr
 import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.repr.IGraphNode
-import org.objectionary.ddr.launch.buildGraph
 import org.objectionary.ddr.launch.documents
 import org.apache.commons.io.FileUtils
+import org.objectionary.ddr.graph.GraphBuilder
+import org.objectionary.ddr.sources.SrsTransformed
+import org.objectionary.ddr.transform.XslTransformer
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -45,7 +47,8 @@ open class AttrBase : TestBase {
     override fun doTest() {
         val path = getTestName()
         documents.clear()
-        val graph = buildGraph(constructInPath(path))
+        documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
+        val graph = GraphBuilder(documents).createGraph()
         val attributesSetter = AttributesSetter(graph)
         attributesSetter.setAttributes()
         val out = ByteArrayOutputStream()

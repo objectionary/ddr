@@ -23,10 +23,6 @@
  */
 
 package org.objectionary.ddr.launch
-import org.objectionary.ddr.graph.GraphBuilder
-import org.objectionary.ddr.graph.repr.Graph
-import org.objectionary.ddr.sources.SrsTransformed
-import org.objectionary.ddr.transform.XslTransformer
 import org.w3c.dom.Document
 
 /**
@@ -45,21 +41,4 @@ fun launch(path: String, postfix: String = "ddr") {
     val launched = DdrLaunched(path, postfix)
     launched.launch()
     documents = launched.documents
-}
-
-/**
- * Builds a single graph for all the files in the provided directory
- *
- * @param path path to the directory with files
- * @param gather if outputs should be gathered
- * @param postfix postfix of the resulting directory
- * @return graph that was built
- */
-fun buildGraph(
-    path: String,
-    gather: Boolean = true,
-    postfix: String = "ddr"
-): Graph {
-    documents = SrsTransformed(path, XslTransformer(), postfix, gather).walk()
-    return GraphBuilder(documents).createGraph()
 }

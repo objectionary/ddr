@@ -27,9 +27,9 @@ interface Sources {
  * Source xmir files that are stored in [Document] format
  *
  * @param strPath string path to directory with source files or single source file
- * @param transformer the object with which xsl transformations on xmir files will be performed
- * @param postfix postfix of the resulting directory
- * @param gather if outputs should be gathered
+ * @property transformer the object with which xsl transformations on xmir files will be performed
+ * @property postfix postfix of the resulting directory
+ * @property gather if outputs should be gathered
  */
 class SrsTransformed(
     strPath: String,

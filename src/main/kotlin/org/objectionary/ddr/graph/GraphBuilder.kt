@@ -48,7 +48,7 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
      * Aggregates the process of graph creation:
      * Constructs inheritance graph, sets heads and leaves and processes cycles
      */
-    fun createGraph() {
+    fun createGraph(): Graph {
         try {
             constructInheritance()
             setLeaves()
@@ -64,8 +64,10 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
             graph.heads.clear()
             thinnedOutHeads.forEach { graph.heads.add(it) }
             processClosedCycles(graph)
+            return graph
         } catch (e: Exception) {
             logger.error(e.printStackTrace().toString())
+            return graph
         }
     }
     @Suppress("PARAMETER_NAME_IN_OUTER_LAMBDA")

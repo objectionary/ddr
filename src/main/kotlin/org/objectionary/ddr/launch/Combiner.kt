@@ -23,16 +23,10 @@
  */
 
 package org.objectionary.ddr.launch
-
-import org.objectionary.ddr.graph.AttributesSetter
-import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
-import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
-import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
-import org.objectionary.ddr.transform.impl.CondNodesResolver
 import org.w3c.dom.Document
 
 /**
@@ -48,12 +42,9 @@ var documents: MutableMap<Document, String> = mutableMapOf()
  */
 fun launch(path: String, postfix: String = "ddr") {
     documents.clear()
-    val graph = buildGraph(path, false, postfix)
-    CondAttributesSetter(graph).processConditions()
-    AttributesSetter(graph).setAttributes()
-    InnerPropagator(graph).propagateInnerAttrs()
-    CondNodesResolver(graph, documents).resolve()
-    BasicDecoratorsResolver(graph, documents).resolve()
+    val launched = DdrLaunched(path, postfix)
+    launched.launch()
+    documents = launched.documents
 }
 
 /**
@@ -70,7 +61,5 @@ fun buildGraph(
     postfix: String = "ddr"
 ): Graph {
     documents = SrsTransformed(path, XslTransformer(), postfix, gather).walk()
-    val builder = GraphBuilder(documents)
-    builder.createGraph()
-    return builder.graph
+    return GraphBuilder(documents).createGraph()
 }

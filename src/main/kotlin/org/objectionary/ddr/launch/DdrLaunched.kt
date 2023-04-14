@@ -19,7 +19,7 @@ import org.objectionary.ddr.transform.impl.CondNodesResolver
  */
 class DdrLaunched(path: String, postfix: String = "ddr") {
     /** @property documents all documents from analyzed directory */
-    private val documents = SrsTransformed(path, XslTransformer(), postfix, false).walk()
+    val documents = SrsTransformed(path, XslTransformer(), postfix, false).walk()
 
     /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
     private val graph: Graph

@@ -35,6 +35,9 @@ import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
 import org.w3c.dom.Document
 
+/**
+ * @todo #108:120min get rid of the global variable and fix all places were it was used
+ */
 var documents: MutableMap<Document, String> = mutableMapOf()
 
 /**
@@ -47,10 +50,8 @@ fun launch(path: String, postfix: String = "ddr") {
     documents.clear()
     val graph = buildGraph(path, false, postfix)
     CondAttributesSetter(graph).processConditions()
-    val attributesSetter = AttributesSetter(graph)
-    attributesSetter.setAttributes()
-    val innerPropagator = InnerPropagator(graph)
-    innerPropagator.propagateInnerAttrs()
+    AttributesSetter(graph).setAttributes()
+    InnerPropagator(graph).propagateInnerAttrs()
     CondNodesResolver(graph, documents).resolve()
     BasicDecoratorsResolver(graph, documents).resolve()
 }
@@ -68,9 +69,7 @@ fun buildGraph(
     gather: Boolean = true,
     postfix: String = "ddr"
 ): Graph {
-    val sources = SrsTransformed(path, XslTransformer(), postfix, gather)
-    sources.walk()
-    documents = sources.documents
+    documents = SrsTransformed(path, XslTransformer(), postfix, gather).walk()
     val builder = GraphBuilder(documents)
     builder.createGraph()
     return builder.graph

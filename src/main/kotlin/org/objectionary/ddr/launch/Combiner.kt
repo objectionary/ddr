@@ -23,6 +23,7 @@
  */
 
 package org.objectionary.ddr.launch
+
 import org.w3c.dom.Document
 
 /**

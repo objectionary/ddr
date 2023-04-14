@@ -26,13 +26,13 @@ package org.objectionary.ddr.unit.graph.inner
 
 import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.graph.AttributesSetter
+import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.launch.documents
-import org.apache.commons.io.FileUtils
-import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
+import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream

@@ -25,9 +25,9 @@
 package org.objectionary.ddr.unit.graph.builder
 
 import org.objectionary.ddr.TestBase
+import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.launch.documents
-import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.apache.commons.io.FileUtils

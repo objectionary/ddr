@@ -47,6 +47,8 @@ class GraphBuilder(private val documents: MutableMap<Document, String>) {
     /**
      * Aggregates the process of graph creation:
      * Constructs inheritance graph, sets heads and leaves and processes cycles
+     *
+     * @return built graph
      */
     fun createGraph(): Graph {
         try {

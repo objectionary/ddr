@@ -4,7 +4,6 @@ import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
-import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
@@ -22,16 +21,7 @@ class DdrLaunched(path: String, postfix: String = "ddr") {
     val documents = SrsTransformed(path, XslTransformer(), postfix, false).walk()
 
     /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
-    private val graph: Graph
-
-    /**
-     * Aggregates all steps of analysis
-     */
-    init {
-        val builder = GraphBuilder(documents)
-        builder.createGraph()
-        graph = builder.graph
-    }
+    private val graph = GraphBuilder(documents).createGraph()
 
     /**
      * Aggregates all steps of analysis

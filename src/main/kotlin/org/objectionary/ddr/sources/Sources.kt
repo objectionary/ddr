@@ -30,6 +30,8 @@ interface Sources {
  * @property transformer the object with which xsl transformations on xmir files will be performed
  * @property postfix postfix of the resulting directory
  * @property gather if outputs should be gathered
+ *
+ * todo #108:60min remove an unnecessary parameter gather that is used only in tests (also fix the tests)
  */
 class SrsTransformed(
     strPath: String,

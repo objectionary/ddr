@@ -37,7 +37,7 @@ import java.nio.file.Paths
 /**
  * Base class for testing decorators resolver
  */
-open class IntegrationBase : TestBase {
+open class IntegrationLaunchBase : TestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun doTest() {

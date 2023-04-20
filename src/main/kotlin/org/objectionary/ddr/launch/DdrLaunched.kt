@@ -17,17 +17,17 @@ import org.w3c.dom.Document
  * @property documents all documents from analyzed directory
  */
 class DdrLaunched(val documents: MutableMap<Document, String>) {
+    /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
+    private val graph = GraphBuilder(documents).createGraph()
+
     /**
      * Constructs [documents] from [path]
      *
      * @param path path to the directory to be analysed
      * @param postfix postfix of the resulting directory
      */
-    constructor(path: String, postfix: String = "ddr"):
-            this(SrsTransformed(path, XslTransformer(), postfix, false).walk());
-
-    /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
-    private val graph = GraphBuilder(documents).createGraph()
+    constructor(path: String, postfix: String = "ddr") : this(
+        SrsTransformed(path, XslTransformer(), postfix, false).walk())
 
     /**
      * Aggregates all steps of analysis

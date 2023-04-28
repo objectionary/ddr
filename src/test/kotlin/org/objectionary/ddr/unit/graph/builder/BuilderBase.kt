@@ -44,8 +44,12 @@ open class BuilderBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
-        val graph = GraphBuilder(documents).createGraph()
+        val graph = GraphBuilder(
+            SrsTransformed(
+                constructInPath(path),
+                XslTransformer()
+            ).walk()
+        ).createGraph()
         val out = ByteArrayOutputStream()
         graph.heads.sortedBy { it.name }.forEach { printOut(it, out, mutableSetOf()) }
         val actual = String(out.toByteArray())

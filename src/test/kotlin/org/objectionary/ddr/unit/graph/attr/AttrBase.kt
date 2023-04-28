@@ -45,10 +45,13 @@ open class AttrBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        val documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
-        val graph = GraphBuilder(documents).createGraph()
-        val attributesSetter = AttributesSetter(graph)
-        attributesSetter.setAttributes()
+        val graph = GraphBuilder(
+            SrsTransformed(
+                constructInPath(path),
+                XslTransformer()
+            ).walk()
+        ).createGraph()
+        AttributesSetter(graph).setAttributes()
         val out = ByteArrayOutputStream()
         printOut(out, graph.igNodes)
         val actual = String(out.toByteArray())

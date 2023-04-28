@@ -29,7 +29,6 @@ import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
-import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
@@ -57,12 +56,11 @@ open class ResolverBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        documents.clear()
         Files.walk(Paths.get(constructEoPath(path)))
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)
-        documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
+        val documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
         val graph = GraphBuilder(documents).createGraph()
         CondAttributesSetter(graph).processConditions()
         val attributesSetter = AttributesSetter(graph)

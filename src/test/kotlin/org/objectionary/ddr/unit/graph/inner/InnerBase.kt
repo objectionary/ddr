@@ -29,7 +29,6 @@ import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.IGraphNode
-import org.objectionary.ddr.launch.documents
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.apache.commons.io.FileUtils
@@ -47,8 +46,7 @@ open class InnerBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        documents.clear()
-        documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
+        val documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
         val graph = GraphBuilder(documents).createGraph()
         val attributesSetter = AttributesSetter(graph)
         attributesSetter.setAttributes()

@@ -29,5 +29,5 @@ package org.objectionary.ddr.launch
  * - args[0] path to the folder with the program to be analyzed
  */
 fun main(args: Array<String>) {
-    DdrLaunched(path = args[0], postfix = "ddr").launch()
+    DdrLaunched(path = args[0]).launch()
 }

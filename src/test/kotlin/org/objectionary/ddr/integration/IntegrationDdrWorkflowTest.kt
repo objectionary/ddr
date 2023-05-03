@@ -3,7 +3,7 @@ package org.objectionary.ddr.integration
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
-class IntegrationDdrLaunchedTest : IntegrationDdrLaunchedBase() {
+class IntegrationDdrWorkflowTest : IntegrationDdrLaunchedBase() {
     @Test
     @Ignore
     fun `test fibonacci`() = doTest()

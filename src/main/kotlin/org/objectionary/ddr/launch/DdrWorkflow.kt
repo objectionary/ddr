@@ -16,7 +16,7 @@ import org.w3c.dom.Document
  *
  * @property documents all documents from analyzed directory
  */
-class DdrLaunched(val documents: MutableMap<Document, String>) {
+class DdrWorkflow(val documents: MutableMap<Document, String>) {
     /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
     private val graph = GraphBuilder(documents).createGraph()
 

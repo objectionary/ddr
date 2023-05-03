@@ -25,7 +25,7 @@
 package org.objectionary.ddr.integration
 
 import org.objectionary.ddr.TestBase
-import org.objectionary.ddr.launch.DdrLaunched
+import org.objectionary.ddr.launch.DdrWorkflow
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
@@ -41,7 +41,7 @@ open class IntegrationDdrLaunchedBase : TestBase {
 
     override fun doTest() {
         val path = getTestName()
-        DdrLaunched(constructInPath(path)).launch()
+        DdrWorkflow(constructInPath(path)).launch()
         val actualFiles: MutableList<String> = mutableListOf()
         Files.walk(Paths.get(constructOutPath(path)))
             .filter(Files::isRegularFile)

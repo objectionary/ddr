@@ -11,15 +11,37 @@ import org.objectionary.ddr.transform.impl.CondNodesResolver
 import org.w3c.dom.Document
 
 /**
+ * Workflow of some software application.
+ */
+interface Workflow {
+    /**
+     * Starts the entire workflow.
+     */
+    fun launch()
+}
+
+/**
  * Stores all the information from xmir files in the form of a graph. Launches various analysis or transformation steps
- * on the graph.
+ * on this graph.
  *
  * @property documents all documents from analyzed directory
  */
-class DdrWorkflow(val documents: MutableMap<Document, String>) {
+abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, String>) : Workflow {
     /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
-    private val graph = GraphBuilder(documents).createGraph()
+    protected val graph = GraphBuilder(documents).createGraph()
+    /**
+     * Aggregates all steps of analysis
+     */
+    abstract override fun launch()
+}
 
+/**
+ * Stores all the information from xmir files in the form of a graph. Launches analysis and transformation steps for
+ * the "Dynamic Dispatch Removal" on this graph.
+ *
+ * @property documents all documents from analyzed directory
+ */
+class DdrWorkflow(documents: MutableMap<Document, String>): XmirAnalysisWorkflow(documents) {
     /**
      * Constructs [documents] from [path]
      *
@@ -32,7 +54,7 @@ class DdrWorkflow(val documents: MutableMap<Document, String>) {
     /**
      * Aggregates all steps of analysis
      */
-    fun launch() {
+    override fun launch() {
         CondAttributesSetter(graph).processConditions()
         AttributesSetter(graph).setAttributes()
         InnerPropagator(graph).propagateInnerAttrs()

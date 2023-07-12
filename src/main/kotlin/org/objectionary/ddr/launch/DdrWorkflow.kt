@@ -29,6 +29,7 @@ interface Workflow {
 abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, String>) : Workflow {
     /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
     protected val graph = GraphBuilder(documents).createGraph()
+
     /**
      * Aggregates all steps of analysis
      */
@@ -37,11 +38,11 @@ abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, String>)
 
 /**
  * Stores all the information from xmir files in the form of a graph. Launches analysis and transformation steps for
- * the "Dynamic Dispatch Removal" on this graph.
+ * the Dynamic Dispatch Removal on this graph.
  *
- * @property documents all documents from analyzed directory
+ * @param documents all documents from analyzed directory
  */
-class DdrWorkflow(documents: MutableMap<Document, String>): XmirAnalysisWorkflow(documents) {
+class DdrWorkflow(documents: MutableMap<Document, String>) : XmirAnalysisWorkflow(documents) {
     /**
      * Constructs [documents] from [path]
      *
@@ -52,7 +53,7 @@ class DdrWorkflow(documents: MutableMap<Document, String>): XmirAnalysisWorkflow
         SrsTransformed(path, XslTransformer(), postfix, false).walk())
 
     /**
-     * Aggregates all steps of analysis
+     * Aggregates all steps of Dynamic Dispatch Removal
      */
     override fun launch() {
         CondAttributesSetter(graph).processConditions()

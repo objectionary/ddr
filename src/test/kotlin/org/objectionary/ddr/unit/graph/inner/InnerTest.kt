@@ -27,7 +27,6 @@ package org.objectionary.ddr.unit.graph.inner
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
-@Ignore
 class InnerTest : InnerBase() {
     @Test
     fun `test multiple aliases`() {

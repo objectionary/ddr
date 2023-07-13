@@ -40,9 +40,12 @@ import java.nio.file.Paths
 
 /**
  * Base class for inner attributes propagation testing
+ *
+ * @todo #121:60min InnerBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class InnerBase : TestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
+    private val postfix = "tmp"
 
     override fun doTest() {
         val path = getTestName()
@@ -50,7 +53,7 @@ open class InnerBase : TestBase {
             SrsTransformed(
                 constructInPath(path),
                 XslTransformer(),
-                "TMP"
+                postfix
             ).walk()
         ).createGraph()
         AttributesSetter(graph).setAttributes()
@@ -64,7 +67,7 @@ open class InnerBase : TestBase {
         checkOutput(expected, actual)
         try {
             val tmpDir =
-                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+                Paths.get("${constructInPath(path).replace('/', sep)}_$postfix").toString()
             FileUtils.deleteDirectory(File(tmpDir))
         } catch (e: Exception) {
             logger.error(e.printStackTrace().toString())

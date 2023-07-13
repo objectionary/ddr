@@ -35,13 +35,16 @@ import java.nio.file.Paths
 
 /**
  * Base class for testing decorators resolver
+ *
+ * @todo #121:60min IntegrationDdrWorkflowBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class IntegrationDdrWorkflowBase : TestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
+    private val postfix = "tmp"
 
     override fun doTest() {
         val path = getTestName()
-        DdrWorkflow(constructInPath(path)).launch()
+        DdrWorkflow(constructInPath(path), postfix).launch()
         val actualFiles: MutableList<String> = mutableListOf()
         Files.walk(Paths.get(constructOutPath(path)))
             .filter(Files::isRegularFile)
@@ -52,7 +55,7 @@ open class IntegrationDdrWorkflowBase : TestBase {
                 val actualBr: BufferedReader = File(file.toString()).bufferedReader()
                 val actual = actualBr.use { it.readText() }.replace(" ", "")
                 val expectedFile = actualFiles.find {
-                    it.replace("out$sep", "in$sep").replaceFirst(path, "${path}_ddr") == file.toString()
+                    it.replace("out$sep", "in$sep").replaceFirst(path, "${path}_$postfix") == file.toString()
                 }
                 val expectedBr: BufferedReader = File(expectedFile.toString()).bufferedReader()
                 val expected = expectedBr.use { it.readText() }.replace(" ", "")
@@ -60,7 +63,7 @@ open class IntegrationDdrWorkflowBase : TestBase {
             }
         try {
             val tmpDir =
-                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+                Paths.get("${constructInPath(path).replace('/', sep)}_$postfix").toString()
             FileUtils.deleteDirectory(File(tmpDir))
         } catch (e: Exception) {
             logger.error(e.printStackTrace().toString())
@@ -79,6 +82,6 @@ open class IntegrationDdrWorkflowBase : TestBase {
 
     private fun constructResultPath(directoryName: String): String =
         File(System.getProperty("user.dir")).resolve(
-            File("src${sep}test${sep}resources${sep}integration${sep}in$sep${directoryName}_ddr")
+            File("src${sep}test${sep}resources${sep}integration${sep}in$sep${directoryName}_$postfix")
         ).absolutePath.replace("/", File.separator)
 }

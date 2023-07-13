@@ -102,7 +102,7 @@ open class ResolverBase : TestBase {
             }
         try {
             val tmpDir =
-                Paths.get(constructInPath(path).replace('/', sep).substringBeforeLast(sep)).toString()
+                Paths.get("${constructInPath(path).replace('/', sep)}_$postfix").toString()
             FileUtils.deleteDirectory(File(tmpDir))
             FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
             FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
@@ -129,7 +129,7 @@ open class ResolverBase : TestBase {
     private fun XMIRToEo(path: String, testName: String) {
         val outFile = File(
             path.replaceFirst(
-                "xmirs${sep}${testName}_${postfix}",
+                "xmirs$sep${testName}_$postfix",
                 "eo_outputs$sep$testName"
             ).replace(".xmir", ".eo")
         )
@@ -158,5 +158,5 @@ open class ResolverBase : TestBase {
         "src${sep}test${sep}resources${sep}resolver${sep}in$sep$path"
 
     private fun constructCmpPath(path: String) =
-        "${constructInPath(path).substringBeforeLast(sep)}${sep}${path}_${postfix}"
+        "${constructInPath(path).substringBeforeLast(sep)}$sep${path}_$postfix"
 }

@@ -25,12 +25,10 @@
 package org.objectionary.ddr.unit.graph.attr
 
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 /**
  * Tests attributes propagation
  */
-@Ignore
 class AttrTest : AttrBase() {
     @Test
     fun `test basic tree`() = doTest()

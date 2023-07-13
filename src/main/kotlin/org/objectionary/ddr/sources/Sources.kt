@@ -29,15 +29,11 @@ interface Sources {
  * @param strPath string path to directory with source files or single source file
  * @property transformer the object with which xsl transformations on xmir files will be performed
  * @property postfix postfix of the resulting directory
- * @property gather if outputs should be gathered
- *
- * todo #108:60min remove an unnecessary parameter gather that is used only in tests (also fix the tests)
  */
 class SrsTransformed(
     strPath: String,
     private val transformer: XslTransformer,
-    private val postfix: String = "ddr",
-    private val gather: Boolean = true
+    private val postfix: String,
 ) : Sources {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
@@ -106,10 +102,6 @@ class SrsTransformed(
      */
     private fun generateTmpPath(filename: String): String {
         val strPath = path.toString()
-        return if (gather) {
-            "${strPath.substringBeforeLast(sep)}${sep}TMP$sep${strPath.substringAfterLast(sep)}_tmp${filename.substring(strPath.length)}"
-        } else {
-            "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$postfix${filename.substring(strPath.length)}"
-        }
+        return "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$postfix${filename.substring(strPath.length)}"
     }
 }

@@ -50,7 +50,7 @@ class DdrWorkflow(documents: MutableMap<Document, String>) : XmirAnalysisWorkflo
      * @param postfix postfix of the resulting directory
      */
     constructor(path: String, postfix: String = "ddr") : this(
-        SrsTransformed(path, XslTransformer(), postfix, false).walk())
+        SrsTransformed(path, XslTransformer(), postfix).walk())
 
     /**
      * Aggregates all steps of Dynamic Dispatch Removal

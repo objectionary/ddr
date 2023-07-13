@@ -11,27 +11,27 @@ import kotlin.test.assertTrue
  * Tests generation of temporary directory for modified xmir files
  */
 open class TempDirectoryBase : TestBase {
+    private val postfix = "tmp"
     override fun doTest() {
         for (i in 0..2) {
             val path = constructInPath(getTestName()) + sep.toString().repeat(i)
             deleteTempDirIfExists(Path.of(path))
-            val postfix = "ddr"
-            SrsTransformed(path, XslTransformer(), postfix, false).walk()
+            SrsTransformed(path, XslTransformer(), postfix).walk()
             checkIfTempDirExists(Path.of(path))
             deleteTempDirIfExists(Path.of(path))
         }
     }
 
-    private fun deleteTempDirIfExists(pathToSource: Path, dirPostfix: String = "ddr") {
-        val strPathToTemp = "${pathToSource}_$dirPostfix"
+    private fun deleteTempDirIfExists(pathToSource: Path) {
+        val strPathToTemp = "${pathToSource}_$postfix"
         val tempDir = File(strPathToTemp)
         if (tempDir.exists() && tempDir.isDirectory) {
             tempDir.deleteRecursively()
         }
     }
 
-    private fun checkIfTempDirExists(pathToSource: Path, dirPostfix: String = "ddr") {
-        val strPathToTemp = "${pathToSource}_$dirPostfix"
+    private fun checkIfTempDirExists(pathToSource: Path) {
+        val strPathToTemp = "${pathToSource}_$postfix"
         val tempDir = File(strPathToTemp)
         assertTrue { tempDir.exists() }
     }

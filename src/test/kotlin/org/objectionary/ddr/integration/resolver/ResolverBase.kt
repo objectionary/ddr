@@ -50,9 +50,12 @@ import java.nio.file.Paths
 
 /**
  * Base class for testing decorators resolver
+ *
+ * @todo #121:60min ResolverBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class ResolverBase : TestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
+    private val postfix = "tmp"
 
     override fun doTest() {
         val path = getTestName()
@@ -60,7 +63,7 @@ open class ResolverBase : TestBase {
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)
-        val documents = SrsTransformed(constructInPath(path), XslTransformer()).walk()
+        val documents = SrsTransformed(constructInPath(path), XslTransformer(), postfix).walk()
         val graph = GraphBuilder(documents).createGraph()
         CondAttributesSetter(graph).processConditions()
         AttributesSetter(graph).setAttributes()
@@ -99,7 +102,7 @@ open class ResolverBase : TestBase {
             }
         try {
             val tmpDir =
-                Paths.get("${constructInPath(path).replace('/', sep).substringBeforeLast(sep)}${sep}TMP").toString()
+                Paths.get(constructInPath(path).replace('/', sep).substringBeforeLast(sep)).toString()
             FileUtils.deleteDirectory(File(tmpDir))
             FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
             FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
@@ -126,7 +129,7 @@ open class ResolverBase : TestBase {
     private fun XMIRToEo(path: String, testName: String) {
         val outFile = File(
             path.replaceFirst(
-                "xmirs${sep}TMP$sep${testName}_tmp",
+                "xmirs${sep}${testName}_${postfix}",
                 "eo_outputs$sep$testName"
             ).replace(".xmir", ".eo")
         )
@@ -155,5 +158,5 @@ open class ResolverBase : TestBase {
         "src${sep}test${sep}resources${sep}resolver${sep}in$sep$path"
 
     private fun constructCmpPath(path: String) =
-        "${constructInPath(path).substringBeforeLast(sep)}${sep}TMP$sep${path}_tmp"
+        "${constructInPath(path).substringBeforeLast(sep)}${sep}${path}_${postfix}"
 }

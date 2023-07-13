@@ -49,7 +49,8 @@ open class InnerBase : TestBase {
         val graph = GraphBuilder(
             SrsTransformed(
                 constructInPath(path),
-                XslTransformer()
+                XslTransformer(),
+                "TMP"
             ).walk()
         ).createGraph()
         AttributesSetter(graph).setAttributes()

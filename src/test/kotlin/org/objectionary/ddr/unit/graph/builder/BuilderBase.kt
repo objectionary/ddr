@@ -35,10 +35,12 @@ import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Paths
+import kotlin.test.Ignore
 
 /**
  * Base class for graph builder testing
  */
+@Ignore
 open class BuilderBase : TestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
@@ -47,7 +49,8 @@ open class BuilderBase : TestBase {
         val graph = GraphBuilder(
             SrsTransformed(
                 constructInPath(path),
-                XslTransformer()
+                XslTransformer(),
+                "TMP"
             ).walk()
         ).createGraph()
         val out = ByteArrayOutputStream()

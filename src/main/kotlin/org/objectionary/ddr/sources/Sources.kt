@@ -41,7 +41,7 @@ class SrsTransformed(
     val path: Path = Path.of(strPath)
 
     /** @property documents all documents */
-    val documents: MutableMap<Document, String> = mutableMapOf()
+    private val documents: MutableMap<Document, String> = mutableMapOf()
 
     /**
      * Walks through [path], make some xsl transformation on xmir files using [transformer] and collect [documents]
@@ -56,7 +56,7 @@ class SrsTransformed(
                 transformer.transformXml(it.toString(), tmpPath)
                 documents[getDocument(tmpPath)!!] = tmpPath
             }
-        return documents.toMutableMap()
+        return documents
     }
 
     /**

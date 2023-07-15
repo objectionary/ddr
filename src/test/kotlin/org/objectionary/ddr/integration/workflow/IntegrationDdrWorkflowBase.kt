@@ -24,7 +24,6 @@
 
 package org.objectionary.ddr.integration.workflow
 
-import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.integration.IntegrationTestBase
 import org.objectionary.ddr.launch.DdrWorkflow
 import org.apache.commons.io.FileUtils
@@ -45,7 +44,7 @@ open class IntegrationDdrWorkflowBase : IntegrationTestBase {
 
     override fun doTest() {
         val path = getTestName()
-        DdrWorkflow(constructInPath(path), postfix).launch()
+        DdrWorkflow(constructInPath(path!!), postfix).launch()
         val actualFiles: MutableList<String> = mutableListOf()
         Files.walk(Paths.get(constructOutPath(path)))
             .filter(Files::isRegularFile)

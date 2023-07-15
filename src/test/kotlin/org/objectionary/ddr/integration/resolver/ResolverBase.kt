@@ -24,11 +24,11 @@
 
 package org.objectionary.ddr.integration.resolver
 
-import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.CondAttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.InnerPropagator
+import org.objectionary.ddr.integration.IntegrationTestBase
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
@@ -53,13 +53,13 @@ import java.nio.file.Paths
  *
  * @todo #121:60min ResolverBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
-open class ResolverBase : TestBase {
+open class ResolverBase : IntegrationTestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
     private val postfix = "tmp"
 
     override fun doTest() {
         val path = getTestName()
-        Files.walk(Paths.get(constructEoPath(path)))
+        Files.walk(Paths.get(constructEoPath(path!!)))
             .filter(Files::isRegularFile)
             .forEach { eoToXMIR(it.toString()) }
         constructInPath(path)

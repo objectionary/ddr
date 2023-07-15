@@ -63,7 +63,7 @@ interface TestBase {
      * @param directoryName name of the input directory
      * @return path to input location
      */
-    fun constructInPath(directoryName: String): String = "src${sep}test${sep}resources${sep}unit${sep}in$sep$directoryName"
+    fun constructInPath(directoryName: String): String
 
     /**
      * @param directoryName name of the output directory
@@ -74,7 +74,13 @@ interface TestBase {
     /**
      * @return name of the test being executed
      */
-    fun getTestName() = Thread.currentThread().stackTrace[4].methodName
-        .substring(5)
-        .replace(' ', '_')
+    fun getTestName(): String? {
+        Thread.currentThread().stackTrace.forEach {
+            val methodName = it.methodName
+            if (methodName.substring(0, "test ".length) == "test ") {
+                return methodName.substring("test ".length).replace(' ', '_')
+            }
+        }
+        return null
+    }
 }

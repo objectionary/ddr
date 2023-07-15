@@ -31,6 +31,7 @@ import org.objectionary.ddr.graph.InnerPropagator
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
+import org.objectionary.ddr.unit.UnitTestBase
 import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
@@ -43,7 +44,7 @@ import java.nio.file.Paths
  *
  * @todo #121:60min InnerBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
-open class InnerBase : TestBase {
+open class InnerBase : UnitTestBase {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
     private val postfix = "tmp"
 
@@ -51,7 +52,7 @@ open class InnerBase : TestBase {
         val path = getTestName()
         val graph = GraphBuilder(
             SrsTransformed(
-                constructInPath(path),
+                constructInPath(path!!),
                 XslTransformer(),
                 postfix
             ).walk()

@@ -70,7 +70,7 @@ open class ResolverBase : IntegrationTestBase {
         InnerPropagator(graph).propagateInnerAttrs()
         CondNodesResolver(graph, documents).resolve()
         BasicDecoratorsResolver(graph, documents).resolve()
-        val cmpPath = constructCmpPath(path)
+        val cmpPath = constructResultPath(path)
         Files.walk(Paths.get(cmpPath))
             .filter(Files::isRegularFile)
             .forEach {
@@ -156,7 +156,4 @@ open class ResolverBase : IntegrationTestBase {
 
     private fun constructEoPath(path: String): String =
         "src${sep}test${sep}resources${sep}resolver${sep}in$sep$path"
-
-    private fun constructCmpPath(path: String) =
-        "${constructInPath(path).substringBeforeLast(sep)}$sep${path}_$postfix"
 }

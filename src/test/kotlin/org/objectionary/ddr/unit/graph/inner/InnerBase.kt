@@ -52,7 +52,7 @@ open class InnerBase : UnitTestBase {
         val expected = File(constructOutPath(testName)).bufferedReader().readText()
         logger.debug(actual)
         checkOutput(expected, actual)
-        deleteTempDir(sources.path)
+        deleteTempDir(sources.inPath)
     }
 
     override fun constructOutPath(directoryName: String): String =

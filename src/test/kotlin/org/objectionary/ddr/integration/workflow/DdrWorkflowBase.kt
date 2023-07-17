@@ -22,48 +22,34 @@
  * SOFTWARE.
  */
 
-package org.objectionary.ddr.unit.graph.attr
+package org.objectionary.ddr.integration.workflow
 
-import org.objectionary.ddr.graph.AttributesSetter
-import org.objectionary.ddr.graph.GraphBuilder
-import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.integration.IntegrationTestBase
+import org.objectionary.ddr.launch.DdrWorkflow
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
-import org.objectionary.ddr.unit.UnitTestBase
 import org.slf4j.LoggerFactory
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 /**
- * Base class for attributes propagation testing
+ * Base class for testing decorators resolver
  */
-open class AttrBase : UnitTestBase {
+open class DdrWorkflowBase : IntegrationTestBase {
     override val logger = LoggerFactory.getLogger(this.javaClass.name)
     override val postfix = "tmp"
 
     override fun doTest() {
         val testName = getTestName()
         val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
-        val graph = GraphBuilder(sources.walk()).createGraph()
-        AttributesSetter(graph).setAttributes()
-        val actual = stringOutput(graph.igNodes)
-        val expected = File(constructOutPath(testName)).bufferedReader().readText()
-        logger.debug(actual)
-        checkOutput(expected, actual)
-        deleteTempDir(sources.inPath)
-    }
-
-    override fun constructOutPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}unit${sep}out${sep}attr$sep$directoryName.txt"
-
-    private fun stringOutput(
-        nodes: Set<IGraphNode>
-    ): String {
-        val out = ByteArrayOutputStream()
-        nodes.sortedBy { it.name }.forEach { node ->
-            out.write("NODE: ${node.name} ATTRIBUTES:\n".toByteArray())
-            node.attributes.forEach { out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray()) }
+        val documents = sources.walk()
+        DdrWorkflow(documents).launch()
+        documents.forEach {
+            val expected = File(it.value).bufferedReader().readText().replace(" ", "")
+            val actualFilename = it.value.replace("in$sep", "out$sep")
+                .replaceFirst("${testName}_$postfix", testName)
+            val actual = File(actualFilename).bufferedReader().readText().replace(" ", "")
+            checkOutput(expected, actual)
         }
-        return String(out.toByteArray())
+        deleteTempDir(sources.inPath)
     }
 }

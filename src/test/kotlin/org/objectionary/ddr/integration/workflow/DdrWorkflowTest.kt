@@ -3,8 +3,7 @@ package org.objectionary.ddr.integration.workflow
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
-@Ignore
-class IntegrationDdrWorkflowTest : IntegrationDdrWorkflowBase() {
+class DdrWorkflowTest : DdrWorkflowBase() {
     @Test
     @Ignore
     fun `test fibonacci`() = doTest()

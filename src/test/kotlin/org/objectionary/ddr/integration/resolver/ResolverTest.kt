@@ -25,9 +25,7 @@
 package org.objectionary.ddr.integration.resolver
 
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
-@Ignore
 class ResolverTest : ResolverBase() {
     @Test
     fun `test basic`() = doTest()

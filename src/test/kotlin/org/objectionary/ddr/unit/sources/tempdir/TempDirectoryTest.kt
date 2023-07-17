@@ -1,9 +1,7 @@
 package org.objectionary.ddr.unit.sources.tempdir
 
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
-@Ignore
 class TempDirectoryTest : TempDirectoryBase() {
     @Test
     fun `test basic tree`() = doTest()

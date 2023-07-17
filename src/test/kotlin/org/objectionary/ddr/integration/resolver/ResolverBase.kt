@@ -43,78 +43,53 @@ import org.cactoos.io.ResourceOf
 import org.eolang.parser.Syntax
 import org.eolang.parser.XMIR
 import org.slf4j.LoggerFactory
-import java.io.BufferedReader
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
  * Base class for testing decorators resolver
- *
- * @todo #121:60min ResolverBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class ResolverBase : IntegrationTestBase {
     override val logger = LoggerFactory.getLogger(this.javaClass.name)
     override val postfix = "tmp"
+    private var testName: String? = ""
+    private val xmirInTmp = "xmirs_tmp"
+    private val eoOutTmp = "eo_tmp"
 
     override fun doTest() {
-        val path = getTestName()
-        Files.walk(Paths.get(constructEoPath(path!!)))
-            .filter(Files::isRegularFile)
-            .forEach { eoToXMIR(it.toString()) }
-        constructInPath(path)
-        val documents = SrsTransformed(constructInPath(path), XslTransformer(), postfix).walk()
+        testName = getTestName()
+        eoToXmir(constructEoInPath(testName!!))
+        val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
+        val documents = sources.walk()
         val graph = GraphBuilder(documents).createGraph()
         CondAttributesSetter(graph).processConditions()
         AttributesSetter(graph).setAttributes()
         InnerPropagator(graph).propagateInnerAttrs()
         CondNodesResolver(graph, documents).resolve()
         BasicDecoratorsResolver(graph, documents).resolve()
-        val cmpPath = constructResultPath(path)
-        Files.walk(Paths.get(cmpPath))
+        xmirToEo(constructResultPath(testName!!))
+        Files.walk(Paths.get(constructOutPath(testName!!)))
             .filter(Files::isRegularFile)
             .forEach {
-                XslTransformer().singleTransformation(it.toString(), it.toString(), "/compress-aliases.xsl")
-                XslTransformer().singleTransformation(
-                    it.toString(),
-                    it.toString(),
-                    "/org/eolang/parser/wrap-method-calls.xsl"
-                )
-                XMIRToEo(it.toString(), path)
-            }
-        val outPath = constructOutPath(path)
-        val cmpFiles: MutableList<String> = mutableListOf()
-        Files.walk(Paths.get(outPath))
-            .filter(Files::isRegularFile)
-            .forEach { cmpFiles.add(it.toString()) }
-        val eoOutPath = constructEoOutPath(path)
-        Files.walk(Paths.get(eoOutPath))
-            .filter(Files::isRegularFile)
-            .forEach { file ->
-                val actualBr: BufferedReader = File(file.toString()).bufferedReader()
-                val actual = actualBr.use { it.readText() }
-                val expectedFile = cmpFiles.find {
-                    it.substringAfterLast(path) == file.toString().substringAfterLast(path)
-                }
-                val expectedBr: BufferedReader = File(expectedFile.toString()).bufferedReader()
-                val expected = expectedBr.use { it.readText() }
+                val expected = File(it.toString()).bufferedReader().readText().replace(" ", "")
+                val actualFilename = it.toString().replace("$eoOutTmp$sep", "out$sep")
+                val actual = File(actualFilename).bufferedReader().readText().replace(" ", "")
                 checkOutput(expected, actual)
             }
-        try {
-            val tmpDir =
-                Paths.get("${constructInPath(path).replace('/', sep)}_$postfix").toString()
-            FileUtils.deleteDirectory(File(tmpDir))
-            FileUtils.deleteDirectory(File(Paths.get(constructInPath(path).substringBeforeLast(sep)).toString()))
-            FileUtils.deleteDirectory(File(Paths.get(constructEoOutPath(path).substringBeforeLast(sep)).toString()))
-        } catch (e: Exception) {
-            logger.error(e.printStackTrace().toString())
-        }
+        deleteTempDir(sources.inPath)
     }
 
-    @Throws(Exception::class)
-    @Suppress("FUNCTION_NAME_INCORRECT_CASE")
-    private fun eoToXMIR(path: String) {
-        val outFile = File(path.replaceFirst("${sep}in$sep", "${sep}xmirs$sep").replace(".eo", ".xmir"))
+    private fun eoToXmir(path: String) {
+        Files.walk(Paths.get(path))
+            .filter(Files::isRegularFile)
+            .forEach { singleEoToXmir(it.toString()) }
+    }
+
+    private fun singleEoToXmir(path: String) {
+        val outFile = File(path.replaceFirst("${sep}in$sep", "$sep$xmirInTmp$sep").replace(".eo", ".xmir"))
         Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
         val syntax = Syntax(
             "transformer",
@@ -124,13 +99,25 @@ open class ResolverBase : IntegrationTestBase {
         syntax.parse()
     }
 
-    @Throws(Exception::class)
-    @Suppress("FUNCTION_NAME_INCORRECT_CASE")
-    private fun XMIRToEo(path: String, testName: String) {
+    private fun xmirToEo(path: String) {
+        Files.walk(Paths.get(path))
+            .filter(Files::isRegularFile)
+            .forEach {
+                XslTransformer().singleTransformation(it.toString(), it.toString(), "/compress-aliases.xsl")
+                XslTransformer().singleTransformation(
+                    it.toString(),
+                    it.toString(),
+                    "/org/eolang/parser/wrap-method-calls.xsl"
+                )
+                singleXmirToEo(it.toString())
+            }
+    }
+
+    private fun singleXmirToEo(path: String) {
         val outFile = File(
             path.replaceFirst(
-                "xmirs$sep${testName}_$postfix",
-                "eo_outputs$sep$testName"
+                "$xmirInTmp$sep${testName}_$postfix",
+                "$eoOutTmp$sep$testName"
             ).replace(".xmir", ".eo")
         )
         Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
@@ -145,15 +132,27 @@ open class ResolverBase : IntegrationTestBase {
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
+    override fun deleteTempDir(pathToSource: Path) {
+        val tmpDir = File("${pathToSource}_$postfix")
+        try {
+            FileUtils.deleteDirectory(tmpDir)
+            FileUtils.deleteDirectory(File(constructInPath(testName!!).substringBeforeLast(sep)))
+            FileUtils.deleteDirectory(File(constructEoOutPath(testName!!).substringBeforeLast(sep)))
+        } catch (e: IOException) {
+            logger.error(e.message)
+            throw e
+        }
+    }
+
     override fun constructOutPath(directoryName: String): String =
         "src${sep}test${sep}resources${sep}resolver${sep}out$sep$directoryName"
 
     override fun constructInPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}resolver${sep}xmirs$sep$directoryName"
+        "src${sep}test${sep}resources${sep}resolver$sep$xmirInTmp$sep$directoryName"
 
-    private fun constructEoOutPath(path: String): String =
-        "src${sep}test${sep}resources${sep}resolver${sep}eo_outputs$sep$path"
+    private fun constructEoOutPath(directoryName: String): String =
+        "src${sep}test${sep}resources${sep}resolver$sep$eoOutTmp$sep$directoryName"
 
-    private fun constructEoPath(path: String): String =
-        "src${sep}test${sep}resources${sep}resolver${sep}in$sep$path"
+    private fun constructEoInPath(directoryName: String): String =
+        "src${sep}test${sep}resources${sep}resolver${sep}in$sep$directoryName"
 }

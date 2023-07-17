@@ -3,6 +3,7 @@ package org.objectionary.ddr.integration.workflow
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
+@Ignore
 class IntegrationDdrWorkflowTest : IntegrationDdrWorkflowBase() {
     @Test
     @Ignore

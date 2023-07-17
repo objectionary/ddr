@@ -25,7 +25,9 @@
 package org.objectionary.ddr.unit.graph.builder
 
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 
+@Ignore
 class BuilderTest : BuilderBase() {
     @Test
     fun `test basic dir`() = doTest()

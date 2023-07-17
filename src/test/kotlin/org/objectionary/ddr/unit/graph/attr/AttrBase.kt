@@ -24,7 +24,6 @@
 
 package org.objectionary.ddr.unit.graph.attr
 
-import org.objectionary.ddr.TestBase
 import org.objectionary.ddr.graph.AttributesSetter
 import org.objectionary.ddr.graph.GraphBuilder
 import org.objectionary.ddr.graph.repr.IGraphNode
@@ -44,8 +43,8 @@ import java.nio.file.Paths
  * @todo #121:60min AttrBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class AttrBase : UnitTestBase {
-    private val logger = LoggerFactory.getLogger(this.javaClass.name)
-    private val postfix = "tmp"
+    override val logger = LoggerFactory.getLogger(this.javaClass.name)
+    override val postfix = "tmp"
 
     override fun doTest() {
         val path = getTestName()

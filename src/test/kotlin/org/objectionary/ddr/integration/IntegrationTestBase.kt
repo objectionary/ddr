@@ -1,9 +1,11 @@
 package org.objectionary.ddr.integration
 
 import org.objectionary.ddr.TestBase
-import java.io.File
 
-interface IntegrationTestBase: TestBase {
+/**
+ * Interface for all integration test classes
+ */
+interface IntegrationTestBase : TestBase {
     override fun constructInPath(directoryName: String): String =
         "src${sep}test${sep}resources${sep}integration${sep}in$sep$directoryName"
 

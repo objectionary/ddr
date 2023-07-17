@@ -24,13 +24,23 @@
 
 package org.objectionary.ddr
 
+import org.apache.commons.io.FileUtils
+import org.slf4j.Logger
 import java.io.File
+import java.io.IOException
+import java.nio.file.Path
 import kotlin.test.assertEquals
 
 /**
  * Common interface for all test classes
  */
 interface TestBase {
+    /** @property postfix postfix for temporary output directories */
+    val postfix: String
+
+    /** @property logger logger */
+    val logger: Logger
+
     /**
      * File path separator
      */
@@ -82,5 +92,21 @@ interface TestBase {
             }
         }
         return null
+    }
+
+    /**
+     * Deletes temporary output directory
+     *
+     * @param pathToSource path to source directory
+     * @throws IOException
+     */
+    fun deleteTempDir(pathToSource: Path) {
+        val tmpDir = File("${pathToSource}_$postfix")
+        try {
+            FileUtils.deleteDirectory(tmpDir)
+        } catch (e: IOException) {
+            logger.error(e.message)
+            throw e
+        }
     }
 }

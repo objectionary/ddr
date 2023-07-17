@@ -54,8 +54,8 @@ import java.nio.file.Paths
  * @todo #121:60min ResolverBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class ResolverBase : IntegrationTestBase {
-    private val logger = LoggerFactory.getLogger(this.javaClass.name)
-    private val postfix = "tmp"
+    override val logger = LoggerFactory.getLogger(this.javaClass.name)
+    override val postfix = "tmp"
 
     override fun doTest() {
         val path = getTestName()

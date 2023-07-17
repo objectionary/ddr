@@ -37,7 +37,6 @@ import java.io.File
 
 /**
  * Base class for inner attributes propagation testing
- *
  */
 open class InnerBase : UnitTestBase {
     override val logger = LoggerFactory.getLogger(this.javaClass.name)

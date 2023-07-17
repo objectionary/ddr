@@ -36,8 +36,6 @@ import java.io.File
 
 /**
  * Base class for attributes propagation testing
- *
- * @todo #121:60min AttrBase test needs to be refactored. Some decomposition needs to be added into doTest method.
  */
 open class AttrBase : UnitTestBase {
     override val logger = LoggerFactory.getLogger(this.javaClass.name)

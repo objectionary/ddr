@@ -30,12 +30,9 @@ import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.sources.SrsTransformed
 import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.unit.UnitTestBase
-import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
-import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.nio.file.Paths
 
 /**
  * Base class for attributes propagation testing
@@ -47,41 +44,28 @@ open class AttrBase : UnitTestBase {
     override val postfix = "tmp"
 
     override fun doTest() {
-        val path = getTestName()
-        val graph = GraphBuilder(
-            SrsTransformed(
-                constructInPath(path!!),
-                XslTransformer(),
-                postfix
-            ).walk()
-        ).createGraph()
+        val testName = getTestName()
+        val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
+        val graph = GraphBuilder(sources.walk()).createGraph()
         AttributesSetter(graph).setAttributes()
-        val out = ByteArrayOutputStream()
-        printOut(out, graph.igNodes)
-        val actual = String(out.toByteArray())
-        val bufferedReader: BufferedReader = File(constructOutPath(path)).bufferedReader()
-        val expected = bufferedReader.use { it.readText() }
+        val actual = stringOutput(graph.igNodes)
+        val expected = File(constructOutPath(testName)).bufferedReader().readText()
         logger.debug(actual)
         checkOutput(expected, actual)
-        try {
-            val tmpDir =
-                Paths.get("${constructInPath(path).replace('/', sep)}_$postfix").toString()
-            FileUtils.deleteDirectory(File(tmpDir))
-        } catch (e: Exception) {
-            logger.error(e.printStackTrace().toString())
-        }
+        deleteTempDir(sources.path)
     }
 
     override fun constructOutPath(directoryName: String): String =
         "src${sep}test${sep}resources${sep}unit${sep}out${sep}attr$sep$directoryName.txt"
 
-    private fun printOut(
-        out: ByteArrayOutputStream,
+    private fun stringOutput(
         nodes: Set<IGraphNode>
-    ) {
+    ): String {
+        val out = ByteArrayOutputStream()
         nodes.sortedBy { it.name }.forEach { node ->
             out.write("NODE: ${node.name} ATTRIBUTES:\n".toByteArray())
             node.attributes.forEach { out.write("name=${it.name}, dist=${it.parentDistance}\n".toByteArray()) }
         }
+        return String(out.toByteArray())
     }
 }

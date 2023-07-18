@@ -83,6 +83,7 @@ interface TestBase {
 
     /**
      * @return name of the test being executed
+     * @throws TestNotFoundException
      */
     fun getTestName(): String {
         Thread.currentThread().stackTrace.forEach {
@@ -91,7 +92,7 @@ interface TestBase {
                 return methodName.substring("test ".length).replace(' ', '_')
             }
         }
-        throw TestNotFoundException("Test name not found")
+        throw TestNotFoundException("Function with a name starting with \"test\" is not found in the current stack trace")
     }
 
     /**

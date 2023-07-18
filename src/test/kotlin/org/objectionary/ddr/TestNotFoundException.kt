@@ -1,8 +1,6 @@
 package org.objectionary.ddr
 
-class TestNotFoundException : RuntimeException {
-    constructor() : super()
-    constructor(message: String?) : super(message)
-    constructor(message: String?, cause: Throwable?) : super(message, cause)
-    constructor(cause: Throwable?) : super(cause)
-}
+/**
+ * This is a custom exception class that is thrown when a specific test not found
+ */
+class TestNotFoundException(message: String?) : RuntimeException(message)

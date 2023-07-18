@@ -42,7 +42,7 @@ open class BuilderBase : UnitTestBase {
 
     override fun doTest() {
         val testName = getTestName()
-        val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
+        val sources = SrsTransformed(constructInPath(testName), XslTransformer(), postfix)
         val graph = GraphBuilder(sources.walk()).createGraph()
         val actual = stringOutput(graph.heads)
         val expected = File(constructOutPath(testName)).bufferedReader().use { it.readText() }

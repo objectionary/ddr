@@ -84,14 +84,14 @@ interface TestBase {
     /**
      * @return name of the test being executed
      */
-    fun getTestName(): String? {
+    fun getTestName(): String {
         Thread.currentThread().stackTrace.forEach {
             val methodName = it.methodName
             if (methodName.substring(0, "test ".length) == "test ") {
                 return methodName.substring("test ".length).replace(' ', '_')
             }
         }
-        return null
+        throw TestNotFoundException("Test name not found")
     }
 
     /**

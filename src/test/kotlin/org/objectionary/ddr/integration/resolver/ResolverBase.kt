@@ -55,14 +55,14 @@ import java.nio.file.Paths
 open class ResolverBase : IntegrationTestBase {
     override val logger = LoggerFactory.getLogger(this.javaClass.name)
     override val postfix = "tmp"
-    private var testName: String? = ""
+    private var testName: String = ""
     private val xmirInTmp = "xmirs_tmp"
     private val eoOutTmp = "eo_tmp"
 
     override fun doTest() {
         testName = getTestName()
-        eoToXmir(constructEoInPath(testName!!))
-        val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
+        eoToXmir(constructEoInPath(testName))
+        val sources = SrsTransformed(constructInPath(testName), XslTransformer(), postfix)
         val documents = sources.walk()
         val graph = GraphBuilder(documents).createGraph()
         CondAttributesSetter(graph).processConditions()
@@ -70,8 +70,8 @@ open class ResolverBase : IntegrationTestBase {
         InnerPropagator(graph).propagateInnerAttrs()
         CondNodesResolver(graph, documents).resolve()
         BasicDecoratorsResolver(graph, documents).resolve()
-        xmirToEo(constructResultPath(testName!!))
-        Files.walk(Paths.get(constructOutPath(testName!!)))
+        xmirToEo(constructResultPath(testName))
+        Files.walk(Paths.get(constructOutPath(testName)))
             .filter(Files::isRegularFile)
             .forEach { file ->
                 val expected = File(file.toString()).bufferedReader().use { it.readText().replace(" ", "") }
@@ -136,8 +136,8 @@ open class ResolverBase : IntegrationTestBase {
         val tmpDir = File("${pathToSource}_$postfix")
         try {
             FileUtils.deleteDirectory(tmpDir)
-            FileUtils.deleteDirectory(File(constructInPath(testName!!).substringBeforeLast(sep)))
-            FileUtils.deleteDirectory(File(constructEoOutPath(testName!!).substringBeforeLast(sep)))
+            FileUtils.deleteDirectory(File(constructInPath(testName).substringBeforeLast(sep)))
+            FileUtils.deleteDirectory(File(constructEoOutPath(testName).substringBeforeLast(sep)))
         } catch (e: IOException) {
             logger.error(e.message)
             throw e

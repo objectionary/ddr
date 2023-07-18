@@ -16,7 +16,7 @@ open class TempDirectoryBase : UnitTestBase {
     override val postfix = "tmp"
     override fun doTest() {
         for (i in 0..2) {
-            val path = constructInPath(getTestName()!!) + sep.toString().repeat(i)
+            val path = constructInPath(getTestName()) + sep.toString().repeat(i)
             SrsTransformed(path, XslTransformer(), postfix).walk()
             checkIfTempDirExists(Path.of(path))
             deleteTempDir(Path.of(path))

@@ -43,7 +43,7 @@ open class AttrBase : UnitTestBase {
 
     override fun doTest() {
         val testName = getTestName()
-        val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
+        val sources = SrsTransformed(constructInPath(testName), XslTransformer(), postfix)
         val graph = GraphBuilder(sources.walk()).createGraph()
         AttributesSetter(graph).setAttributes()
         val actual = stringOutput(graph.igNodes)

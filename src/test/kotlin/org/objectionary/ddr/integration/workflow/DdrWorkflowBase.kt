@@ -40,7 +40,7 @@ open class DdrWorkflowBase : IntegrationTestBase {
 
     override fun doTest() {
         val testName = getTestName()
-        val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
+        val sources = SrsTransformed(constructInPath(testName), XslTransformer(), postfix)
         val documents = sources.walk()
         DdrWorkflow(documents).launch()
         documents.forEach { doc ->

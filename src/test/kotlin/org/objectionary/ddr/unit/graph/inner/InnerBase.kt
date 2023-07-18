@@ -49,7 +49,7 @@ open class InnerBase : UnitTestBase {
         AttributesSetter(graph).setAttributes()
         InnerPropagator(graph).propagateInnerAttrs()
         val actual = stringOutput(graph.igNodes)
-        val expected = File(constructOutPath(testName)).bufferedReader().readText()
+        val expected = File(constructOutPath(testName)).bufferedReader().use { it.readText() }
         logger.debug(actual)
         checkOutput(expected, actual)
         deleteTempDir(sources.inPath)

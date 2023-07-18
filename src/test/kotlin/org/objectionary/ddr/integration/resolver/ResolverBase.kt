@@ -73,10 +73,10 @@ open class ResolverBase : IntegrationTestBase {
         xmirToEo(constructResultPath(testName!!))
         Files.walk(Paths.get(constructOutPath(testName!!)))
             .filter(Files::isRegularFile)
-            .forEach {
-                val expected = File(it.toString()).bufferedReader().readText().replace(" ", "")
-                val actualFilename = it.toString().replace("$eoOutTmp$sep", "out$sep")
-                val actual = File(actualFilename).bufferedReader().readText().replace(" ", "")
+            .forEach { file ->
+                val expected = File(file.toString()).bufferedReader().use { it.readText().replace(" ", "") }
+                val actualFilename = file.toString().replace("$eoOutTmp$sep", "out$sep")
+                val actual = File(actualFilename).bufferedReader().use { it.readText().replace(" ", "") }
                 checkOutput(expected, actual)
             }
         deleteTempDir(sources.inPath)

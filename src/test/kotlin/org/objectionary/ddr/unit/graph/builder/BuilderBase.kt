@@ -45,7 +45,7 @@ open class BuilderBase : UnitTestBase {
         val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
         val graph = GraphBuilder(sources.walk()).createGraph()
         val actual = stringOutput(graph.heads)
-        val expected = File(constructOutPath(testName)).bufferedReader().readText()
+        val expected = File(constructOutPath(testName)).bufferedReader().use { it.readText() }
         logger.debug(actual)
         checkOutput(expected, actual)
         deleteTempDir(sources.inPath)

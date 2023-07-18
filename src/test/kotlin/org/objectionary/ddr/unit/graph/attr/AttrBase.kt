@@ -47,7 +47,7 @@ open class AttrBase : UnitTestBase {
         val graph = GraphBuilder(sources.walk()).createGraph()
         AttributesSetter(graph).setAttributes()
         val actual = stringOutput(graph.igNodes)
-        val expected = File(constructOutPath(testName)).bufferedReader().readText()
+        val expected = File(constructOutPath(testName)).bufferedReader().use { it.readText() }
         logger.debug(actual)
         checkOutput(expected, actual)
         deleteTempDir(sources.inPath)

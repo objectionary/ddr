@@ -43,11 +43,11 @@ open class DdrWorkflowBase : IntegrationTestBase {
         val sources = SrsTransformed(constructInPath(testName!!), XslTransformer(), postfix)
         val documents = sources.walk()
         DdrWorkflow(documents).launch()
-        documents.forEach {
-            val expected = File(it.value).bufferedReader().readText().replace(" ", "")
-            val actualFilename = it.value.replace("in$sep", "out$sep")
+        documents.forEach { doc ->
+            val expected = File(doc.value).bufferedReader().use { it.readText().replace(" ", "") }
+            val actualFilename = doc.value.replace("in$sep", "out$sep")
                 .replaceFirst("${testName}_$postfix", testName)
-            val actual = File(actualFilename).bufferedReader().readText().replace(" ", "")
+            val actual = File(actualFilename).bufferedReader().use { it.readText().replace(" ", "") }
             checkOutput(expected, actual)
         }
         deleteTempDir(sources.inPath)

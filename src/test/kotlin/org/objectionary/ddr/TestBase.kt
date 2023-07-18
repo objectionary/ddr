@@ -106,8 +106,7 @@ interface TestBase {
         try {
             FileUtils.deleteDirectory(tmpDir)
         } catch (e: IOException) {
-            logger.error(e.message)
-            throw e
+            throw IOException("Trying to delete not existing temporary directory", e)
         }
     }
 }

@@ -105,7 +105,7 @@ class SrsTransformed(
      *
      */
     private fun generateTmpPath(filename: String): String {
-        val strPath = inPath.toString()
-        return "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$postfix${filename.substring(strPath.length)}"
+        val path = inPath.toString()
+        return "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_$postfix${filename.substring(path.length)}"
     }
 }

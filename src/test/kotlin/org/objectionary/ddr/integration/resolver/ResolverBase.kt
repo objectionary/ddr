@@ -75,8 +75,9 @@ open class ResolverBase : IntegrationTestBase {
             .filter(Files::isRegularFile)
             .forEach { file ->
                 val expected = File(file.toString()).bufferedReader().use { it.readText().replace(" ", "") }
-                val actualFilename = file.toString().replace("$eoOutTmp$sep", "out$sep")
-                val actual = File(actualFilename).bufferedReader().use { it.readText().replace(" ", "") }
+                val actual = File(
+                    file.toString().replace("$eoOutTmp$sep", "out$sep")
+                ).bufferedReader().use { it.readText().replace(" ", "") }
                 checkOutput(expected, actual)
             }
         deleteTempDir(sources.inPath)
@@ -132,15 +133,13 @@ open class ResolverBase : IntegrationTestBase {
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
-    override fun deleteTempDir(pathToSource: Path) {
-        val tmpDir = File("${pathToSource}_$postfix")
+    override fun deleteTempDir(path: Path) {
         try {
-            FileUtils.deleteDirectory(tmpDir)
+            FileUtils.deleteDirectory(File("${path}_$postfix"))
             FileUtils.deleteDirectory(File(constructInPath(testName).substringBeforeLast(sep)))
             FileUtils.deleteDirectory(File(constructEoOutPath(testName).substringBeforeLast(sep)))
         } catch (e: IOException) {
-            logger.error(e.message)
-            throw e
+            throw IOException("Trying to delete not existing temporary directory", e)
         }
     }
 

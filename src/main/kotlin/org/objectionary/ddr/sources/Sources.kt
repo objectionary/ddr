@@ -47,8 +47,6 @@ class SrsTransformed(
      * Walks through [inPath], make some xsl transformation on xmir files using [transformer] and collect [documents]
      *
      * @return [MutableMap] with collected [documents] as key and their filenames as value
-     *
-     * @todo #119:30min `createTempDirectories` method is redundantly called in a loop. This method should be called once.
      */
     override fun walk(): MutableMap<Document, String> {
         Files.walk(inPath)
@@ -84,7 +82,7 @@ class SrsTransformed(
      * @return path to the temporary directory with xmir files
      *
      * @todo #119:30min if output directory already exists createFile throws exception and logger prints error message. This situation should be handled correctly.
-     * @todo #119:30min rename "tmpPath" to "resPath" and make it a public field.
+     * @todo #119:30min make public field "resPath" where path to result directory will be stored
      */
     private fun createTempDirectories(filename: String): String {
         val tmpPath = generateTmpPath(filename)

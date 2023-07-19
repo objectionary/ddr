@@ -37,7 +37,7 @@ abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, Path>) :
      * @param path path to the directory to be analysed
      * @param postfix postfix of the resulting directory
      */
-    constructor(path: String, postfix: String = "ddr") : this(
+    constructor(path: String, postfix: String) : this(
         SrsTransformed(Path.of(path), XslTransformer(), postfix).walk())
 
     /**
@@ -49,18 +49,22 @@ abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, Path>) :
 /**
  * Stores all the information from xmir files in the form of a graph. Launches analysis and transformation steps for
  * the Dynamic Dispatch Removal on this graph.
- *
- * @param documents all documents from analyzed directory
  */
-class DdrWorkflow(documents: MutableMap<Document, Path>) : XmirAnalysisWorkflow(documents) {
+class DdrWorkflow : XmirAnalysisWorkflow {
+    /**
+     * Constructs workflow class using documents
+     *
+     * @param documents all documents from analyzed directory
+     */
+    constructor(documents: MutableMap<Document, Path>) : super(documents)
+
     /**
      * Constructs [documents] from [path]
      *
      * @param path path to the directory to be analysed
      * @param postfix postfix of the resulting directory
      */
-    constructor(path: String, postfix: String = "ddr") : this(
-        SrsTransformed(Path.of(path), XslTransformer(), postfix).walk())
+    constructor(path: String, postfix: String = "ddr") : super(path, postfix)
 
     /**
      * Aggregates all steps of Dynamic Dispatch Removal

@@ -1,16 +1,12 @@
 package org.objectionary.ddr.sources
 
 import org.objectionary.ddr.transform.XslTransformer
-import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
-import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
-
-private val sep = File.separatorChar
 
 /**
  * Sources that can be traversed
@@ -36,8 +32,6 @@ class SrsTransformed(
     private val transformer: XslTransformer,
     private val postfix: String,
 ) : Sources {
-    private val logger = LoggerFactory.getLogger(this.javaClass.name)
-
     /** @property resPath path to directory with the result */
     val resPath: Path = Path.of("${inPath}_$postfix")
 
@@ -77,19 +71,27 @@ class SrsTransformed(
      *
      * @param path path to current xmir file in source directory
      * @return path to the temporary directory with xmir files
-     *
-     * @todo #119:30min if output directory already exists createFile throws exception and logger prints error message. This situation should be handled correctly.
      */
     private fun createResultDirectories(path: Path): Path {
-        val tmpPath = "$resPath${path.toString().substring(inPath.toString().length)}"
-        val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
-        Files.createDirectories(forDirs)
-        val newFilePath = Path.of(tmpPath)
-        try {
-            Files.createFile(newFilePath)
-        } catch (e: IOException) {
-            logger.error(e.message)
+        val result = generateResPath(path)
+        if (!result.toFile().exists()) {
+            try {
+                Files.createDirectories(result.parent)
+                Files.createFile(result)
+            } catch (e: IOException) {
+                throw IOException("Error when trying to create the resulting files", e)
+            }
         }
-        return Path.of(tmpPath)
+        return result
     }
+
+    /**
+     * Generates path to result xmir files
+     *
+     * @param path path to current xmir file in source directory
+     * @return path to result xmir files
+     *
+     */
+    private fun generateResPath(path: Path) =
+        Path.of("$resPath${path.toString().substring(inPath.toString().length)}")
 }

@@ -87,9 +87,9 @@ interface TestBase {
      */
     fun getTestName(): String {
         Thread.currentThread().stackTrace.forEach {
-            val methodName = it.methodName
-            if (methodName.substring(0, "test ".length) == "test ") {
-                return methodName.substring("test ".length).replace(' ', '_')
+            val name = it.methodName
+            if (name.substring(0, "test ".length) == "test ") {
+                return name.substring("test ".length).replace(' ', '_')
             }
         }
         throw TestNotFoundException("Function with a name starting with \"test\" is not found in the current stack trace")
@@ -98,12 +98,12 @@ interface TestBase {
     /**
      * Deletes temporary output directory
      *
-     * @param results sources for test
+     * @param path path to source directory
      * @throws IOException
      */
-    fun deleteTempDir(results: Path) {
+    fun deleteTempDir(path: Path) {
         try {
-            FileUtils.deleteDirectory(results.toFile())
+            FileUtils.deleteDirectory(File("${path}_$postfix"))
         } catch (e: IOException) {
             throw IOException("Trying to delete not existing temporary directory", e)
         }

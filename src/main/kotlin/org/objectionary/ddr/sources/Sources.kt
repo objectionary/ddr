@@ -40,6 +40,9 @@ class SrsTransformed(
     /** @property inPath path to directory with source files or single source file */
     val inPath: Path = Path.of(strPath)
 
+    /** @property resPath path to directory with the result */
+    val resPath: Path = Path.of("${inPath}_$postfix")
+
     /** @property documents all documents */
     private val documents: MutableMap<Document, String> = mutableMapOf()
 
@@ -107,7 +110,6 @@ class SrsTransformed(
      *
      */
     private fun generateTmpPath(filename: String): String {
-        val strPath = inPath.toString()
-        return "${strPath.substringBeforeLast(sep)}$sep${strPath.substringAfterLast(sep)}_$postfix${filename.substring(strPath.length)}"
+        return "$resPath${filename.substring(inPath.toString().length)}"
     }
 }

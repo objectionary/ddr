@@ -16,10 +16,11 @@ open class TempDirectoryBase : UnitTestBase {
     override val postfix = "tmp"
     override fun doTest() {
         for (i in 0..2) {
-            val path = constructInPath(getTestName()) + sep.toString().repeat(i)
-            SrsTransformed(path, XslTransformer(), postfix).walk()
-            checkIfTempDirExists(Path.of(path))
-            deleteTempDir(Path.of(path))
+            val path = Path.of("${constructInPath(getTestName())}${sep.toString().repeat(i)}")
+            val sources = SrsTransformed(path, XslTransformer(), postfix)
+            sources.walk()
+            checkIfTempDirExists(path)
+            deleteTempDir(sources.resPath)
         }
     }
 
@@ -28,5 +29,5 @@ open class TempDirectoryBase : UnitTestBase {
         val tempDir = File(strPathToTemp)
         assertTrue { tempDir.exists() }
     }
-    override fun constructOutPath(directoryName: String) = ""
+    override fun constructOutPath(dirname: String): Path = Path.of("")
 }

@@ -9,6 +9,7 @@ import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.transform.impl.BasicDecoratorsResolver
 import org.objectionary.ddr.transform.impl.CondNodesResolver
 import org.w3c.dom.Document
+import java.nio.file.Path
 
 /**
  * Workflow of some software application.
@@ -26,7 +27,7 @@ interface Workflow {
  *
  * @property documents all documents from analyzed directory
  */
-abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, String>) : Workflow {
+abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, Path>) : Workflow {
     /** @property graph decoration hierarchy graph of xmir files from analyzed directory */
     protected val graph = GraphBuilder(documents).createGraph()
 
@@ -42,7 +43,7 @@ abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, String>)
  *
  * @param documents all documents from analyzed directory
  */
-class DdrWorkflow(documents: MutableMap<Document, String>) : XmirAnalysisWorkflow(documents) {
+class DdrWorkflow(documents: MutableMap<Document, Path>) : XmirAnalysisWorkflow(documents) {
     /**
      * Constructs [documents] from [path]
      *
@@ -50,7 +51,7 @@ class DdrWorkflow(documents: MutableMap<Document, String>) : XmirAnalysisWorkflo
      * @param postfix postfix of the resulting directory
      */
     constructor(path: String, postfix: String = "ddr") : this(
-        SrsTransformed(path, XslTransformer(), postfix).walk())
+        SrsTransformed(Path.of(path), XslTransformer(), postfix).walk())
 
     /**
      * Aggregates all steps of Dynamic Dispatch Removal

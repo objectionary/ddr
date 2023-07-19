@@ -29,13 +29,14 @@ import org.objectionary.ddr.graph.repr.IGraphNode
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Node
+import java.nio.file.Path
 
 typealias GraphAbstracts = MutableMap<String, MutableSet<Node>>
 
 /**
  * Builds decoration hierarchy graph
  */
-class GraphBuilder(private val documents: MutableMap<Document, String>) {
+class GraphBuilder(private val documents: MutableMap<Document, Path>) {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
     private val abstracts: GraphAbstracts = mutableMapOf()
 

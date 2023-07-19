@@ -36,13 +36,14 @@ import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import java.io.FileOutputStream
+import java.nio.file.Path
 
 /**
  * Abstract class for all resolvers
  */
 abstract class Resolver(
     private val graph: Graph,
-    private val documents: MutableMap<Document, String>
+    private val documents: MutableMap<Document, Path>
 ) {
     /**
      * Map of objects and their declarations
@@ -79,7 +80,7 @@ abstract class Resolver(
      */
     protected fun transformDocuments() {
         documents.forEach { doc ->
-            val outputStream = FileOutputStream(doc.value)
+            val outputStream = FileOutputStream(doc.value.toFile())
             outputStream.use { XslTransformer().writeXml(it, doc.key) }
         }
     }

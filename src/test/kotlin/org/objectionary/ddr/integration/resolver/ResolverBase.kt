@@ -47,7 +47,6 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * Base class for testing decorators resolver
@@ -71,7 +70,7 @@ open class ResolverBase : IntegrationTestBase {
         CondNodesResolver(graph, documents).resolve()
         BasicDecoratorsResolver(graph, documents).resolve()
         xmirToEo(constructResultPath(testName))
-        Files.walk(Paths.get(constructOutPath(testName)))
+        Files.walk(constructOutPath(testName))
             .filter(Files::isRegularFile)
             .forEach { file ->
                 val expected = File(file.toString()).bufferedReader().use { it.readText().replace(" ", "") }
@@ -79,28 +78,29 @@ open class ResolverBase : IntegrationTestBase {
                 val actual = File(actualFilename).bufferedReader().use { it.readText().replace(" ", "") }
                 checkOutput(expected, actual)
             }
-        deleteTempDir(sources.inPath)
+        deleteTempDir(sources.resPath)
     }
 
-    private fun eoToXmir(path: String) {
-        Files.walk(Paths.get(path))
+    private fun eoToXmir(path: Path) {
+        Files.walk(path)
             .filter(Files::isRegularFile)
-            .forEach { singleEoToXmir(it.toString()) }
+            .forEach { singleEoToXmir(it) }
     }
 
-    private fun singleEoToXmir(path: String) {
-        val outFile = File(path.replaceFirst("${sep}in$sep", "$sep$xmirInTmp$sep").replace(".eo", ".xmir"))
-        Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
-        val syntax = Syntax(
-            "transformer",
-            ResourceOf(path.replace("src${sep}test${sep}resources$sep", "")),
-            OutputTo(outFile.outputStream())
+    private fun singleEoToXmir(path: Path) {
+        val outFile = File(
+            path.toString().replaceFirst("${sep}in$sep", "$sep$xmirInTmp$sep").replace(".eo", ".xmir")
         )
-        syntax.parse()
+        Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
+        Syntax(
+            "transformer",
+            ResourceOf(path.toString().replace("src${sep}test${sep}resources$sep", "")),
+            OutputTo(outFile.outputStream())
+        ).parse()
     }
 
-    private fun xmirToEo(path: String) {
-        Files.walk(Paths.get(path))
+    private fun xmirToEo(path: Path) {
+        Files.walk(path)
             .filter(Files::isRegularFile)
             .forEach {
                 XslTransformer().singleTransformation(it.toString(), it.toString(), "/compress-aliases.xsl")
@@ -109,22 +109,25 @@ open class ResolverBase : IntegrationTestBase {
                     it.toString(),
                     "/org/eolang/parser/wrap-method-calls.xsl"
                 )
-                singleXmirToEo(it.toString())
+                singleXmirToEo(it)
             }
     }
 
-    private fun singleXmirToEo(path: String) {
+    private fun singleXmirToEo(path: Path) {
         val outFile = File(
-            path.replaceFirst(
+            path.toString().replaceFirst(
                 "$xmirInTmp$sep${testName}_$postfix",
                 "$eoOutTmp$sep$testName"
             ).replace(".xmir", ".eo")
         )
         Files.createDirectories(File(outFile.toPath().toString().substringBeforeLast(File.separator)).toPath())
-        val src = File(path).readText()
-        val first: XML = clean(XMLDocument(src))
-        val eolang = XMIR(first).toEO()
-        outFile.outputStream().write(eolang.toByteArray())
+        outFile.outputStream().write(
+            XMIR(
+                clean(
+                    XMLDocument(path.toFile().readText())
+                )
+            ).toEO().toByteArray()
+        )
     }
 
     private fun clean(xmir: XML): XML {
@@ -132,27 +135,26 @@ open class ResolverBase : IntegrationTestBase {
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
-    override fun deleteTempDir(pathToSource: Path) {
-        val tmpDir = File("${pathToSource}_$postfix")
+    override fun deleteTempDir(results: Path) {
         try {
-            FileUtils.deleteDirectory(tmpDir)
-            FileUtils.deleteDirectory(File(constructInPath(testName).substringBeforeLast(sep)))
-            FileUtils.deleteDirectory(File(constructEoOutPath(testName).substringBeforeLast(sep)))
+            FileUtils.deleteDirectory(results.toFile())
+            FileUtils.deleteDirectory(constructInPath(testName).parent.toFile())
+            FileUtils.deleteDirectory(constructEoOutPath(testName).parent.toFile())
         } catch (e: IOException) {
             logger.error(e.message)
             throw e
         }
     }
 
-    override fun constructOutPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}resolver${sep}out$sep$directoryName"
+    override fun constructOutPath(dirname: String): Path =
+        Path.of("src${sep}test${sep}resources${sep}resolver${sep}out$sep$dirname")
 
-    override fun constructInPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}resolver$sep$xmirInTmp$sep$directoryName"
+    override fun constructInPath(dirname: String): Path =
+        Path.of("src${sep}test${sep}resources${sep}resolver$sep$xmirInTmp$sep$dirname")
 
-    private fun constructEoOutPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}resolver$sep$eoOutTmp$sep$directoryName"
+    private fun constructEoOutPath(directoryName: String): Path =
+        Path.of("src${sep}test${sep}resources${sep}resolver$sep$eoOutTmp$sep$directoryName")
 
-    private fun constructEoInPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}resolver${sep}in$sep$directoryName"
+    private fun constructEoInPath(directoryName: String): Path =
+        Path.of("src${sep}test${sep}resources${sep}resolver${sep}in$sep$directoryName")
 }

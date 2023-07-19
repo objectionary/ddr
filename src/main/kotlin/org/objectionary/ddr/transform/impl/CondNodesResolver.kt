@@ -38,13 +38,14 @@ import org.objectionary.ddr.transform.Resolver
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
+import java.nio.file.Path
 
 /**
  * Inserts if blocks instead of conditional nodes and attributes application
  */
 class CondNodesResolver(
     private val graph: Graph,
-    private val documents: MutableMap<Document, String>
+    private val documents: MutableMap<Document, Path>
 ) : Resolver(graph, documents) {
     /**
      * Aggregate process of conditional nodes resolving

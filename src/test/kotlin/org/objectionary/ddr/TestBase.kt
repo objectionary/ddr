@@ -70,16 +70,16 @@ interface TestBase {
         )
 
     /**
-     * @param directoryName name of the input directory
+     * @param dirname name of the input directory
      * @return path to input location
      */
-    fun constructInPath(directoryName: String): String
+    fun constructInPath(dirname: String): Path
 
     /**
-     * @param directoryName name of the output directory
+     * @param dirname name of the output directory
      * @return path to output location
      */
-    fun constructOutPath(directoryName: String): String
+    fun constructOutPath(dirname: String): Path
 
     /**
      * @return name of the test being executed
@@ -98,13 +98,12 @@ interface TestBase {
     /**
      * Deletes temporary output directory
      *
-     * @param pathToSource path to source directory
+     * @param results sources for test
      * @throws IOException
      */
-    fun deleteTempDir(pathToSource: Path) {
-        val tmpDir = File("${pathToSource}_$postfix")
+    fun deleteTempDir(results: Path) {
         try {
-            FileUtils.deleteDirectory(tmpDir)
+            FileUtils.deleteDirectory(results.toFile())
         } catch (e: IOException) {
             throw IOException("Trying to delete not existing temporary directory", e)
         }

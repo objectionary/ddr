@@ -31,7 +31,7 @@ import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.unit.UnitTestBase
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
-import java.io.File
+import java.nio.file.Path
 
 /**
  * Base class for graph builder testing
@@ -45,14 +45,14 @@ open class BuilderBase : UnitTestBase {
         val sources = SrsTransformed(constructInPath(testName), XslTransformer(), postfix)
         val graph = GraphBuilder(sources.walk()).createGraph()
         val actual = stringOutput(graph.heads)
-        val expected = File(constructOutPath(testName)).bufferedReader().use { it.readText() }
+        val expected = constructOutPath(testName).toFile().bufferedReader().use { it.readText() }
         logger.debug(actual)
         checkOutput(expected, actual)
-        deleteTempDir(sources.inPath)
+        deleteTempDir(sources.resPath)
     }
 
-    override fun constructOutPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}unit${sep}out${sep}builder$sep$directoryName.txt"
+    override fun constructOutPath(dirname: String): Path =
+        Path.of("src${sep}test${sep}resources${sep}unit${sep}out${sep}builder$sep$dirname.txt")
 
     private fun stringOutput(
         heads: MutableSet<IGraphNode>

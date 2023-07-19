@@ -33,7 +33,7 @@ import org.objectionary.ddr.transform.XslTransformer
 import org.objectionary.ddr.unit.UnitTestBase
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
-import java.io.File
+import java.nio.file.Path
 
 /**
  * Base class for inner attributes propagation testing
@@ -49,14 +49,14 @@ open class InnerBase : UnitTestBase {
         AttributesSetter(graph).setAttributes()
         InnerPropagator(graph).propagateInnerAttrs()
         val actual = stringOutput(graph.igNodes)
-        val expected = File(constructOutPath(testName)).bufferedReader().use { it.readText() }
+        val expected = constructOutPath(testName).toFile().bufferedReader().use { it.readText() }
         logger.debug(actual)
         checkOutput(expected, actual)
-        deleteTempDir(sources.inPath)
+        deleteTempDir(sources.resPath)
     }
 
-    override fun constructOutPath(directoryName: String): String =
-        "src${sep}test${sep}resources${sep}unit${sep}out${sep}inner$sep$directoryName.txt"
+    override fun constructOutPath(dirname: String): Path =
+        Path.of("src${sep}test${sep}resources${sep}unit${sep}out${sep}inner$sep$dirname.txt")
 
     private fun stringOutput(
         nodes: Set<IGraphNode>

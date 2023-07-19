@@ -35,13 +35,14 @@ import org.objectionary.ddr.transform.Resolver
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
+import java.nio.file.Path
 
 /**
  * Collects all decorators and inserts desired .@ applications
  */
 class BasicDecoratorsResolver(
     private val graph: Graph,
-    documents: MutableMap<Document, String>
+    documents: MutableMap<Document, Path>
 ) : Resolver(graph, documents) {
     /**
      * Aggregates process of resolving all decorators:

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
@@ -55,9 +56,9 @@ class SrsTransformed(
         Files.walk(inPath)
             .filter(Files::isRegularFile)
             .forEach {
-                val tmpPath = createTempDirectories(it.toString())
-                transformer.transformXml(it.toString(), tmpPath)
-                documents[getDocument(tmpPath)!!] = tmpPath
+                val result = createResultDirectories(it.toString())
+                transformer.transformXml(it.toString(), result)
+                documents[getDocument(result)!!] = result
             }
         return documents
     }
@@ -72,7 +73,7 @@ class SrsTransformed(
         try {
             val factory = DocumentBuilderFactory.newInstance()
             FileInputStream(filename).use { return factory.newDocumentBuilder().parse(it) }
-        } catch (e: Exception) {
+        } catch (e: FileNotFoundException) {
             logger.error(e.printStackTrace().toString())
             return null
         }
@@ -86,8 +87,8 @@ class SrsTransformed(
      *
      * @todo #119:30min if output directory already exists createFile throws exception and logger prints error message. This situation should be handled correctly.
      */
-    private fun createTempDirectories(filename: String): String {
-        val tmpPath = generateTmpPath(filename)
+    private fun createResultDirectories(filename: String): String {
+        val tmpPath = generateResultPath(filename)
         val forDirs = File(tmpPath.substringBeforeLast(sep)).toPath()
         Files.createDirectories(forDirs)
         val newFilePath = Path.of(tmpPath)
@@ -100,13 +101,13 @@ class SrsTransformed(
     }
 
     /**
-     * Generates path to temporary directories
+     * Generates path to result files
      *
      * @param filename path to current xmir file in source directory
-     * @return path to the temporary directories
+     * @return path to the result files
      *
      */
-    private fun generateTmpPath(filename: String): String {
+    private fun generateResultPath(filename: String): String {
         return "$resPath${filename.substring(inPath.toString().length)}"
     }
 }

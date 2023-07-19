@@ -103,7 +103,7 @@ interface TestBase {
      */
     fun deleteTempDir(path: Path) {
         try {
-            FileUtils.deleteDirectory(File("${path}_$postfix"))
+            FileUtils.deleteDirectory(path.toFile())
         } catch (e: IOException) {
             throw IOException("Trying to delete not existing temporary directory", e)
         }

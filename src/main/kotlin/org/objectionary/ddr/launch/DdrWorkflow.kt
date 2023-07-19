@@ -32,6 +32,15 @@ abstract class XmirAnalysisWorkflow(val documents: MutableMap<Document, Path>) :
     protected val graph = GraphBuilder(documents).createGraph()
 
     /**
+     * Constructs [documents] from [path]
+     *
+     * @param path path to the directory to be analysed
+     * @param postfix postfix of the resulting directory
+     */
+    constructor(path: String, postfix: String = "ddr") : this(
+        SrsTransformed(Path.of(path), XslTransformer(), postfix).walk())
+
+    /**
      * Aggregates all steps of analysis
      */
     abstract override fun launch()

@@ -136,9 +136,9 @@ open class ResolverBase : IntegrationTestBase {
         return XSLDocument(stripXml).with(ClasspathSources()).transform(xmir)
     }
 
-    override fun deleteTempDir(results: Path) {
+    override fun deleteTempDir(path: Path) {
         try {
-            FileUtils.deleteDirectory(results.toFile())
+            FileUtils.deleteDirectory(path.toFile())
             FileUtils.deleteDirectory(constructInPath(testName).parent.toFile())
             FileUtils.deleteDirectory(constructEoOutPath(testName).parent.toFile())
         } catch (e: IOException) {

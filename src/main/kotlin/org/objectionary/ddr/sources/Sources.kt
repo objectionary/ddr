@@ -37,19 +37,19 @@ class SrsTransformed(
 ) : Sources {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    /** @property inPath path to directory with source files or single source file */
-    val inPath: Path = Path.of(strPath)
+    /** @property inputPath path to directory with source files or single source file */
+    val inputPath: Path = Path.of(strPath)
 
     /** @property documents all documents */
     private val documents: MutableMap<Document, String> = mutableMapOf()
 
     /**
-     * Walks through [inPath], make some xsl transformation on xmir files using [transformer] and collect [documents]
+     * Walks through [inputPath], make some xsl transformation on xmir files using [transformer] and collect [documents]
      *
      * @return [MutableMap] with collected [documents] as key and their filenames as value
      */
     override fun walk(): MutableMap<Document, String> {
-        Files.walk(inPath)
+        Files.walk(inputPath)
             .filter(Files::isRegularFile)
             .forEach {
                 val tmpPath = createTempDirectories(it.toString())
@@ -105,7 +105,7 @@ class SrsTransformed(
      *
      */
     private fun generateTmpPath(filename: String): String {
-        val path = inPath.toString()
+        val path = inputPath.toString()
         return "${path.substringBeforeLast(sep)}$sep${path.substringAfterLast(sep)}_$postfix${filename.substring(path.length)}"
     }
 }

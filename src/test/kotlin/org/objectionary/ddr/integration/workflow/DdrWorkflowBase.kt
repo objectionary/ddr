@@ -50,6 +50,6 @@ open class DdrWorkflowBase : IntegrationTestBase {
             val actual = File(actualFilename).bufferedReader().use { it.readText().replace(" ", "") }
             checkOutput(expected, actual)
         }
-        deleteTempDir(sources.inPath)
+        deleteTempDir(sources.inputPath)
     }
 }

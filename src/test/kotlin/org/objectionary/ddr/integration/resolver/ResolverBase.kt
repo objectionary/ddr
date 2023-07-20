@@ -80,7 +80,7 @@ open class ResolverBase : IntegrationTestBase {
                 ).bufferedReader().use { it.readText().replace(" ", "") }
                 checkOutput(expected, actual)
             }
-        deleteTempDir(sources.inPath)
+        deleteTempDir(sources.inputPath)
     }
 
     private fun eoToXmir(path: String) {

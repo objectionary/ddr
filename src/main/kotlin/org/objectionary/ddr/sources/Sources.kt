@@ -23,28 +23,28 @@ interface Sources {
 /**
  * Source xmir files that are stored in [Document] format
  *
- * @property inPath path to directory with source files or single source file
+ * @property inputPath path to directory with source files or single source file
  * @property transformer the object with which xsl transformations on xmir files will be performed
  * @property postfix postfix of the resulting directory
  */
 class SrsTransformed(
-    val inPath: Path,
+    val inputPath: Path,
     private val transformer: XslTransformer,
     private val postfix: String,
 ) : Sources {
     /** @property resPath path to directory with the result */
-    val resPath: Path = Path.of("${inPath}_$postfix")
+    val resPath: Path = Path.of("${inputPath}_$postfix")
 
     /** @property documents all documents */
     private val documents: MutableMap<Document, Path> = mutableMapOf()
 
     /**
-     * Walks through [inPath], make some xsl transformation on xmir files using [transformer] and collect [documents]
+     * Walks through [inputPath], make some xsl transformation on xmir files using [transformer] and collect [documents]
      *
      * @return [MutableMap] with collected [documents] as key and their filenames as value
      */
     override fun walk(): MutableMap<Document, Path> {
-        Files.walk(inPath)
+        Files.walk(inputPath)
             .filter(Files::isRegularFile)
             .forEach {
                 val result = createResultDirectories(it)
@@ -93,5 +93,5 @@ class SrsTransformed(
      *
      */
     private fun generateResPath(path: Path) =
-        Path.of("$resPath${path.toString().substring(inPath.toString().length)}")
+        Path.of("$resPath${path.toString().substring(inputPath.toString().length)}")
 }

@@ -50,9 +50,9 @@ class AttributesSetter(private val graph: Graph) {
             val attributes = node.body.childNodes
             for (j in 0 until attributes.length) {
                 val attr: Node = attributes.item(j)
-                abstract(attr)?.let {
-                    name(attr)?.let {
-                        node.attributes.add(IGraphAttr(name(attr)!!, 0, attr))
+                attr.getAttr("abstract")?.let {
+                    attr.getAttrContent("name")?.let {
+                        node.attributes.add(IGraphAttr(attr.getAttrContent("name")!!, 0, attr))
                     }
                 }
             }

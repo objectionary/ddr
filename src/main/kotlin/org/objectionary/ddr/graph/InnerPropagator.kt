@@ -51,12 +51,12 @@ class InnerPropagator(
     private fun collectDecorators() {
         val objects = graph.initialObjects
         for (node in objects) {
-            val name = name(node)
+            val name = node.getAttrContent("name")
             if (name != null && name == "@") {
-                decorators[IGraphNode(node, packageName(node))] = false
+                decorators[IGraphNode(node, node.packageName())] = false
             }
-            if (abstract(node) != null && name != null) {
-                abstracts.getOrPut(name) { mutableSetOf() }.add(IGraphNode(node, packageName(node)))
+            if (node.containsAttr("abstract") && name != null) {
+                abstracts.getOrPut(name) { mutableSetOf() }.add(IGraphNode(node, node.packageName()))
             }
         }
     }
@@ -81,13 +81,13 @@ class InnerPropagator(
     @Suppress("AVOID_NULL_CHECKS")
     private fun getBaseAbstract(key: IGraphNode) {
         var tmpKey = key.body
-        while (base(tmpKey)?.startsWith('.') == true) {
+        while (tmpKey.getAttrContent("base")?.startsWith('.') == true) {
             if (tmpKey.previousSibling.previousSibling == null) {
                 break
             }
             tmpKey = tmpKey.previousSibling.previousSibling
         }
-        when (base(tmpKey)) {
+        when (tmpKey.getAttrContent("base")) {
             "^" -> {
                 val abstract = tmpKey.parentNode.parentNode
                 resolveAttrs(tmpKey, abstract, key)
@@ -107,7 +107,7 @@ class InnerPropagator(
      * Finds an actual definition of an object that was copied into given [node]
      */
     private fun resolveRefs(node: Node): Node? {
-        abstract(node)?.let { return node }
+        node.getAttr("abstract")?.let { return node }
         return findRef(node, graph.initialObjects, graph)
     }
 
@@ -122,16 +122,16 @@ class InnerPropagator(
     ) {
         var tmpAbstract = graph.igNodes.find { it.body == abstract } ?: return
         var tmpNode: Node? = node.nextSibling.nextSibling ?: return
-        while (name(tmpAbstract.body) != base(key.body)?.substring(1)) {
+        while (tmpAbstract.body.getAttrContent("name") != key.body.getAttrContent("base")?.substring(1)) {
             tmpAbstract = graph.igNodes.find { graphNode ->
                 tmpAbstract.attributes.find {
-                    base(tmpNode)?.substring(1) == name(it.body)
+                    tmpNode.getAttrContent("base")?.substring(1) == it.body.getAttrContent("name")
                 }?.body == graphNode.body
             } ?: return
             tmpNode = tmpNode?.nextSibling?.nextSibling
         }
         val parent = node.parentNode ?: return
-        graph.igNodes.find { it.body == parent } ?: run { graph.igNodes.add(IGraphNode(parent, packageName(parent))) }
+        graph.igNodes.find { it.body == parent } ?: run { graph.igNodes.add(IGraphNode(parent, parent.packageName())) }
         val igParent = graph.igNodes.find { it.body == parent } ?: return
         tmpAbstract.attributes.forEach { graphNode ->
             igParent.attributes.find { graphNode.body == it.body }

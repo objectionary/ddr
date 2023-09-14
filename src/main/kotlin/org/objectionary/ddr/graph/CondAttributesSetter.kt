@@ -27,7 +27,7 @@ class CondAttributesSetter(
     private fun collectConditions() {
         val objects = graph.initialObjects
         for (node in objects) {
-            val base = base(node) ?: continue
+            val base = node.getAttrContent("base") ?: continue
             if (base == ".if") {
                 conditions.add(node)
             }
@@ -37,32 +37,32 @@ class CondAttributesSetter(
     private fun processApplications() {
         conditions.forEach { node ->
             var tmpNode = node.firstChild.nextSibling
-            var line = line(tmpNode)
+            var line = tmpNode.getAttrContent("line")
             val cond: MutableList<Node> = mutableListOf(tmpNode)
-            while (line(tmpNode.nextSibling.nextSibling) == line) {
+            while (tmpNode.nextSibling.nextSibling.getAttrContent("line") == line) {
                 cond.add(tmpNode.nextSibling.nextSibling)
                 tmpNode = tmpNode.nextSibling.nextSibling
-                line = line(tmpNode)
+                line = tmpNode.getAttrContent("line")
             }
             tmpNode = tmpNode.nextSibling.nextSibling
             val fstOption: MutableList<Node> = mutableListOf(tmpNode)
-            while (line(tmpNode.nextSibling.nextSibling) == line) {
+            while (tmpNode.nextSibling.nextSibling.getAttrContent("line") == line) {
                 fstOption.add(tmpNode.nextSibling.nextSibling)
                 tmpNode = tmpNode.nextSibling.nextSibling
-                line = line(tmpNode)
+                line = tmpNode.getAttrContent("line")
             }
             tmpNode = tmpNode.nextSibling.nextSibling
             val sndOption: MutableList<Node> = mutableListOf(tmpNode)
-            while (line(tmpNode.nextSibling.nextSibling) == line) {
+            while (tmpNode.nextSibling.nextSibling.getAttrContent("line") == line) {
                 sndOption.add(tmpNode.nextSibling.nextSibling)
                 tmpNode = tmpNode.nextSibling.nextSibling
-                line = line(tmpNode)
+                line = tmpNode.getAttrContent("line")
             }
             val igCond = IgNodeCondition(cond)
             traverseParents(node.parentNode, igCond.freeVars)
-            name(node)?.let {name ->
+            node.getAttrContent("name")?.let {name ->
                 if (name != "@") {
-                    graph.igNodes.add(IGraphCondNode(node, packageName(node), igCond, fstOption, sndOption))
+                    graph.igNodes.add(IGraphCondNode(node, node.packageName(), igCond, fstOption, sndOption))
                     val parent = graph.igNodes.find { it.body == node.parentNode }
                     parent?.attributes?.add(IGraphCondAttr(name, 0, node, igCond, fstOption, sndOption))
                 } else {
@@ -74,10 +74,10 @@ class CondAttributesSetter(
     }
 
     private fun traverseParents(node: Node, freeVars: MutableSet<String>) {
-        abstract(node) ?: return
+        node.getAttr("abstract") ?: return
         var sibling = node.firstChild?.nextSibling
-        while (base(sibling) == null && abstract(sibling) == null && sibling != null) {
-            name(sibling)?.let { freeVars.add(it) }
+        while (!sibling.containsAttr("base") && !sibling.containsAttr("abstract") && sibling != null) {
+            sibling.getAttrContent("name")?.let { freeVars.add(it) }
             sibling = sibling?.nextSibling
         }
         traverseParents(node.parentNode, freeVars)

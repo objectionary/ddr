@@ -1,6 +1,6 @@
 package org.objectionary.ddr.graph.repr
 
-import org.objectionary.ddr.graph.name
+import org.objectionary.ddr.graph.getAttrContent
 import org.w3c.dom.Node
 
 /**
@@ -17,7 +17,7 @@ open class IGraphNode(
     /**
      * Name of the node
      */
-    val name: String? by lazy { name(body) }
+    val name: String? by lazy { body.getAttrContent("name") }
 
     /**
      * Children of this node

@@ -24,13 +24,11 @@
 
 package org.objectionary.ddr.transform
 
-import org.objectionary.ddr.graph.abstract
-import org.objectionary.ddr.graph.base
+import org.objectionary.ddr.graph.containsAttr
 import org.objectionary.ddr.graph.findRef
-import org.objectionary.ddr.graph.line
-import org.objectionary.ddr.graph.name
+import org.objectionary.ddr.graph.getAttr
+import org.objectionary.ddr.graph.getAttrContent
 import org.objectionary.ddr.graph.packageName
-import org.objectionary.ddr.graph.ref
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.w3c.dom.Document
@@ -61,8 +59,8 @@ abstract class Resolver(
     protected fun collectDeclarations() {
         val objects = graph.initialObjects
         for (node in objects) {
-            val base = base(node) ?: continue
-            if (abstract(node) == null && (!base.startsWith('.') || name(node) != null)) {
+            val base = node.getAttrContent("base") ?: continue
+            if (!node.containsAttr("abstract") && (!base.startsWith('.') || node.containsAttr("name"))) {
                 declarations[node] = null
             }
         }
@@ -113,7 +111,7 @@ abstract class Resolver(
      * @return found abstract or null if such abstract was not found
      */
     protected fun getIgAbstract(node: Node?): IGraphNode? {
-        abstract(node)?.let { return graph.igNodes.find { it.body == node } }
+        node.getAttr("abstract")?.let { return graph.igNodes.find { it.body == node } }
         val abstract = declarations[node]
         graph.igNodes.find { it.body == abstract }?.let { return it }
         val cand = findRef(node, graph.initialObjects, graph)
@@ -131,29 +129,29 @@ abstract class Resolver(
         node: Node,
         objects: MutableSet<Node>
     ): Node? {
-        ref(node)?.let { ref ->
+        node.getAttrContent("ref")?.let { ref ->
             objects.forEach {
-                if (line(it) == ref && packageName(node) == packageName(it) && name(it) == base(node)) {
+                if (it.getAttrContent("line") == ref && node.packageName() == it.packageName() && it.getAttrContent("name") == node.getAttrContent("base")) {
                     return lastInvocation(it)
                 }
             }
         }
-        ref(node)?.let { ref ->
+        node.getAttrContent("ref")?.let { ref ->
             objects.forEach {
-                if (line(it) == ref && packageName(node) == packageName(it)) {
+                if (it.getAttrContent("line") == ref && node.packageName() == it.packageName()) {
                     return lastInvocation(it)
                 }
             }
         }
-        if (base(node) == "^") {
+        if (node.getAttrContent("base") == "^") {
             return node.parentNode?.parentNode
         }
-        if (base(node) == "$") {
+        if (node.getAttrContent("base") == "$") {
             return node.parentNode
         }
-        getAbstractViaPackage(base(node))?.body?.let { return it }
+        getAbstractViaPackage(node.getAttrContent("base"))?.body?.let { return it }
         val attrs = graph.igNodes.find { it.body == node.parentNode }?.attributes
-        return attrs?.find { it.name == base(node) }?.body
+        return attrs?.find { it.name == node.getAttrContent("base") }?.body
     }
 
     private fun lastInvocation(
@@ -161,7 +159,7 @@ abstract class Resolver(
     ): Node? {
         var res: Node? = node
         var sibling = node.nextSibling?.nextSibling
-        while (base(sibling)?.startsWith(".") == true) {
+        while (sibling.getAttrContent("base")?.startsWith(".") == true) {
             res = sibling
             sibling = sibling?.nextSibling
             sibling?.attributes ?: run { sibling = sibling?.nextSibling }

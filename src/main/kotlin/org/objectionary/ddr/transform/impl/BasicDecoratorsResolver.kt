@@ -24,10 +24,7 @@
 
 package org.objectionary.ddr.transform.impl
 
-import org.objectionary.ddr.graph.base
-import org.objectionary.ddr.graph.line
-import org.objectionary.ddr.graph.name
-import org.objectionary.ddr.graph.pos
+import org.objectionary.ddr.graph.getAttrContent
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphAttr
 import org.objectionary.ddr.graph.repr.IGraphNode
@@ -68,7 +65,7 @@ class BasicDecoratorsResolver(
             traverseDotChain(node, abstract)
             graph.igNodes.find { node.parentNode == it.body }?.let { parentNode ->
                 parentNode.attributes
-                    .find { it.name == name(baseObject) }?.parentDistance
+                    .find { it.name == baseObject.getAttrContent("name") }?.parentDistance
                     ?.let { insertBefore(node, parentNode.body, it) }
             }
         }
@@ -85,8 +82,8 @@ class BasicDecoratorsResolver(
         sibling?.attributes ?: run {
             sibling = sibling?.nextSibling
         }
-        while (base(sibling)?.startsWith(".") == true) {
-            val base = base(sibling)
+        while (sibling.getAttrContent("base")?.startsWith(".") == true) {
+            val base = sibling.getAttrContent("base")
             val attr = abstract.attributes.find { it.name == base?.substring(1) }
             if (attr != null && sibling != null) {
                 insert(sibling, attr)
@@ -156,11 +153,12 @@ class BasicDecoratorsResolver(
     ) {
         val newChild: Element = document.createElement("o")
         newChild.setAttribute("base", baseValue)
-        newChild.setAttribute("line", line(node))
+        newChild.setAttribute("line", node.getAttrContent("line"))
         if (baseValue == ".@") {
             newChild.setAttribute("method", "")
         }
-        newChild.setAttribute("pos", "${base(node)?.length?.plus(pos(node)?.toInt()!!)?.plus(offset)}")
+        newChild.setAttribute("pos", "${node.getAttrContent("base")?.length
+            ?.plus(node.getAttrContent("pos")?.toInt()!!)?.plus(offset)}")
         parent.appendChild(newChild)
     }
 }

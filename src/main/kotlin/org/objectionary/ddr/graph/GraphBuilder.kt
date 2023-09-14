@@ -76,8 +76,8 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
     @Suppress("PARAMETER_NAME_IN_OUTER_LAMBDA")
     private fun abstracts(objects: MutableList<Node>, packageName: String) =
         objects.forEach {
-            val name = name(it)
-            if (abstract(it) != null && name != null) {
+            val name = it.getAttrContent("name")
+            if (it.containsAttr("abstract") && name != null) {
                 abstracts.getOrPut(name) { mutableSetOf() }.add(it)
                 graph.igNodes.add(IGraphNode(it, packageName))
             }
@@ -89,7 +89,7 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
     ): Node? =
         if (baseName != null && abstracts.contains(baseName)) {
             abstracts[baseName]!!.find {
-                line(it) == baseRef
+                it.getAttrContent("line") == baseRef
             }
         } else {
             null
@@ -105,7 +105,7 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
         documents.forEach {
             val objects: MutableList<Node> = mutableListOf()
             val docObjects = it.key.getElementsByTagName("o")
-            val packageName = packageName(docObjects.item(0))
+            val packageName = docObjects.item(0).packageName()
             for (i in 0 until docObjects.length) {
                 objects.add(docObjects.item(i))
             }
@@ -113,20 +113,20 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
             graph.initialObjects.addAll(objects)
         }
         for (node in graph.initialObjects) {
-            val name = name(node) ?: continue
+            val name = node.getAttrContent("name") ?: continue
             if (name == "@") {
                 // check that @ attribute's base has an abstract object in this program
-                val baseNodeName = base(node)
-                val baseNodeRef = ref(node)
+                val baseNodeName = node.getAttrContent("base")
+                val baseNodeRef = node.getAttrContent("ref")
                 val abstractBaseNode =
                     getAbstractViaRef(baseNodeName, baseNodeRef) ?: getAbstractViaPackage(baseNodeName)?.body
                 abstractBaseNode?.let {
                     val parentNode = node.parentNode ?: return
                     graph.igNodes.find { it.body.attributes == parentNode.attributes }
-                        ?: run { graph.igNodes.add(IGraphNode(parentNode, packageName(parentNode))) }
+                        ?: run { graph.igNodes.add(IGraphNode(parentNode, parentNode.packageName())) }
                     val igChild = graph.igNodes.find { it.body.attributes == parentNode.attributes }!!
                     graph.igNodes.find { it.body.attributes == abstractBaseNode.attributes }
-                        ?: run { graph.igNodes.add(IGraphNode(abstractBaseNode, packageName(abstractBaseNode))) }
+                        ?: run { graph.igNodes.add(IGraphNode(abstractBaseNode, abstractBaseNode.packageName())) }
                     val igParent = graph.igNodes.find { it.body.attributes == abstractBaseNode.attributes }!!
                     graph.connect(igChild, igParent)
                 }

@@ -24,11 +24,7 @@
 
 package org.objectionary.ddr.transform.impl
 
-import org.objectionary.ddr.graph.base
-import org.objectionary.ddr.graph.line
-import org.objectionary.ddr.graph.name
-import org.objectionary.ddr.graph.pos
-import org.objectionary.ddr.graph.ref
+import org.objectionary.ddr.graph.getAttrContent
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
@@ -66,7 +62,7 @@ class CondNodesResolver(
         val objects = graph.initialObjects
         val condNodes: List<IGraphCondNode> = graph.igNodes.filterIsInstance(IGraphCondNode::class.java)
         condNodes.forEach { node ->
-            objects.filter { ref(it) == line(node.body) }.forEach {
+            objects.filter { it.getAttrContent("ref") == node.body.getAttrContent("line") }.forEach {
                 insert(it, node.cond, node.fstOption, node.sndOption)
             }
         }
@@ -106,11 +102,11 @@ class CondNodesResolver(
         abstract: IGraphNode
     ) {
         var sibling = node.nextSibling?.nextSibling
-        if (base(node)?.startsWith(".") == true) {
+        if (node.getAttrContent("base")?.startsWith(".") == true) {
             return
         }
-        while (base(sibling)?.startsWith(".") == true) {
-            val base = base(sibling)!!
+        while (sibling.getAttrContent("base")?.startsWith(".") == true) {
+            val base = sibling.getAttrContent("base")!!
             val attr = abstract.attributes.find { it.name == base.substring(1) }
             if (attr == null && abstract.attributes.filterIsInstance<IGraphCondAttr>().isNotEmpty()) {
                 val igAttr = abstract.attributes.filterIsInstance<IGraphCondAttr>()[0]
@@ -123,7 +119,7 @@ class CondNodesResolver(
                 }
             }
             sibling = sibling?.nextSibling
-            if (name(sibling)?.isNotEmpty() == true) {
+            if (sibling.getAttrContent("name")?.isNotEmpty() == true) {
                 break
             }
         }
@@ -137,7 +133,7 @@ class CondNodesResolver(
     ): MutableList<Node?> {
         val res: MutableList<Node?> = mutableListOf()
         var sibling = node.nextSibling?.nextSibling
-        while (base(sibling)?.startsWith(".") == true) {
+        while (sibling.getAttrContent("base")?.startsWith(".") == true) {
             res.add(sibling)
             sibling = sibling?.nextSibling
             sibling?.attributes ?: run { sibling = sibling?.nextSibling }
@@ -183,13 +179,13 @@ class CondNodesResolver(
         expr: MutableList<Node?>
     ): Element {
         val ifChild: Element = document.createElement("o")
-        val phi = expr.any { name(it) == "@" }
+        val phi = expr.any { it.getAttrContent("name") == "@" }
         ifChild.setAttribute("base", ".if")
-        ifChild.setAttribute("line", line(node))
-        ifChild.setAttribute("pos", pos(node))
+        ifChild.setAttribute("line", node.getAttrContent("line"))
+        ifChild.setAttribute("pos", node.getAttrContent("pos"))
         if (phi) {
             ifChild.setAttribute("name", "@")
-            expr.find { name(it) == "@" }?.attributes?.removeNamedItem("name")
+            expr.find { it.getAttrContent("name") == "@" }?.attributes?.removeNamedItem("name")
         }
         val abstract = declarations[node]
         val abstractFreeVars = getFreeVars(abstract)
@@ -198,7 +194,7 @@ class CondNodesResolver(
         cond.cond.forEach { cnd ->
             val elem = cnd.cloneNode(true)
             cond.freeVars.forEach { fv ->
-                if (base(elem) == fv) {
+                if (elem.getAttrContent("base") == fv) {
                     elem.attributes.removeNamedItem("base")
                     val i = abstractFreeVars.indexOf(fv)
                     val repl =
@@ -224,10 +220,10 @@ class CondNodesResolver(
         val children = decl?.childNodes ?: return res
         for (i in 0..children.length) {
             val ch = children.item(i)
-            if (name(ch) != null) {
-                res.add(name(ch))
+            if (ch.getAttrContent("name") != null) {
+                res.add(ch.getAttrContent("name"))
             } else {
-                base(ch)?.let { res.add(base(ch)) }
+                ch.getAttrContent("base")?.let { res.add(ch.getAttrContent("base")) }
             }
         }
         return res
@@ -243,7 +239,7 @@ class CondNodesResolver(
         ifChild: Node,
         refOption: Node
     ) {
-        val ref = document.createAttribute("ref").apply { value = ref(refOption) }
+        val ref = document.createAttribute("ref").apply { value = refOption.getAttrContent("ref") }
         val clonedNode = node.cloneNode(true).apply { attributes.setNamedItem(ref) }
         ifChild.appendChild(clonedNode)
         expr.forEach { ifChild.appendChild(it?.cloneNode(true)) }

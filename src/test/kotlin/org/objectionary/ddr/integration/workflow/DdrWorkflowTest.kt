@@ -10,4 +10,9 @@ class DdrWorkflowTest : DdrWorkflowBase() {
 
     @Test
     fun `test basic cycle`() = doTest()
+
+    // @todo #115:90m/DEV Now this test doesn't work. Fix xsl transformations to resolve this test.
+    @Test
+    @Ignore
+    fun `test basic cycle vertical`() = doTest()
 }

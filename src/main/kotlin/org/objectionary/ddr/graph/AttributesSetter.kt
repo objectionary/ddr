@@ -27,6 +27,8 @@ package org.objectionary.ddr.graph
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphAttr
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.util.getAttr
+import org.objectionary.ddr.util.getAttrContent
 import org.w3c.dom.Node
 
 /**

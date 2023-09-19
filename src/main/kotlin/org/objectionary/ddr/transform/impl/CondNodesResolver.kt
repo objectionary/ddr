@@ -24,13 +24,13 @@
 
 package org.objectionary.ddr.transform.impl
 
-import org.objectionary.ddr.graph.getAttrContent
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IGraphNode
 import org.objectionary.ddr.graph.repr.IgNodeCondition
 import org.objectionary.ddr.transform.Resolver
+import org.objectionary.ddr.util.getAttrContent
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node

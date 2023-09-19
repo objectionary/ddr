@@ -4,6 +4,10 @@ import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphCondAttr
 import org.objectionary.ddr.graph.repr.IGraphCondNode
 import org.objectionary.ddr.graph.repr.IgNodeCondition
+import org.objectionary.ddr.util.containsAttr
+import org.objectionary.ddr.util.getAttr
+import org.objectionary.ddr.util.getAttrContent
+import org.objectionary.ddr.util.packageName
 import org.w3c.dom.Node
 
 /**

@@ -31,7 +31,7 @@ import org.w3c.dom.Node
  */
 class Graph {
     /**
-     * Collection of all graph nodes
+     * Collection of all graph nodes (it can be only abstract objects)
      */
     val igNodes: MutableSet<IGraphNode> = mutableSetOf()
 

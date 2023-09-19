@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-package org.objectionary.ddr.graph
+package org.objectionary.ddr.util
 
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.w3c.dom.Document
 import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 
 /**
  * Finds attribute of this node by [name]
@@ -66,6 +68,35 @@ fun Node?.packageName(): String {
         }
     }
     return ""
+}
+
+/**
+ * Finds package name of this xmir file
+ *
+ * @return found package name
+ */
+fun Document?.packageName(): String {
+    val heads = this?.getElementsByTagName("head") ?: return ""
+    for (i in 0 until heads.length) {
+        val head = heads.item(i)
+        if (head.textContent.equals("package")) {
+            return head.nextSibling.nextSibling.textContent
+        }
+    }
+    return ""
+}
+
+/**
+ * Converts `NodeList` to `MutableList<Node>` of nodes
+ *
+ * @return `MutableList<Node>` of nodes
+ */
+fun NodeList.toMutableList(): MutableList<Node> {
+    val mutList: MutableList<Node> = mutableListOf()
+    for (i in 0 until this.length) {
+        mutList.add(this.item(i)!!)
+    }
+    return mutList
 }
 
 /**

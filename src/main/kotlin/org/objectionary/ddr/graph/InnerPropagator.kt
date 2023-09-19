@@ -27,6 +27,11 @@ package org.objectionary.ddr.graph
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphAttr
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.util.containsAttr
+import org.objectionary.ddr.util.findRef
+import org.objectionary.ddr.util.getAttr
+import org.objectionary.ddr.util.getAttrContent
+import org.objectionary.ddr.util.packageName
 import org.w3c.dom.Node
 
 typealias Abstracts = MutableMap<String, MutableSet<IGraphNode>>

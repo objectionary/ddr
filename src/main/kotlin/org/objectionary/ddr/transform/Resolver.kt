@@ -24,13 +24,13 @@
 
 package org.objectionary.ddr.transform
 
-import org.objectionary.ddr.graph.containsAttr
-import org.objectionary.ddr.graph.findRef
-import org.objectionary.ddr.graph.getAttr
-import org.objectionary.ddr.graph.getAttrContent
-import org.objectionary.ddr.graph.packageName
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphNode
+import org.objectionary.ddr.util.containsAttr
+import org.objectionary.ddr.util.findRef
+import org.objectionary.ddr.util.getAttr
+import org.objectionary.ddr.util.getAttrContent
+import org.objectionary.ddr.util.packageName
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import java.io.FileOutputStream

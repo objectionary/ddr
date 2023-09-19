@@ -26,20 +26,21 @@ package org.objectionary.ddr.graph
 
 import org.objectionary.ddr.graph.repr.Graph
 import org.objectionary.ddr.graph.repr.IGraphNode
-import org.slf4j.LoggerFactory
+import org.objectionary.ddr.util.containsAttr
+import org.objectionary.ddr.util.getAttrContent
+import org.objectionary.ddr.util.packageName
+import org.objectionary.ddr.util.toMutableList
+import org.apache.commons.lang3.mutable.MutableBoolean
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import java.nio.file.Path
 
-typealias GraphAbstracts = MutableMap<String, MutableSet<Node>>
-
 /**
  * Builds decoration hierarchy graph
+ *
+ * @property documents all XMIR documents
  */
 class GraphBuilder(private val documents: MutableMap<Document, Path>) {
-    private val logger = LoggerFactory.getLogger(this.javaClass.name)
-    private val abstracts: GraphAbstracts = mutableMapOf()
-
     /**
      * Graph of the program to be analysed
      */
@@ -49,98 +50,117 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
      * Aggregates the process of graph creation:
      * Constructs inheritance graph, sets heads and leaves and processes cycles
      *
-     * @return built graph
+     * @return built [graph]
      */
     fun createGraph(): Graph {
-        try {
-            constructInheritance()
-            setLeaves()
-            graph.leaves.forEach { setHeads(it, mutableMapOf()) }
-            val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
-            graph.heads.forEach {
-                val found = mutableListOf(false)
-                thinOutHeads(it, thinnedOutHeads, mutableSetOf(), found)
-                if (!found[0]) {
-                    thinnedOutHeads.add(it)
-                }
-            }
-            graph.heads.clear()
-            thinnedOutHeads.forEach { graph.heads.add(it) }
-            processClosedCycles(graph)
-            return graph
-        } catch (e: Exception) {
-            logger.error(e.printStackTrace().toString())
-            return graph
+        initializeGraph()
+        constructInheritance()
+        setLeaves()
+        setHeads()
+        return graph
+    }
+
+    /**
+     * Initializes [graph] by adding all initial and abstract objects from the [documents]
+     */
+    fun initializeGraph() {
+        documents.forEach {
+            val objects = it.key.getElementsByTagName("o").toMutableList()
+            val packageName = it.key.packageName()
+            graph.igNodes.addAll(collectAbstracts(objects, packageName))
+            graph.initialObjects.addAll(objects)
         }
     }
-    @Suppress("PARAMETER_NAME_IN_OUTER_LAMBDA")
-    private fun abstracts(objects: MutableList<Node>, packageName: String) =
-        objects.forEach {
-            val name = it.getAttrContent("name")
-            if (it.containsAttr("abstract") && name != null) {
-                abstracts.getOrPut(name) { mutableSetOf() }.add(it)
-                graph.igNodes.add(IGraphNode(it, packageName))
+
+    /**
+     * Puts all nodes representing abstract objects in a set of nodes [graph]
+     */
+    private fun constructInheritance() {
+        graph.initialObjects.filter { isDecoration(it) }.forEach { decor ->
+            val abstractBaseNode = getAbstractBaseObject(decor)
+            abstractBaseNode?.let {
+                val igChild = graph.igNodes.find { it.body == decor.parentNode }!!
+                graph.connect(igChild, abstractBaseNode)
             }
         }
+    }
+
+    /**
+     * Puts all nodes representing abstract objects in a set of nodes [graph]
+     *
+     * @param objects list of objects
+     * @param packageName name of the package in which the described object is located
+     */
+    private fun collectAbstracts(objects: MutableList<Node>, packageName: String): MutableSet<IGraphNode> {
+        val abstracts: MutableSet<IGraphNode> = mutableSetOf()
+        objects.filter {
+            it.containsAttr("abstract") && it.containsAttr("name")
+        }.forEach { obj ->
+            abstracts.add(IGraphNode(obj, packageName))
+        }
+        return abstracts
+    }
+
+    /**
+     * Finds the definition of an abstract object, which is the object from "base" attribute of given decoration node
+     *
+     * @param node decoration node
+     * @return found abstract base object of given decoration node or `null`
+     */
+    private fun getAbstractBaseObject(node: Node): IGraphNode? {
+        val baseObjName = node.getAttrContent("base")
+        val baseObjRef = node.getAttrContent("ref")
+        return getAbstractViaRef(baseObjName, baseObjRef) ?: getAbstractViaPackage(baseObjName)
+    }
 
     private fun getAbstractViaRef(
         baseName: String?,
         baseRef: String?
-    ): Node? =
-        if (baseName != null && abstracts.contains(baseName)) {
-            abstracts[baseName]!!.find {
-                it.getAttrContent("line") == baseRef
-            }
-        } else {
-            null
-        }
+    ): IGraphNode? = graph.igNodes.find {
+        it.body.getAttrContent("line") == baseRef && it.body.getAttrContent("name") == baseName
+    }
 
     private fun getAbstractViaPackage(baseNodeName: String?): IGraphNode? {
         val packageName = baseNodeName?.substringBeforeLast('.')
         val nodeName = baseNodeName?.substringAfterLast('.')
-        return graph.igNodes.find { it.name.equals(nodeName) && it.packageName == packageName }
+        return graph.igNodes.find { it.name == nodeName && it.packageName == packageName }
     }
 
-    private fun constructInheritance() {
-        documents.forEach {
-            val objects: MutableList<Node> = mutableListOf()
-            val docObjects = it.key.getElementsByTagName("o")
-            val packageName = docObjects.item(0).packageName()
-            for (i in 0 until docObjects.length) {
-                objects.add(docObjects.item(i))
-            }
-            abstracts(objects, packageName)
-            graph.initialObjects.addAll(objects)
-        }
-        for (node in graph.initialObjects) {
-            val name = node.getAttrContent("name") ?: continue
-            if (name == "@") {
-                // check that @ attribute's base has an abstract object in this program
-                val baseNodeName = node.getAttrContent("base")
-                val baseNodeRef = node.getAttrContent("ref")
-                val abstractBaseNode =
-                    getAbstractViaRef(baseNodeName, baseNodeRef) ?: getAbstractViaPackage(baseNodeName)?.body
-                abstractBaseNode?.let {
-                    val parentNode = node.parentNode ?: return
-                    graph.igNodes.find { it.body.attributes == parentNode.attributes }
-                        ?: run { graph.igNodes.add(IGraphNode(parentNode, parentNode.packageName())) }
-                    val igChild = graph.igNodes.find { it.body.attributes == parentNode.attributes }!!
-                    graph.igNodes.find { it.body.attributes == abstractBaseNode.attributes }
-                        ?: run { graph.igNodes.add(IGraphNode(abstractBaseNode, abstractBaseNode.packageName())) }
-                    val igParent = graph.igNodes.find { it.body.attributes == abstractBaseNode.attributes }!!
-                    graph.connect(igChild, igParent)
-                }
-            }
-        }
+    /**
+     * Check if given [node] is decoration statement
+     *
+     * @param node node to be inspected
+     * @return `true` if [node] is decoration and `false` otherwise
+     */
+    private fun isDecoration(node: Node): Boolean {
+        val name = node.getAttrContent("name") ?: return false
+        return name == "@"
     }
-
-    private fun checkNodes(node: IGraphNode): IGraphNode? =
-        graph.igNodes.find { it.body.attributes == node.body.attributes }
 
     private fun setLeaves() =
         graph.igNodes.filter { it.children.isEmpty() }.forEach { graph.leaves.add(it) }
 
-    private fun setHeads(
+    /**
+     * @todo #115:90m/DEV Current algorithm of finding graph heads is very inefficient and requires refactoring.
+     *      To reimplement `setHeads()`, `findHeadsExcessively()` and `thinOutHeads()` functions.
+     *      To reimplement all functions from `ClosedCycleProcessor.kt`.
+     */
+    private fun setHeads() {
+        graph.leaves.forEach { findHeadsExcessively(it, mutableMapOf()) }
+        val thinnedOutHeads: MutableSet<IGraphNode> = mutableSetOf()
+        graph.heads.forEach {
+            val found = MutableBoolean(false)
+            thinOutHeads(it, thinnedOutHeads, mutableSetOf(), found)
+            if (found.isFalse) {
+                thinnedOutHeads.add(it)
+            }
+        }
+        graph.heads.clear()
+        thinnedOutHeads.forEach { graph.heads.add(it) }
+        processClosedCycles(graph)
+    }
+
+    private fun findHeadsExcessively(
         node: IGraphNode,
         visited: MutableMap<IGraphNode, Boolean>
     ) {
@@ -148,7 +168,7 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
             graph.heads.add(node)
         } else {
             visited[node] = true
-            node.parents.forEach { setHeads(it, visited) }
+            node.parents.forEach { findHeadsExcessively(it, visited) }
         }
     }
 
@@ -156,15 +176,15 @@ class GraphBuilder(private val documents: MutableMap<Document, Path>) {
         node: IGraphNode,
         toBeRemoved: MutableSet<IGraphNode>,
         visited: MutableSet<IGraphNode>,
-        found: MutableList<Boolean>
+        found: MutableBoolean
     ) {
-        if (found[0] || toBeRemoved.contains(node)) {
-            found[0] = true
+        if (found.isTrue || toBeRemoved.contains(node)) {
+            found.setTrue()
             return
         }
         if (visited.contains(node)) {
             toBeRemoved.add(node)
-            found[0] = true
+            found.setTrue()
             return
         }
         visited.add(node)

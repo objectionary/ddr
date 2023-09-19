@@ -1,6 +1,6 @@
 package org.objectionary.ddr.graph.repr
 
-import org.objectionary.ddr.graph.getAttrContent
+import org.objectionary.ddr.util.getAttrContent
 import org.w3c.dom.Node
 
 /**

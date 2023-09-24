@@ -75,7 +75,7 @@ open class ResolverBase : IntegrationTestBase {
             .forEach { file ->
                 val expected = File(file.toString()).bufferedReader().use { it.readText().replace(" ", "") }
                 val actual = File(
-                    file.toString().replace("$eoOutTmp$sep", "out$sep")
+                    file.toString().replace("out$sep", "$eoOutTmp$sep")
                 ).bufferedReader().use { it.readText().replace(" ", "") }
                 checkOutput(expected, actual)
             }

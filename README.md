@@ -29,7 +29,7 @@ CombinerKt.launch("${PATH_TO_YOUR_DIRECTORY}");
 ```
 
 #### From IntelliJ Idea
-You can launch the tool from IntelliJ Idea using MainKt configuration.  
+You can launch the tool from IntelliJ Idea using MainKt configuration.
 Just click `Edit configuration` in the `'Edit run/debug configurations' dialog` and
 type an absolute path to your input directory with `.xmir` files in the `Program arguments` field.
 
@@ -45,10 +45,10 @@ $ java -jar target/ddr-1.0-SNAPSHOT-jar-with-dependencies.jar "${PATH_TO_YOUR_DI
 ### Tests
 
 #### How to add integration tests:
-1) Add your directory with `.eo` source files to `src/test/resources/integration/in`.  
+1) Add your directory with `.eo` source files to `src/test/resources/integration/in`.
 Note that directory name must be written in snake case.
 
-2) Add your directory with desired output `.eo` files to `src/test/resources/integration/out`.  
+2) Add your directory with desired output `.eo` files to `src/test/resources/integration/out`.
 Note that `.eo` files in the output directory must use dot notation like shown below:
 ```
 [] > greet
@@ -58,10 +58,10 @@ Note that `.eo` files in the output directory must use dot notation like shown b
     "Hello, world!"
 ```
 
-3) Add a test to [ResolverTest](src/test/kotlin/org/objectionary/ddr/integration/resolver/ResolverTest.kt).  
-Your test name must be identical to your added directory name with `_` symbols replaced with spaces and a word `test` inserted in the beginning.  
-Example:  
-Directory name: `basic_example`  
+3) Add a test to [ResolverTest](src/test/kotlin/org/objectionary/ddr/integration/resolver/ResolverTest.kt).
+Your test name must be identical to your added directory name with `_` symbols replaced with spaces and a word `test` inserted in the beginning.
+Example:
+Directory name: `basic_example`
 Test:
 ```
 @Test

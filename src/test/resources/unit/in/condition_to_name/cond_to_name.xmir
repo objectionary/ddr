@@ -1,9 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * SPDX-FileCopyrightText: Copyright (c) 2022 Olesia Subbotina
  * SPDX-License-Identifier: MIT
 -->
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <program ms="227"
           name="test-1"
           time="2022-09-02T10:02:34.260263358Z"

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * Copyright (c) 2022 Olesia Subbotina
  *
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 -->
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <program ms="7"
           name="org.eolang.examples.app"
           source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/src/main/eo/org/eolang/examples/app.eo"

@@ -1,9 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * SPDX-FileCopyrightText: Copyright (c) 2022 Olesia Subbotina
  * SPDX-License-Identifier: MIT
 -->
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <program ms="7"
           name="org.eolang.txt.regex"
           source="/home/olesya/huawei/fork-eo/eo/eo-maven-plugin/target/it/fibonacci/target/eo/04-pull/org/eolang/txt/regex.eo"

@@ -234,7 +234,7 @@
     <dependency>
       <groupId>com.yegor256</groupId>
       <artifactId>xsline</artifactId>
-      <version>0.13.0</version>
+      <version>0.23.1</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
